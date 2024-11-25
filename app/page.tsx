@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import Hero from '@/components/Hero'
-import MetalianDawn from '@/components/MetalianDawn'
 import Satements from '@/components/statements'
 import Roadmap from '@/components/Roadmap'
 import Contact from '@/components/Contact'
