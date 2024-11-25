@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react'
 import Hero from '@/components/Hero'
 import MetalianDawn from '@/components/MetalianDawn'
 import Satements from '@/components/statements'
-import Roadmap2 from '@/components/Roadmap2'
-import Roadmap4 from '@/components/Roadmap4'
+import Roadmap from '@/components/Roadmap'
+import Contact from '@/components/Contact'
 import About from '@/components/about'
 
 export default function Home() {
@@ -17,7 +17,8 @@ export default function Home() {
     { component: <Satements key="x" />, name: 'Y' },
     { component: <About key="about" />, name: 'Z' },
     // { component: <MetalianDawn key="roadmap1" />, name: 'Metalian Dawn' },
-    { component: <Roadmap2 key="roadmap2" />, name: 'Phase 2' },
+    { component: <Roadmap key="roadmap" />, name: 'A' },
+    { component: <Contact key="contact" />, name: 'B' },
     // { component: <Roadmap3 key="roadmap3" />, name: 'Phase 3' },
     // { component: <Roadmap4 key="roadmap4" />, name: 'Phase 4' }
   ]
