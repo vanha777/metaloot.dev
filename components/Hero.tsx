@@ -5,7 +5,7 @@ import Image from 'next/image'
 
 export default function Hero() {
   return (
-    <div className="hero min-h-screen bg-base-200 relative overflow-hidden">
+    <div className="hero min-h-screen bg-gradient-to-br from-gray-900 to-black relative overflow-hidden">
       {/* Animated background patterns */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute w-96 h-96 -top-48 -left-48 bg-primary rounded-full animate-pulse" />
