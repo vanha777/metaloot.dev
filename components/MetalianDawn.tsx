@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import Image from 'next/image'
+import ThreeComponent from './3d'
 
 export default function MetalianDawn() {
   return (
