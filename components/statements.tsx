@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { useState } from 'react'
 
 export default function Statements() {
-  const [expandedCard, setExpandedCard] = useState<number | null>(null)
+  const [cardOrder, setCardOrder] = useState([0, 1, 2])
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -32,124 +32,169 @@ export default function Statements() {
     }
   }
 
-  const contentVariants = {
-    collapsed: { opacity: 0, height: 0 },
-    expanded: { opacity: 1, height: "auto" }
+  const rotateCards = () => {
+    setCardOrder(prev => [(prev[1]), (prev[2]), (prev[0])])
   }
 
+  const cards = [
+    {
+      title: "Play-to-Earn Gaming",
+      description: "Imagine your in-game currency can be converted to real-world assets.",
+      image: "https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%2016.jpeg"
+    },
+    {
+      title: "NFT Marketplace",
+      description: "List, trade, buy, or cash out your in-game items.",
+      image: "https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%2018.jpeg"
+    },
+    {
+      title: "Cross-Chain Gaming",
+      description: "Play one game and use your rewards on another game.",
+      image: "https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%2017.jpeg"
+    }
+  ]
+
   return (
-    <section className="bg-gradient-to-br from-gray-900 to-black min-h-screen flex items-center justify-center px-2 md:px-4 text-white overflow-hidden py-6 md:py-10">
+    <section className="min-h-screen bg-[#010205] relative overflow-hidden flex items-center justify-center px-2 md:px-4 text-white py-6 md:py-10">
+      {/* Cyberpunk grid background */}
+      <div className="absolute inset-0">
+        {/* Dark gradient overlay */}
+        <div className="absolute w-full h-full bg-gradient-to-b from-[#010205] via-[#010205]/90 to-[#010205]" />
+        
+        {/* Horizontal lines */}
+        <div className="absolute inset-0">
+          {[...Array(20)].map((_, i) => (
+            <motion.div
+              key={`h-${i}`}
+              initial={{ opacity: 0.2 }}
+              animate={{
+                opacity: [0.2, 0.4, 0.2],
+                height: ['1px', '2px', '1px']
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                delay: i * 0.2,
+              }}
+              style={{ top: `${(i + 1) * 5}%` }}
+              className="absolute w-full bg-[#0CC0DF]/40"
+            />
+          ))}
+        </div>
+
+        {/* Vertical lines */}
+        <div className="absolute inset-0">
+          {[...Array(20)].map((_, i) => (
+            <motion.div
+              key={`v-${i}`}
+              initial={{ opacity: 0.2 }}
+              animate={{
+                opacity: [0.2, 0.4, 0.2],
+                width: ['1px', '2px', '1px']
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                delay: i * 0.2,
+              }}
+              style={{ left: `${(i + 1) * 5}%` }}
+              className="absolute h-full bg-[#0CC0DF]/40"
+            />
+          ))}
+        </div>
+      </div>
+
       <motion.div 
-        className="max-w-6xl w-full"
+        className="max-w-7xl w-full relative z-10"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       > 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-8">
-          <motion.div 
-            variants={itemVariants}
-            whileHover={{ scale: 1.02 }}
-            className="relative h-[200px] md:h-[400px] rounded-xl overflow-hidden group cursor-pointer"
-            onClick={() => setExpandedCard(expandedCard === 0 ? null : 0)}
-          >
-            <Image
-              src="https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%2016.jpeg"
-              alt="Play-to-Earn Gaming"
-              fill
-              className="object-cover transition-transform duration-300 group-hover:scale-110"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
-            
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-16 relative">
+          {[0, 1, 2].map((index) => (
             <motion.div 
-              className="absolute top-2 md:top-4 left-1/2 transform -translate-x-1/2 bg-purple-900/50 backdrop-blur-sm rounded-full p-2 md:p-5"
-              whileHover={{ scale: 1.1 }}
+              key={index}
+              variants={itemVariants}
+              whileHover={index === 1 ? { scale: 1.05, zIndex: 20 } : {}}
+              style={{
+                transform: index === 0 ? 'perspective(1000px) rotateY(45deg) translateX(60px)' : 
+                          index === 2 ? 'perspective(1000px) rotateY(-45deg) translateX(-60px)' : 
+                          'perspective(1000px)',
+                transformOrigin: index === 0 ? 'right center' : index === 2 ? 'left center' : 'center'
+              }}
+              className={`relative h-[400px] rounded-xl overflow-hidden cursor-pointer transition-all duration-500
+                ${index !== 1 ? 'pointer-events-none' : 'z-10'}
+                shadow-[0_0_25px_rgba(12,192,223,0.4)]
+              `}
+              onClick={index === 1 ? rotateCards : undefined}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 md:h-14 md:w-14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.9)" strokeWidth="1.5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
-              </svg>
-            </motion.div>
+              <Image
+                src={cards[cardOrder[index]].image}
+                alt={cards[cardOrder[index]].title}
+                fill
+                className="object-cover transition-transform duration-300"
+              />
+              
+              {/* Enhanced overlay for side cards */}
+              {index !== 1 && (
+                <div className="absolute inset-0">
+                  {/* Hexagonal pattern overlay */}
+                  <div className="absolute inset-0" 
+                    style={{
+                      backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l25.98 15v30L30 60 4.02 45V15z' fill-opacity='0.3' fill='%230CC0DF'/%3E%3C/svg%3E")`,
+                      backgroundSize: '30px 30px'
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" />
+                  {/* Glowing lines */}
+                  <div className="absolute inset-0 opacity-60"
+                    style={{
+                      background: 'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(12,192,223,0.15) 10px, rgba(12,192,223,0.15) 20px)'
+                    }}
+                  />
+                </div>
+              )}
+              
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
+              
+              {/* Enhanced magical stone effect for center card */}
+              {index === 1 && (
+                <motion.div
+                  animate={{
+                    boxShadow: ['0 0 30px #0CC0DF', '0 0 50px #0CC0DF', '0 0 30px #0CC0DF']
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                  className="absolute top-4 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-gradient-to-br from-[#0CC0DF] to-[#0CC0DF]/70"
+                />
+              )}
 
-            <motion.div
-              className="absolute bottom-0 left-0 right-0 p-3 md:p-6"
-              initial="collapsed"
-              animate={expandedCard === 0 ? "expanded" : "collapsed"}
-              variants={contentVariants}
-              transition={{ duration: 0.3 }}
-            >
-              <h3 className="text-base md:text-xl font-bold mb-1 md:mb-3 bg-gradient-to-r from-primary via-purple-500 to-secondary bg-clip-text text-transparent">Play-to-Earn Gaming</h3>
-              <p className="text-xs md:text-base text-gray-300">Imagine your in-game currency can be converted to real-world assets.</p>
-            </motion.div>
-          </motion.div>
+              <div className={`absolute bottom-0 left-0 right-0 p-6 ${index !== 1 ? 'opacity-60' : ''}`}>
+                <h3 className="text-xl font-bold mb-3 bg-gradient-to-r from-[#0CC0DF] to-[#0CC0DF]/70 bg-clip-text text-transparent">
+                  {cards[cardOrder[index]].title}
+                </h3>
+                <p className="text-base text-gray-300">{cards[cardOrder[index]].description}</p>
+              </div>
 
-          <motion.div 
-            variants={itemVariants}
-            whileHover={{ scale: 1.02 }}
-            className="relative h-[200px] md:h-[400px] rounded-xl overflow-hidden group cursor-pointer"
-            onClick={() => setExpandedCard(expandedCard === 1 ? null : 1)}
-          >
-            <Image
-              src="https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%2018.jpeg"
-              alt="NFT Marketplace"
-              fill
-              className="object-cover transition-transform duration-300 group-hover:scale-110"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
-            
-            <motion.div 
-              className="absolute top-2 md:top-4 left-1/2 transform -translate-x-1/2 bg-purple-900/50 backdrop-blur-sm rounded-full p-2 md:p-5"
-              whileHover={{ scale: 1.1 }}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 md:h-14 md:w-14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.9)" strokeWidth="1.5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-              </svg>
+              {/* Enhanced portal frame effect for center card */}
+              {index === 1 && (
+                <motion.div 
+                  animate={{
+                    borderColor: ['rgba(12, 192, 223, 0.4)', 'rgba(12, 192, 223, 0.7)', 'rgba(12, 192, 223, 0.4)']
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                  className="absolute inset-0 border-4 rounded-xl"
+                />
+              )}
             </motion.div>
-
-            <motion.div
-              className="absolute bottom-0 left-0 right-0 p-3 md:p-6"
-              initial="collapsed"
-              animate={expandedCard === 1 ? "expanded" : "collapsed"}
-              variants={contentVariants}
-              transition={{ duration: 0.3 }}
-            >
-              <h3 className="text-base md:text-xl font-bold mb-1 md:mb-3 bg-gradient-to-r from-primary via-purple-500 to-secondary bg-clip-text text-transparent">NFT Marketplace</h3>
-              <p className="text-xs md:text-base text-gray-300">List, trade, buy, or cash out your in-game items.</p>
-            </motion.div>
-          </motion.div>
-
-          <motion.div 
-            variants={itemVariants}
-            whileHover={{ scale: 1.02 }}
-            className="relative h-[200px] md:h-[400px] rounded-xl overflow-hidden group cursor-pointer"
-            onClick={() => setExpandedCard(expandedCard === 2 ? null : 2)}
-          >
-            <Image
-              src="https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%2017.jpeg"
-              alt="Cross-Chain Gaming"
-              fill
-              className="object-cover transition-transform duration-300 group-hover:scale-110"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
-            
-            <motion.div 
-              className="absolute top-2 md:top-4 left-1/2 transform -translate-x-1/2 bg-purple-900/50 backdrop-blur-sm rounded-full p-2 md:p-5"
-              whileHover={{ scale: 1.1 }}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 md:h-14 md:w-14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.9)" strokeWidth="1.5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
-              </svg>
-            </motion.div>
-
-            <motion.div
-              className="absolute bottom-0 left-0 right-0 p-3 md:p-6"
-              initial="collapsed"
-              animate={expandedCard === 2 ? "expanded" : "collapsed"}
-              variants={contentVariants}
-              transition={{ duration: 0.3 }}
-            >
-              <h3 className="text-base md:text-xl font-bold mb-1 md:mb-3 bg-gradient-to-r from-primary via-purple-500 to-secondary bg-clip-text text-transparent">Cross-Chain Gaming</h3>
-              <p className="text-xs md:text-base text-gray-300">Play one game and use your rewards on another game.</p>
-            </motion.div>
-          </motion.div>
+          ))}
         </div>
       </motion.div>
     </section>
