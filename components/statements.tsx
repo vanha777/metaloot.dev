@@ -109,92 +109,100 @@ export default function Statements() {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-      > 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-16 relative">
-          {[0, 1, 2].map((index) => (
-            <motion.div 
-              key={index}
-              variants={itemVariants}
-              whileHover={index === 1 ? { scale: 1.05, zIndex: 20 } : {}}
-              style={{
-                transform: index === 0 ? 'perspective(1000px) rotateY(45deg) translateX(60px)' : 
-                          index === 2 ? 'perspective(1000px) rotateY(-45deg) translateX(-60px)' : 
-                          'perspective(1000px)',
-                transformOrigin: index === 0 ? 'right center' : index === 2 ? 'left center' : 'center'
-              }}
-              className={`relative h-[400px] rounded-xl overflow-hidden cursor-pointer transition-all duration-500
-                ${index !== 1 ? 'pointer-events-none' : 'z-10'}
-                shadow-[0_0_25px_rgba(12,192,223,0.4)]
-              `}
-              onClick={index === 1 ? rotateCards : undefined}
+      >
+        <div className="flex flex-col md:flex-row items-center justify-between gap-8 md:gap-16">
+          {/* Left Text Content */}
+          <motion.div 
+            variants={itemVariants}
+            className="md:w-1/2 text-left"
+          >
+            <h2 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-[#0CC0DF] to-[#0CC0DF]/70 bg-clip-text text-transparent">
+              {cards[cardOrder[1]].title}
+            </h2>
+            <p className="text-xl md:text-2xl text-gray-300 leading-relaxed">
+              {cards[cardOrder[1]].description}
+            </p>
+          </motion.div>
+
+          {/* Center Image Carousel */}
+          <motion.div 
+            variants={itemVariants}
+            className="md:w-1/2 relative h-[500px] w-full"
+          >
+            <motion.div
+              className="relative w-full h-full rounded-xl overflow-hidden cursor-pointer group"
+              onClick={rotateCards}
+              whileHover={{ scale: 1.05 }}
             >
               <Image
-                src={cards[cardOrder[index]].image}
-                alt={cards[cardOrder[index]].title}
+                src={cards[cardOrder[1]].image}
+                alt={cards[cardOrder[1]].title}
                 fill
-                className="object-cover transition-transform duration-300"
+                className="object-cover"
               />
               
-              {/* Enhanced overlay for side cards */}
-              {index !== 1 && (
-                <div className="absolute inset-0">
-                  {/* Hexagonal pattern overlay */}
-                  <div className="absolute inset-0" 
-                    style={{
-                      backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l25.98 15v30L30 60 4.02 45V15z' fill-opacity='0.3' fill='%230CC0DF'/%3E%3C/svg%3E")`,
-                      backgroundSize: '30px 30px'
-                    }}
-                  />
-                  <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" />
-                  {/* Glowing lines */}
-                  <div className="absolute inset-0 opacity-60"
-                    style={{
-                      background: 'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(12,192,223,0.15) 10px, rgba(12,192,223,0.15) 20px)'
-                    }}
-                  />
-                </div>
-              )}
-              
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
-              
-              {/* Enhanced magical stone effect for center card */}
-              {index === 1 && (
-                <motion.div
-                  animate={{
-                    boxShadow: ['0 0 30px #0CC0DF', '0 0 50px #0CC0DF', '0 0 30px #0CC0DF']
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                  className="absolute top-4 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-gradient-to-br from-[#0CC0DF] to-[#0CC0DF]/70"
-                />
-              )}
+              {/* Portal effect */}
+              <motion.div
+                animate={{
+                  boxShadow: ['0 0 30px #0CC0DF', '0 0 50px #0CC0DF', '0 0 30px #0CC0DF']
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+                className="absolute inset-0 border-4 border-[#0CC0DF]/60 rounded-xl"
+              />
 
-              <div className={`absolute bottom-0 left-0 right-0 p-6 ${index !== 1 ? 'opacity-60' : ''}`}>
-                <h3 className="text-xl font-bold mb-3 bg-gradient-to-r from-[#0CC0DF] to-[#0CC0DF]/70 bg-clip-text text-transparent">
-                  {cards[cardOrder[index]].title}
-                </h3>
-                <p className="text-base text-gray-300">{cards[cardOrder[index]].description}</p>
+              {/* Top glowing orb */}
+              <motion.div
+                animate={{
+                  opacity: [0.6, 1, 0.6],
+                  scale: [1, 1.2, 1]
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+                className="absolute top-4 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-gradient-to-br from-[#0CC0DF] to-[#0CC0DF]/70"
+              />
+
+              {/* Navigation dots */}
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+                {[0, 1, 2].map((index) => (
+                  <div
+                    key={index}
+                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                      cardOrder[1] === index ? 'bg-[#0CC0DF] w-4' : 'bg-white/50'
+                    }`}
+                  />
+                ))}
               </div>
 
-              {/* Enhanced portal frame effect for center card */}
-              {index === 1 && (
-                <motion.div 
-                  animate={{
-                    borderColor: ['rgba(12, 192, 223, 0.4)', 'rgba(12, 192, 223, 0.7)', 'rgba(12, 192, 223, 0.4)']
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                  className="absolute inset-0 border-4 rounded-xl"
-                />
-              )}
+              {/* Click to next indicator */}
+              <div className="absolute inset-0 flex items-center justify-between px-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                <motion.div
+                  animate={{ x: [0, -10, 0] }}
+                  transition={{ repeat: Infinity, duration: 1.5 }}
+                  className="bg-[#0CC0DF]/20 backdrop-blur-sm p-2 rounded-full"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-[#0CC0DF]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                </motion.div>
+                <motion.div
+                  animate={{ x: [0, 10, 0] }}
+                  transition={{ repeat: Infinity, duration: 1.5 }}
+                  className="bg-[#0CC0DF]/20 backdrop-blur-sm p-2 rounded-full"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-[#0CC0DF]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </motion.div>
+              </div>
             </motion.div>
-          ))}
+          </motion.div>
         </div>
       </motion.div>
     </section>

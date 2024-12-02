@@ -7,7 +7,29 @@ export default function About() {
   const [isPlaying, setIsPlaying] = useState(true)
 
   return (
-    <div className="hero min-h-screen bg-base-200 relative overflow-hidden">
+    <div className="hero min-h-screen bg-[#020309] relative overflow-hidden">
+      {/* Deep space background with electronic effects */}
+      <div className="absolute inset-0">
+        <div className="absolute w-full h-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#0CC0DF] via-black to-[#020309] opacity-10" />
+        <div className="grid grid-cols-12 gap-4 absolute inset-0 opacity-20">
+          {[...Array(48)].map((_, i) => (
+            <motion.div
+              key={i}
+              animate={{
+                opacity: [0.2, 1, 0.2],
+                scale: [1, 1.2, 1],
+              }}
+              transition={{
+                duration: Math.random() * 3 + 2,
+                repeat: Infinity,
+                delay: Math.random() * 2,
+              }}
+              className="h-1 bg-[#0CC0DF] rounded-full"
+            />
+          ))}
+        </div>
+      </div>
+
       {/* Video Background */}
       <div className="absolute inset-0 w-full h-full">
         <video
@@ -17,10 +39,10 @@ export default function About() {
           playsInline
           className="w-full h-full object-cover"
         >
-          <source src="https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Screen%20Recording%202024-11-25%20at%2012.27.45%20PM.mov?t=2024-11-25T02%3A30%3A22.014Z" type="video/mp4" />
+          <source src="https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/copy_4ECEA0DD-01D9-4342-BF57-73B5570F4860.mp4?t=2024-12-02T10%3A44%3A15.619Z" type="video/mp4" />
         </video>
         {/* Overlay gradient */}
-        <div className="absolute inset-0 bg-gradient-to-t from-base-200 via-base-200/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#020309] via-[#020309]/50 to-transparent" />
       </div>
 
       <div className="hero-content text-center relative z-10">
@@ -31,10 +53,11 @@ export default function About() {
           className="max-w-2xl"
         >
           <h1 className="mb-8 text-5xl lg:text-7xl font-black">
-            <span className="bg-gradient-to-r from-primary via-purple-500 to-secondary bg-clip-text text-transparent">
+            <span className="text-[#0CC0DF]">
               Our
             </span>
-            <span className="bg-gradient-to-l from-primary via-purple-500 to-secondary bg-clip-text text-transparent">
+            {" "}
+            <span className="text-[#0CC0DF]">
               Vision
             </span>
           </h1>
@@ -44,7 +67,7 @@ export default function About() {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={() => setIsPlaying(true)}
-              className="btn btn-circle btn-lg bg-primary/20 backdrop-blur-sm border-2 border-primary hover:bg-primary/30"
+              className="btn btn-circle btn-lg bg-[#0CC0DF]/20 backdrop-blur-sm border-2 border-[#0CC0DF] hover:bg-[#0CC0DF]/30"
             >
               <svg 
                 xmlns="http://www.w3.org/2000/svg" 
@@ -62,7 +85,7 @@ export default function About() {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={() => setIsPlaying(false)}
-              className="btn btn-circle btn-lg bg-primary/20 backdrop-blur-sm border-2 border-primary hover:bg-primary/30"
+              className="btn btn-circle btn-lg bg-[#0CC0DF]/20 backdrop-blur-sm border-2 border-[#0CC0DF] hover:bg-[#0CC0DF]/30"
             >
               <svg 
                 xmlns="http://www.w3.org/2000/svg" 

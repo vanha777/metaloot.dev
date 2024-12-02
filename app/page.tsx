@@ -6,6 +6,8 @@ import Satements from '@/components/statements'
 import Roadmap from '@/components/Roadmap'
 import Contact from '@/components/Contact'
 import About from '@/components/about'
+import BigStatement from '@/components/BigStatement'
+import Coin from '@/components/Coin'
 
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0)
@@ -13,11 +15,13 @@ export default function Home() {
 
   const slides = [
     { component: <Hero key="hero" />, name: 'X' },
-    { component: <Satements key="x" />, name: 'Y' },
-    { component: <About key="about" />, name: 'Z' },
+    { component: <About key="about" />, name: 'Y' },
+    { component: <Satements key="z" />, name: 'Z' },
+    { component: <BigStatement key="A" />, name: 'A' },
+    { component: <Coin key="B" />, name: 'B' },
     // { component: <MetalianDawn key="roadmap1" />, name: 'Metalian Dawn' },
-    { component: <Roadmap key="roadmap" />, name: 'A' },
-    { component: <Contact key="contact" />, name: 'B' },
+    { component: <Roadmap key="roadmap" />, name: 'C' },
+    { component: <Contact key="contact" />, name: 'D' },
     // { component: <Roadmap3 key="roadmap3" />, name: 'Phase 3' },
     // { component: <Roadmap4 key="roadmap4" />, name: 'Phase 4' }
   ]
