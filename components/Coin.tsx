@@ -37,6 +37,25 @@ export default function Coin() {
 
       <div className="relative z-10 container mx-auto px-4">
         <div className="flex flex-col items-center">
+          {/* Token Info */}
+          <div className="mb-12 text-center">
+            <h2 className="text-7xl font-bold text-[#0CC0DF] mb-6">$MTL</h2>
+            <div className="flex gap-4 justify-center flex-wrap">
+              <div className="bg-[#0CC0DF]/10 backdrop-blur-sm rounded-xl border border-[#0CC0DF]/30 p-4">
+                <p className="text-gray-300">Total Supply</p>
+                <p className="text-2xl font-bold text-[#0CC0DF]">1,000,000,000</p>
+              </div>
+              <div className="bg-[#0CC0DF]/10 backdrop-blur-sm rounded-xl border border-[#0CC0DF]/30 p-4">
+                <p className="text-gray-300">Circulating Supply</p>
+                <p className="text-2xl font-bold text-[#0CC0DF]">1,000,000</p>
+              </div>
+              <div className="bg-[#0CC0DF]/10 backdrop-blur-sm rounded-xl border border-[#0CC0DF]/30 p-4">
+                <p className="text-gray-300">Market Cap</p>
+                <p className="text-2xl font-bold text-[#0CC0DF]">$~</p>
+              </div>
+            </div>
+          </div>
+
           {/* Central Coin with Connected Text Boxes */}
           <div className="relative w-96 h-96">
             {/* Main Static Coin */}

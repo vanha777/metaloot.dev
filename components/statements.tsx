@@ -38,21 +38,21 @@ export default function Statements() {
 
   const cards = [
     {
-      title: "Play-to-Earn Gaming",
-      description: "Imagine your in-game currency can be converted to real-world assets.",
-      image: "https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%2016.jpeg"
+      title: "P-2-Earn",
+      description: "Ready to cash out? Convert your in-game currency to $MTL anytime. Our tokenomics system spans all games, allowing players to purchase $MTL with their in-game currency.",
+      image: "https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/rb_2151866862.png"
     },
     {
-      title: "NFT Marketplace",
-      description: "List, trade, buy, or cash out your in-game items.",
-      image: "https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%2018.jpeg"
+      title: "X-Game Exchanges",
+      description: "Join our gaming network where your items are real assets - tradeable and usable across multiple games, all securely synced to your blockchain wallet.",
+      image: "https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/abstract-glowing-graphics-template-team-versus-team-b-sport-event-generative-ai.png"
     },
     {
-      title: "Cross-Chain Gaming",
-      description: "Play one game and use your rewards on another game.",
-      image: "https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%2017.jpeg"
-    }
-  ]
+      title: "No-Fuss Items Marketplace",
+      description: "Freely trade valuable game assets, discover rare items, or cash out your gaming inventory - powered by secure NFT trading.",
+      image: "https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/rb_2151866858.png"
+    },
+  ];
 
   return (
     <section className="min-h-screen bg-[#010205] relative overflow-hidden flex items-center justify-center px-2 md:px-4 text-white py-6 md:py-10">
@@ -60,7 +60,7 @@ export default function Statements() {
       <div className="absolute inset-0">
         {/* Dark gradient overlay */}
         <div className="absolute w-full h-full bg-gradient-to-b from-[#010205] via-[#010205]/90 to-[#010205]" />
-        
+
         {/* Horizontal lines */}
         <div className="absolute inset-0">
           {[...Array(20)].map((_, i) => (
@@ -104,7 +104,7 @@ export default function Statements() {
         </div>
       </div>
 
-      <motion.div 
+      <motion.div
         className="max-w-7xl w-full relative z-10"
         variants={containerVariants}
         initial="hidden"
@@ -112,7 +112,7 @@ export default function Statements() {
       >
         <div className="flex flex-col md:flex-row items-center justify-between gap-8 md:gap-16">
           {/* Left Text Content */}
-          <motion.div 
+          <motion.div
             variants={itemVariants}
             className="md:w-1/2 text-left"
           >
@@ -125,7 +125,7 @@ export default function Statements() {
           </motion.div>
 
           {/* Center Image Carousel */}
-          <motion.div 
+          <motion.div
             variants={itemVariants}
             className="md:w-1/2 relative h-[500px] w-full"
           >
@@ -140,7 +140,7 @@ export default function Statements() {
                 fill
                 className="object-cover"
               />
-              
+
               {/* Portal effect */}
               <motion.div
                 animate={{
@@ -173,9 +173,8 @@ export default function Statements() {
                 {[0, 1, 2].map((index) => (
                   <div
                     key={index}
-                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                      cardOrder[1] === index ? 'bg-[#0CC0DF] w-4' : 'bg-white/50'
-                    }`}
+                    className={`w-2 h-2 rounded-full transition-all duration-300 ${cardOrder[1] === index ? 'bg-[#0CC0DF] w-4' : 'bg-white/50'
+                      }`}
                   />
                 ))}
               </div>
