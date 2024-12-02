@@ -185,11 +185,22 @@ export default function Contact() {
                 </div>
               )}
 
-              <div className="form-control">
+              {/* <div className="form-control">
                 <label className="label">
                   <span className="label-text text-[#0CC0DF]">Message</span>
                 </label>
                 <textarea name="message" className="textarea bg-[#0CC0DF]/10 border-[#0CC0DF]/30 h-20 focus:border-[#0CC0DF]"></textarea>
+              </div> */}
+
+              <div className="form-control">
+                <label className="cursor-pointer label">
+                  <input type="checkbox" checked disabled className="checkbox checkbox-primary" />
+                  <span className="label-text text-[#0CC0DF] ml-2">
+                    {userType === 'player' 
+                      ? 'Receive Tokens and a Free Player Subscription'
+                      : 'Receive shared revenue. Allow MetaLoot to advertise your game and attract more players.'}
+                  </span>
+                </label>
               </div>
 
               <motion.button

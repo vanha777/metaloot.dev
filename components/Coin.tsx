@@ -35,6 +35,18 @@ export default function Coin() {
         </div>
       </div>
 
+      {/* Release Date Banner - Clickable */}
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={() => window.open('https://twitter.com/playmetaloot', '_blank')}
+        className="absolute top-8 left-8 bg-[#0CC0DF]/10 backdrop-blur-sm rounded-xl border border-[#0CC0DF]/30 p-4 cursor-pointer hover:bg-[#0CC0DF]/20 transition-all duration-300"
+      >
+        <p className="text-gray-300">Next Drops</p>
+        <p className="text-2xl font-bold text-[#0CC0DF]">6/12/2024</p>
+        <p className="text-sm text-[#0CC0DF]/70 mt-1">@playmetaloot</p>
+      </motion.button>
+
       <div className="relative z-10 container mx-auto px-4">
         <div className="flex flex-col items-center">
           {/* Token Info */}
