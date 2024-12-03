@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, Suspense } from 'react'
+import { useState, useEffect } from 'react'
 import Hero from '@/components/Hero'
 import Satements from '@/components/statements'
 import Roadmap from '@/components/Roadmap'
@@ -8,91 +8,9 @@ import Contact from '@/components/Contact'
 import About from '@/components/about'
 import BigStatement from '@/components/BigStatement'
 import Coin from '@/components/Coin'
-import Loading from '@/components/loading'
 
 export default function Home() {
-  const [currentSlide, setCurrentSlide] = useState(0)
   const [isMobile, setIsMobile] = useState(false)
-
-  const slides = [
-    { component: <Hero key="hero" />, name: 'X' },
-    { component: <About key="about" />, name: 'Y' },
-    { component: <Satements key="z" />, name: 'Z' },
-    { component: <BigStatement key="A" />, name: 'A' },
-    { component: <Coin key="B" />, name: 'B' },
-    // { component: <MetalianDawn key="roadmap1" />, name: 'Metalian Dawn' },
-    { component: <Roadmap key="roadmap" />, name: 'C' },
-    { component: <Contact key="contact" />, name: 'D' },
-    // { component: <Roadmap3 key="roadmap3" />, name: 'Phase 3' },
-    // { component: <Roadmap4 key="roadmap4" />, name: 'Phase 4' }
-  ]
-
-  useEffect(() => {
-    let lastScrollTime = 0;
-    const scrollCooldown = 1000;
-    let touchStartY = 0;
-
-    const handleWheel = (e: WheelEvent) => {
-      e.preventDefault();
-      const currentTime = Date.now();
-
-      if (currentTime - lastScrollTime < scrollCooldown) {
-        return;
-      }
-
-      if (e.deltaY > 0) {
-        setCurrentSlide(prev =>
-          prev === slides.length - 1 ? prev : prev + 1
-        );
-        lastScrollTime = currentTime;
-      } else {
-        setCurrentSlide(prev =>
-          prev === 0 ? prev : prev - 1
-        );
-        lastScrollTime = currentTime;
-      }
-    }
-
-    const handleTouchStart = (e: TouchEvent) => {
-      touchStartY = e.touches[0].clientY;
-    }
-
-    const handleTouchMove = (e: TouchEvent) => {
-      e.preventDefault();
-      const currentTime = Date.now();
-
-      if (currentTime - lastScrollTime < scrollCooldown) {
-        return;
-      }
-
-      const touchEndY = e.touches[0].clientY;
-      const deltaY = touchStartY - touchEndY;
-
-      if (Math.abs(deltaY) > 50) { // Minimum swipe distance threshold
-        if (deltaY > 0) {
-          setCurrentSlide(prev =>
-            prev === slides.length - 1 ? prev : prev + 1
-          );
-        } else {
-          setCurrentSlide(prev =>
-            prev === 0 ? prev : prev - 1
-          );
-        }
-        lastScrollTime = currentTime;
-        touchStartY = touchEndY;
-      }
-    }
-
-    window.addEventListener('wheel', handleWheel, { passive: false });
-    window.addEventListener('touchstart', handleTouchStart, { passive: true });
-    window.addEventListener('touchmove', handleTouchMove, { passive: false });
-
-    return () => {
-      window.removeEventListener('wheel', handleWheel);
-      window.removeEventListener('touchstart', handleTouchStart);
-      window.removeEventListener('touchmove', handleTouchMove);
-    };
-  }, [slides.length])
 
   useEffect(() => {
     const checkMobile = () => {
@@ -105,79 +23,38 @@ export default function Home() {
   }, []);
 
   return (
-    // <Suspense fallback={<Loading />}>
-      <main className="bg-base-100 h-screen overflow-hidden relative">
-        <div
-          className="transition-transform duration-500 ease-in-out h-full"
-          style={{
-            transform: isMobile
-              ? `translateY(-${currentSlide * 100}%)`
-              : `translateX(-${currentSlide * 100}%)`
-          }}
-        >
-          <div className={`${isMobile ? 'flex flex-col' : 'flex'} h-full`}>
-            {slides.map((slide, index) => (
-              <div key={index} className="min-w-full h-full flex-shrink-0">
-                {slide.component}
-              </div>
-            ))}
-          </div>
-        </div>
+    <main className="bg-base-100 min-h-screen relative">
+      <div className="flex flex-col">
+        <Hero />
+        <About />
+        <Satements />
+        <BigStatement />
+        <Coin />
+        <Roadmap />
+        <Contact />
+      </div>
 
-        {/* Timeline navigation with labels */}
-        <div className={`absolute ${isMobile ? 'right-8 top-1/2 -translate-y-1/2' : 'bottom-8 left-1/2 -translate-x-1/2'}`}>
-          <div className={`${isMobile ? 'w-[2px] h-[300px]' : 'h-[2px] w-[300px]'} bg-base-300 relative`}>
-            <div className={`absolute ${isMobile ? 'left-1/2 -translate-x-1/2 flex flex-col' : 'top-1/2 -translate-y-1/2 flex'} justify-between ${isMobile ? 'h-full' : 'w-full'}`}>
-              {slides.map((slide, index) => (
-                <div key={index} className={`flex ${isMobile ? 'items-center' : 'flex-col items-center'}`}>
-                  {isMobile && <span className={`text-sm transition-colors duration-300 mr-2 ${currentSlide === index
-                    ? 'text-primary font-medium'
-                    : 'text-base-content/70'
-                    }`}>
-                    {slide.name}
-                  </span>}
-                  <button
-                    onClick={() => setCurrentSlide(index)}
-                    className={`w-4 h-4 rounded-full transition-all duration-300 ${!isMobile ? 'mb-2' : ''} ${currentSlide === index
-                      ? 'bg-primary scale-125'
-                      : 'bg-base-300 hover:bg-primary/50'
-                      }`}
-                  />
-                  {!isMobile && <span className={`text-sm transition-colors duration-300 ${currentSlide === index
-                    ? 'text-primary font-medium'
-                    : 'text-base-content/70'
-                    }`}>
-                    {slide.name}
-                  </span>}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Solana Stamp */}
-        <div className="absolute left-8 bottom-8 bg-gradient-to-r from-[#9945FF] to-[#14F195] p-[1px] rounded-lg rotate-[-4deg] shadow-lg hover:rotate-0 transition-all duration-300">
-          <div className="bg-black/90 backdrop-blur-sm px-4 py-2 rounded-lg">
-            <div className="flex items-center gap-2">
+      {/* Solana Stamp */}
+      <div className="fixed left-8 bottom-8 bg-gradient-to-r from-[#9945FF] to-[#14F195] p-[1px] rounded-lg rotate-[-4deg] shadow-lg hover:rotate-0 transition-all duration-300">
+        <div className="bg-black/90 backdrop-blur-sm px-4 py-2 rounded-lg">
+          <div className="flex items-center gap-2">
             <svg width="20" height="16" viewBox="0 0 508.07 398.17" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="solana-gradient" x1="463" y1="205.16" x2="182.39" y2="742.62" gradientTransform="translate(0 -198)" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stopColor="#00ffa3"/>
-      <stop offset="1" stopColor="#dc1fff"/>
-    </linearGradient>
-  </defs>
-  <path d="M82.55 303.89A16.63 16.63 0 0194.3 299h405.45a8.3 8.3 0 015.87 14.18l-80.09 80.09a16.61 16.61 0 01-11.75 4.86H8.33a8.31 8.31 0 01-5.88-14.18l80.1-80.06z" fill="url(#solana-gradient)"/>
-  <path d="M82.55 4.85A17.08 17.08 0 0194.3 0h405.45a8.3 8.3 0 015.87 14.18l-80.09 80.09a16.61 16.61 0 01-11.75 4.86H8.33a8.31 8.31 0 01-5.88-14.18l80.1-80.1z" fill="url(#solana-gradient)"/>
-  <path d="M425.53 153.42a16.61 16.61 0 00-11.75-4.86H8.33a8.31 8.31 0 00-5.88 14.18l80.1 80.09a16.6 16.6 0 0011.75 4.86h405.45a8.3 8.3 0 005.87-14.18l-80.09-80.09z" fill="url(#solana-gradient)"/>
-</svg>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#9945FF] to-[#14F195] font-bold">
-                Built on Solana
-              </span>
-            </div>
+              <defs>
+                <linearGradient id="solana-gradient" x1="463" y1="205.16" x2="182.39" y2="742.62" gradientTransform="translate(0 -198)" gradientUnits="userSpaceOnUse">
+                  <stop offset="0" stopColor="#00ffa3"/>
+                  <stop offset="1" stopColor="#dc1fff"/>
+                </linearGradient>
+              </defs>
+              <path d="M82.55 303.89A16.63 16.63 0 0194.3 299h405.45a8.3 8.3 0 015.87 14.18l-80.09 80.09a16.61 16.61 0 01-11.75 4.86H8.33a8.31 8.31 0 01-5.88-14.18l80.1-80.06z" fill="url(#solana-gradient)"/>
+              <path d="M82.55 4.85A17.08 17.08 0 0194.3 0h405.45a8.3 8.3 0 015.87 14.18l-80.09 80.09a16.61 16.61 0 01-11.75 4.86H8.33a8.31 8.31 0 01-5.88-14.18l80.1-80.1z" fill="url(#solana-gradient)"/>
+              <path d="M425.53 153.42a16.61 16.61 0 00-11.75-4.86H8.33a8.31 8.31 0 00-5.88 14.18l80.1 80.09a16.6 16.6 0 0011.75 4.86h405.45a8.3 8.3 0 005.87-14.18l-80.09-80.09z" fill="url(#solana-gradient)"/>
+            </svg>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#9945FF] to-[#14F195] font-bold">
+              Built on Solana
+            </span>
           </div>
         </div>
-      </main>
-    // </Suspense>
-
+      </div>
+    </main>
   )
 }
