@@ -12,6 +12,8 @@ import { useGLTF, useAnimations } from '@react-three/drei'
 import { Group, Mesh, Object3D, Material } from 'three'
 import { GLTF } from 'three-stdlib'
 
+// useGLTF.preload('/european_and_american_game_scencemagic_portal.glb')
+
 type GLTFResult = GLTF & {
   nodes: {
     Plane001_shi_aiStandardSurface1SG_0: Mesh
@@ -249,4 +251,3 @@ export function PortalModel(props: ModelProps) {
   )
 }
 
-useGLTF.preload('/european_and_american_game_scencemagic_portal.glb')

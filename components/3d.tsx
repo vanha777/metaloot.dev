@@ -1,8 +1,12 @@
 'use client'
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { PortalModel } from './Portal';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import Loading from './loading';
+import { useGLTF } from '@react-three/drei';
 // import SpinningLoadingIcon from './SpinningLoadingIcon';
+
+useGLTF.preload('/european_and_american_game_scencemagic_portal.glb')
 
 interface ThreeComponentProps {
     chatBotState: string;
@@ -12,21 +16,19 @@ interface ThreeComponentProps {
 const ThreeComponent: React.FC<ThreeComponentProps> = ({ chatBotState, actions }) => {
     const IronManCameraMyCamera = (): null => {
         const { camera } = useThree();
-        useFrame(() => {
-            camera.position.set(90, 100, 60); // Moved camera further out by increasing z
-            camera.lookAt(-0.5, 40, 0); // Looking up more by increasing y target further
-        });
+        camera.position.set(90, 100, 60);
+        camera.lookAt(-0.5, 40, 0);
         return null;
     };
 
     return (
-        <Canvas flat={false} linear={false}>
-            {/* <Suspense fallback={<SpinningLoadingIcon />}> */}
+        <Suspense fallback={<Loading />}>
+            <Canvas flat={false} linear={false}>
                 <IronManCameraMyCamera />
                 <directionalLight intensity={10} position={[1, 3, 0.5]} />
                 <PortalModel botState={chatBotState} actions={actions} />
-            {/* </Suspense> */}
-        </Canvas>
+            </Canvas >
+        </Suspense>
     );
 };
 
