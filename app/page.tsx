@@ -30,6 +30,7 @@ export default function Home() {
   useEffect(() => {
     let lastScrollTime = 0;
     const scrollCooldown = 1000;
+    let touchStartY = 0;
 
     const handleWheel = (e: WheelEvent) => {
       e.preventDefault();
@@ -52,8 +53,45 @@ export default function Home() {
       }
     }
 
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartY = e.touches[0].clientY;
+    }
+
+    const handleTouchMove = (e: TouchEvent) => {
+      e.preventDefault();
+      const currentTime = Date.now();
+
+      if (currentTime - lastScrollTime < scrollCooldown) {
+        return;
+      }
+
+      const touchEndY = e.touches[0].clientY;
+      const deltaY = touchStartY - touchEndY;
+
+      if (Math.abs(deltaY) > 50) { // Minimum swipe distance threshold
+        if (deltaY > 0) {
+          setCurrentSlide(prev =>
+            prev === slides.length - 1 ? prev : prev + 1
+          );
+        } else {
+          setCurrentSlide(prev =>
+            prev === 0 ? prev : prev - 1
+          );
+        }
+        lastScrollTime = currentTime;
+        touchStartY = touchEndY;
+      }
+    }
+
     window.addEventListener('wheel', handleWheel, { passive: false });
-    return () => window.removeEventListener('wheel', handleWheel);
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
+
+    return () => {
+      window.removeEventListener('wheel', handleWheel);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
+    };
   }, [slides.length])
 
   useEffect(() => {
