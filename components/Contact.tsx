@@ -3,19 +3,46 @@
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 import Image from 'next/image'
-
+import { Auth } from '../app/auth';
 export default function Contact() {
   const [userType, setUserType] = useState<'player' | 'studio' | null>(null)
+  const handleSubmit = async (e: React.FormEvent) => {
+    try {
+      e.preventDefault();
+      
+      const formData = new FormData(e.target as HTMLFormElement);
+      const formValues = Object.fromEntries(formData);
+      
+      console.log('Form submitted:', {
+        userType,
+        ...formValues
+      });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    const formData = new FormData(e.target as HTMLFormElement)
-    const data = Object.fromEntries(formData)
-    console.log('Form submitted:', {
-      userType,
-      ...data
-    })
-  }
+      const dataBase = await Auth;
+      const { data: insertedData, error } = await dataBase
+        .from('subscribers')
+        .insert([{
+          name: formValues.name,
+          email: formValues.email,
+          favourite_game: formValues.favouriteGames || null,
+          studio_name: formValues.studioName || null,
+          type: userType
+        }])
+        .select()
+        .single();
+
+      if (error) {
+        throw error;
+      }
+      
+      console.log('Successfully submitted:', insertedData);
+      return insertedData;
+
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      throw error;
+    }
+  };
 
   return (
     <div className="hero min-h-screen bg-[#020309] relative overflow-hidden">
@@ -99,6 +126,8 @@ export default function Contact() {
                   src="https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/futuristic-ninja-digital-art-2-removebg.png"
                   alt="Player"
                   fill
+                  priority
+                  loading="eager"
                   className="object-cover transition-transform duration-500 group-hover:scale-110"
                 />
                 <span className="absolute bottom-8 left-1/2 -translate-x-1/2 text-3xl font-bold text-[#0CC0DF] z-20">Player</span>
@@ -115,6 +144,8 @@ export default function Contact() {
                   src="https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/view-futuristic-music-robot-droid.png"
                   alt="Game Developer"
                   fill
+                  priority
+                  loading="eager"
                   className="object-cover transition-transform duration-500 group-hover:scale-110"
                 />
                 <span className="absolute bottom-8 left-1/2 -translate-x-1/2 text-3xl font-bold text-[#0CC0DF] z-20">Game Devs</span>
@@ -135,6 +166,8 @@ export default function Contact() {
                 }
                 alt={userType === 'player' ? "Player" : "Game Developer"}
                 fill
+                priority
+                loading="eager"
                 className="object-contain"
               />
             </div>
@@ -196,7 +229,7 @@ export default function Contact() {
                 <label className="cursor-pointer label">
                   <input type="checkbox" checked disabled className="checkbox checkbox-primary" />
                   <span className="label-text text-[#0CC0DF] ml-2">
-                    {userType === 'player' 
+                    {userType === 'player'
                       ? 'Receive Tokens and a Free Player Subscription'
                       : 'Receive shared revenue. Allow MetaLoot to advertise your game and attract more players.'}
                   </span>

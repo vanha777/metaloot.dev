@@ -138,6 +138,8 @@ export default function Statements() {
                 src={cards[cardOrder[1]].image}
                 alt={cards[cardOrder[1]].title}
                 fill
+                priority
+                loading="eager"
                 className="object-cover"
               />
 

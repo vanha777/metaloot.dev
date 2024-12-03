@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import Hero from '@/components/Hero'
 import Satements from '@/components/statements'
 import Roadmap from '@/components/Roadmap'
@@ -8,6 +8,7 @@ import Contact from '@/components/Contact'
 import About from '@/components/about'
 import BigStatement from '@/components/BigStatement'
 import Coin from '@/components/Coin'
+import Loading from '@/components/loading'
 
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0)
@@ -59,61 +60,64 @@ export default function Home() {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
-    
+
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   return (
-    <main className="bg-base-100 h-screen overflow-hidden relative">
-      <div
-        className="transition-transform duration-500 ease-in-out h-full"
-        style={{ 
-          transform: isMobile 
-            ? `translateY(-${currentSlide * 100}%)` 
-            : `translateX(-${currentSlide * 100}%)`
-        }}
-      >
-        <div className={`${isMobile ? 'flex flex-col' : 'flex'} h-full`}>
-          {slides.map((slide, index) => (
-            <div key={index} className="min-w-full h-full flex-shrink-0">
-              {slide.component}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Timeline navigation with labels */}
-      <div className={`absolute ${isMobile ? 'right-8 top-1/2 -translate-y-1/2' : 'bottom-8 left-1/2 -translate-x-1/2'}`}>
-        <div className={`${isMobile ? 'w-[2px] h-[300px]' : 'h-[2px] w-[300px]'} bg-base-300 relative`}>
-          <div className={`absolute ${isMobile ? 'left-1/2 -translate-x-1/2 flex flex-col' : 'top-1/2 -translate-y-1/2 flex'} justify-between ${isMobile ? 'h-full' : 'w-full'}`}>
+    <Suspense fallback={<Loading />}>
+      <main className="bg-base-100 h-screen overflow-hidden relative">
+        <div
+          className="transition-transform duration-500 ease-in-out h-full"
+          style={{
+            transform: isMobile
+              ? `translateY(-${currentSlide * 100}%)`
+              : `translateX(-${currentSlide * 100}%)`
+          }}
+        >
+          <div className={`${isMobile ? 'flex flex-col' : 'flex'} h-full`}>
             {slides.map((slide, index) => (
-              <div key={index} className={`flex ${isMobile ? 'items-center' : 'flex-col items-center'}`}>
-                {isMobile && <span className={`text-sm transition-colors duration-300 mr-2 ${currentSlide === index
-                  ? 'text-primary font-medium'
-                  : 'text-base-content/70'
-                  }`}>
-                  {slide.name}
-                </span>}
-                <button
-                  onClick={() => setCurrentSlide(index)}
-                  className={`w-4 h-4 rounded-full transition-all duration-300 ${!isMobile ? 'mb-2' : ''} ${currentSlide === index
-                    ? 'bg-primary scale-125'
-                    : 'bg-base-300 hover:bg-primary/50'
-                    }`}
-                />
-                {!isMobile && <span className={`text-sm transition-colors duration-300 ${currentSlide === index
-                  ? 'text-primary font-medium'
-                  : 'text-base-content/70'
-                  }`}>
-                  {slide.name}
-                </span>}
+              <div key={index} className="min-w-full h-full flex-shrink-0">
+                {slide.component}
               </div>
             ))}
           </div>
         </div>
-      </div>
-    </main>
+
+        {/* Timeline navigation with labels */}
+        <div className={`absolute ${isMobile ? 'right-8 top-1/2 -translate-y-1/2' : 'bottom-8 left-1/2 -translate-x-1/2'}`}>
+          <div className={`${isMobile ? 'w-[2px] h-[300px]' : 'h-[2px] w-[300px]'} bg-base-300 relative`}>
+            <div className={`absolute ${isMobile ? 'left-1/2 -translate-x-1/2 flex flex-col' : 'top-1/2 -translate-y-1/2 flex'} justify-between ${isMobile ? 'h-full' : 'w-full'}`}>
+              {slides.map((slide, index) => (
+                <div key={index} className={`flex ${isMobile ? 'items-center' : 'flex-col items-center'}`}>
+                  {isMobile && <span className={`text-sm transition-colors duration-300 mr-2 ${currentSlide === index
+                    ? 'text-primary font-medium'
+                    : 'text-base-content/70'
+                    }`}>
+                    {slide.name}
+                  </span>}
+                  <button
+                    onClick={() => setCurrentSlide(index)}
+                    className={`w-4 h-4 rounded-full transition-all duration-300 ${!isMobile ? 'mb-2' : ''} ${currentSlide === index
+                      ? 'bg-primary scale-125'
+                      : 'bg-base-300 hover:bg-primary/50'
+                      }`}
+                  />
+                  {!isMobile && <span className={`text-sm transition-colors duration-300 ${currentSlide === index
+                    ? 'text-primary font-medium'
+                    : 'text-base-content/70'
+                    }`}>
+                    {slide.name}
+                  </span>}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </main>
+    </Suspense>
+
   )
 }
