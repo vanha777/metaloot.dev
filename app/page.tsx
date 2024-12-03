@@ -67,7 +67,7 @@ export default function Home() {
   }, []);
 
   return (
-    <Suspense fallback={<Loading />}>
+    // <Suspense fallback={<Loading />}>
       <main className="bg-base-100 h-screen overflow-hidden relative">
         <div
           className="transition-transform duration-500 ease-in-out h-full"
@@ -117,7 +117,7 @@ export default function Home() {
           </div>
         </div>
       </main>
-    </Suspense>
+    // </Suspense>
 
   )
 }

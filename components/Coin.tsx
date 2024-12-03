@@ -11,6 +11,18 @@ export default function Coin() {
     seconds: 0
   })
 
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
   useEffect(() => {
     const targetDate = new Date('2024-12-06')
 
@@ -34,7 +46,7 @@ export default function Coin() {
   }, [])
 
   return (
-    <div className="hero min-h-screen bg-[#020309] relative overflow-hidden flex items-center justify-center">
+    <div className="hero min-h-screen h-screen bg-[#020309] relative overflow-hidden flex items-center justify-center">
       {/* Static background */}
       <div className="absolute inset-0">
         {/* Static gradient background */}
@@ -70,7 +82,7 @@ export default function Coin() {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => window.open('https://twitter.com/playmetaloot', '_blank')}
-        className="absolute top-8 left-8 bg-[#0CC0DF]/10 backdrop-blur-sm rounded-xl border border-[#0CC0DF]/30 p-4 cursor-pointer hover:bg-[#0CC0DF]/20 transition-all duration-300"
+        className={`absolute ${isMobile ? 'top-4 left-1/2 -translate-x-1/2' : 'top-8 left-8'} bg-[#0CC0DF]/10 backdrop-blur-sm rounded-xl border border-[#0CC0DF]/30 p-4 cursor-pointer hover:bg-[#0CC0DF]/20 transition-all duration-300`}
       >
         <p className="text-[#0CC0DF]">Next Drops</p>
         <div className="flex gap-4">
@@ -99,26 +111,26 @@ export default function Coin() {
       <div className="relative z-10 container mx-auto px-4">
         <div className="flex flex-col items-center">
           {/* Token Info */}
-          <div className="mb-12 text-center">
-            <h2 className="text-7xl font-bold text-[#0CC0DF] mb-6">$MTL</h2>
+          <div className={`mb-12 text-center ${isMobile ? 'mt-32' : ''}`}>
+            <h2 className={`${isMobile ? 'text-5xl' : 'text-7xl'} font-bold text-[#0CC0DF] mb-6`}>$MTL</h2>
             <div className="flex gap-4 justify-center flex-wrap">
               <div className="bg-[#0CC0DF]/10 backdrop-blur-sm rounded-xl border border-[#0CC0DF]/30 p-4">
                 <p className="text-gray-300">Total Supply</p>
-                <p className="text-2xl font-bold text-[#0CC0DF]">$1,000,000,000</p>
+                <p className={`${isMobile ? 'text-xl' : 'text-2xl'} font-bold text-[#0CC0DF]`}>$1,000,000,000</p>
               </div>
               <div className="bg-[#0CC0DF]/10 backdrop-blur-sm rounded-xl border border-[#0CC0DF]/30 p-4">
                 <p className="text-gray-300">Circulating Supply</p>
-                <p className="text-2xl font-bold text-[#0CC0DF]">$~</p>
+                <p className={`${isMobile ? 'text-xl' : 'text-2xl'} font-bold text-[#0CC0DF]`}>$~</p>
               </div>
               <div className="bg-[#0CC0DF]/10 backdrop-blur-sm rounded-xl border border-[#0CC0DF]/30 p-4">
                 <p className="text-gray-300">Market Cap</p>
-                <p className="text-2xl font-bold text-[#0CC0DF]">$~</p>
+                <p className={`${isMobile ? 'text-xl' : 'text-2xl'} font-bold text-[#0CC0DF]`}>$~</p>
               </div>
             </div>
           </div>
 
           {/* Central Coin with Connected Text Boxes */}
-          <div className="relative w-96 h-96">
+          <div className={`relative ${isMobile ? 'w-64 h-64' : 'w-96 h-96'}`}>
             {/* Main Static Coin with Enhanced 3D Effect */}
             <div
               style={{
@@ -185,44 +197,43 @@ export default function Coin() {
               />
             </div>
 
-            {/* Left Text Box */}
-            <div
-              className="absolute left-0 top-1/2 -translate-x-full -translate-y-1/2"
-            >
-              <div className="flex items-center">
-                <div className="w-64 p-4 bg-[#0CC0DF]/10 backdrop-blur-sm rounded-xl border border-[#0CC0DF]/30">
-                  <h3 className="text-xl font-bold text-[#0CC0DF] mb-2">MetaLoot Tokens</h3>
-                  <p className="text-sm text-gray-300">Used to value all items, NFT trades, and in-game currencies.</p>
+            {!isMobile && (
+              // Desktop layout - Connected text boxes
+              <>
+                {/* Left Text Box */}
+                <div className="absolute left-0 top-1/2 -translate-x-full -translate-y-1/2">
+                  <div className="flex items-center">
+                    <div className="w-64 p-4 bg-[#0CC0DF]/10 backdrop-blur-sm rounded-xl border border-[#0CC0DF]/30">
+                      <h3 className="text-xl font-bold text-[#0CC0DF] mb-2">MetaLoot Tokens</h3>
+                      <p className="text-sm text-gray-300">Used to value all items, NFT trades, and in-game currencies.</p>
+                    </div>
+                    <div className="w-16 h-0.5 bg-[#0CC0DF]" />
+                  </div>
                 </div>
-                <div className="w-16 h-0.5 bg-[#0CC0DF]" />
-              </div>
-            </div>
 
-            {/* Right Upper Text Box */}
-            <div
-              className="absolute right-0 top-1/4 translate-x-full -translate-y-1/2"
-            >
-              <div className="flex items-center">
-                <div className="w-16 h-0.5 bg-[#0CC0DF]" />
-                <div className="w-64 p-4 bg-[#0CC0DF]/10 backdrop-blur-sm rounded-xl border border-[#0CC0DF]/30">
-                  <h3 className="text-xl font-bold text-[#0CC0DF] mb-2">Limited Supply</h3>
-                  <p className="text-sm text-gray-300">There will only ever be 1 billion tokens.</p>
+                {/* Right Upper Text Box */}
+                <div className="absolute right-0 top-1/4 translate-x-full -translate-y-1/2">
+                  <div className="flex items-center">
+                    <div className="w-16 h-0.5 bg-[#0CC0DF]" />
+                    <div className="w-64 p-4 bg-[#0CC0DF]/10 backdrop-blur-sm rounded-xl border border-[#0CC0DF]/30">
+                      <h3 className="text-xl font-bold text-[#0CC0DF] mb-2">Limited Supply</h3>
+                      <p className="text-sm text-gray-300">There will only ever be 1 billion tokens.</p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
 
-            {/* Right Lower Text Box */}
-            <div
-              className="absolute right-0 top-3/4 translate-x-full -translate-y-1/2"
-            >
-              <div className="flex items-center">
-                <div className="w-16 h-0.5 bg-[#0CC0DF]" />
-                <div className="w-64 p-4 bg-[#0CC0DF]/10 backdrop-blur-sm rounded-xl border border-[#0CC0DF]/30">
-                  <h3 className="text-xl font-bold text-[#0CC0DF] mb-2">A Substantial Ecosystem</h3>
-                  <p className="text-sm text-gray-300">Strict measures are in place to manage tokenomics and preserve the value of our tokens.</p>
+                {/* Right Lower Text Box */}
+                <div className="absolute right-0 top-3/4 translate-x-full -translate-y-1/2">
+                  <div className="flex items-center">
+                    <div className="w-16 h-0.5 bg-[#0CC0DF]" />
+                    <div className="w-64 p-4 bg-[#0CC0DF]/10 backdrop-blur-sm rounded-xl border border-[#0CC0DF]/30">
+                      <h3 className="text-xl font-bold text-[#0CC0DF] mb-2">A Substantial Ecosystem</h3>
+                      <p className="text-sm text-gray-300">Strict measures are in place to manage tokenomics and preserve the value of our tokens.</p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
+              </>
+            )}
           </div>
         </div>
       </div>

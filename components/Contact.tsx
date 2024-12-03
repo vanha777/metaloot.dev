@@ -1,11 +1,24 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { Auth } from '../app/auth';
+
 export default function Contact() {
   const [userType, setUserType] = useState<'player' | 'studio' | null>(null)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
   const handleSubmit = async (e: React.FormEvent) => {
     try {
       e.preventDefault();
@@ -175,19 +188,21 @@ export default function Contact() {
             animate={{ opacity: 1, x: 0 }}
             className="flex gap-12 max-w-6xl mx-auto items-start"
           >
-            <div className="w-[600px] h-[800px] relative flex-shrink-0">
-              <Image
-                src={userType === 'player'
-                  ? "/player_2.png"
-                  : "/developer_1.png"
-                }
-                alt={userType === 'player' ? "Player" : "Game Developer"}
-                fill
-                priority
-                loading="eager"
-                className="object-contain"
-              />
-            </div>
+            {!isMobile && (
+              <div className="w-[600px] h-[800px] relative flex-shrink-0">
+                <Image
+                  src={userType === 'player'
+                    ? "/player_2.png"
+                    : "/developer_1.png"
+                  }
+                  alt={userType === 'player' ? "Player" : "Game Developer"}
+                  fill
+                  priority
+                  loading="eager"
+                  className="object-contain"
+                />
+              </div>
+            )}
 
             <form onSubmit={handleSubmit} className="flex-1 space-y-6 bg-[#0CC0DF]/10 backdrop-blur-sm p-8 rounded-xl border border-[#0CC0DF]/30">
               <div className="flex justify-between items-center">

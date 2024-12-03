@@ -2,10 +2,21 @@
 
 import { motion } from 'framer-motion'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 export default function Statements() {
   const [cardOrder, setCardOrder] = useState([0, 1, 2])
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -43,7 +54,7 @@ export default function Statements() {
       image: "/statement_1.png"
     },
     {
-      title: "X-Game Exchanges",
+      title: "X-Game Exchanges", 
       description: "Join our gaming network where your items are real assets - tradeable and usable across multiple games, all securely synced to your blockchain wallet.",
       image: "/statement_2.png"
     },
@@ -55,7 +66,7 @@ export default function Statements() {
   ];
 
   return (
-    <section className="min-h-screen bg-[#010205] relative overflow-hidden flex items-center justify-center px-2 md:px-4 text-white py-6 md:py-10">
+    <section className="h-screen bg-[#010205] relative overflow-hidden flex items-center justify-center px-2 md:px-4 text-white">
       {/* Cyberpunk grid background */}
       <div className="absolute inset-0">
         {/* Dark gradient overlay */}
@@ -105,29 +116,29 @@ export default function Statements() {
       </div>
 
       <motion.div
-        className="max-w-7xl w-full relative z-10"
+        className="w-full h-full relative z-10 px-4 md:px-8 lg:px-16 flex items-center"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
-        <div className="flex flex-col md:flex-row items-center justify-between gap-8 md:gap-16">
-          {/* Left Text Content */}
+        <div className={`flex ${isMobile ? 'flex-col' : 'flex-row'} items-center justify-between gap-8 w-full max-w-7xl mx-auto`}>
+          {/* Text Content */}
           <motion.div
             variants={itemVariants}
-            className="md:w-1/2 text-left"
+            className={`${isMobile ? 'w-full pt-16' : 'w-1/2'} text-left`}
           >
-            <h2 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-[#0CC0DF] to-[#0CC0DF]/70 bg-clip-text text-transparent">
+            <h2 className="text-3xl md:text-4xl lg:text-6xl font-bold mb-4 md:mb-6 bg-gradient-to-r from-[#0CC0DF] to-[#0CC0DF]/70 bg-clip-text text-transparent">
               {cards[cardOrder[1]].title}
             </h2>
-            <p className="text-xl md:text-2xl text-gray-300 leading-relaxed">
+            <p className="text-lg md:text-xl lg:text-2xl text-gray-300 leading-relaxed">
               {cards[cardOrder[1]].description}
             </p>
           </motion.div>
 
-          {/* Center Image Carousel */}
+          {/* Image Carousel */}
           <motion.div
             variants={itemVariants}
-            className="md:w-1/2 relative h-[500px] w-full"
+            className={`${isMobile ? 'w-full h-[50vh]' : 'w-1/2 h-[500px]'} relative`}
           >
             <motion.div
               className="relative w-full h-full rounded-xl overflow-hidden cursor-pointer group"
@@ -167,7 +178,7 @@ export default function Statements() {
                   repeat: Infinity,
                   ease: "easeInOut"
                 }}
-                className="absolute top-4 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-gradient-to-br from-[#0CC0DF] to-[#0CC0DF]/70"
+                className="absolute top-4 left-1/2 -translate-x-1/2 w-6 md:w-8 h-6 md:h-8 rounded-full bg-gradient-to-br from-[#0CC0DF] to-[#0CC0DF]/70"
               />
 
               {/* Navigation dots */}
@@ -175,20 +186,19 @@ export default function Statements() {
                 {[0, 1, 2].map((index) => (
                   <div
                     key={index}
-                    className={`w-2 h-2 rounded-full transition-all duration-300 ${cardOrder[1] === index ? 'bg-[#0CC0DF] w-4' : 'bg-white/50'
-                      }`}
+                    className={`w-2 h-2 rounded-full transition-all duration-300 ${cardOrder[1] === index ? 'bg-[#0CC0DF] w-4' : 'bg-white/50'}`}
                   />
                 ))}
               </div>
 
               {/* Click to next indicator */}
-              <div className="absolute inset-0 flex items-center justify-between px-4 opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className={`absolute inset-0 flex items-center justify-between px-4 ${isMobile ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} transition-opacity`}>
                 <motion.div
                   animate={{ x: [0, -10, 0] }}
                   transition={{ repeat: Infinity, duration: 1.5 }}
                   className="bg-[#0CC0DF]/20 backdrop-blur-sm p-2 rounded-full"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-[#0CC0DF]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 md:h-6 md:w-6 text-[#0CC0DF]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                   </svg>
                 </motion.div>
@@ -197,11 +207,23 @@ export default function Statements() {
                   transition={{ repeat: Infinity, duration: 1.5 }}
                   className="bg-[#0CC0DF]/20 backdrop-blur-sm p-2 rounded-full"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-[#0CC0DF]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 md:h-6 md:w-6 text-[#0CC0DF]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
                 </motion.div>
               </div>
+
+              {/* Mobile tap indicator */}
+              {isMobile && (
+                <motion.div 
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center text-white/80 bg-black/50 px-4 py-2 rounded-full backdrop-blur-sm"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: [0, 1, 0] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                >
+                  Tap to navigate
+                </motion.div>
+              )}
             </motion.div>
           </motion.div>
         </div>
