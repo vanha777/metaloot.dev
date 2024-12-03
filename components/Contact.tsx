@@ -9,10 +9,9 @@ export default function Contact() {
   const handleSubmit = async (e: React.FormEvent) => {
     try {
       e.preventDefault();
-      
       const formData = new FormData(e.target as HTMLFormElement);
       const formValues = Object.fromEntries(formData);
-      
+
       console.log('Form submitted:', {
         userType,
         ...formValues
@@ -26,6 +25,7 @@ export default function Contact() {
           email: formValues.email,
           favourite_game: formValues.favouriteGames || null,
           studio_name: formValues.studioName || null,
+          wallet: formValues.wallet,
           type: userType
         }])
         .select()
@@ -34,10 +34,10 @@ export default function Contact() {
       if (error) {
         throw error;
       }
-      
       console.log('Successfully submitted:', insertedData);
+      const modal = document.getElementById('my_modal_1') as HTMLDialogElement;
+      modal?.showModal();
       return insertedData;
-
     } catch (error) {
       console.error('Error submitting form:', error);
       throw error;
@@ -46,6 +46,23 @@ export default function Contact() {
 
   return (
     <div className="hero min-h-screen bg-[#020309] relative overflow-hidden">
+      <dialog id="my_modal_1" className="modal">
+        <div className="modal-box bg-[#020309] border-2 border-[#0CC0DF]/30 backdrop-blur-sm">
+          <h3 className="font-bold text-2xl text-[#0CC0DF]">Accessing the sources...</h3>
+          <p className="py-4 text-gray-300">Stay sharp! Exclusive perks and early token access are heading your way. The adventure has only just begun!</p>
+          <div className="modal-action">
+            <form method="dialog">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="btn bg-[#0CC0DF] hover:bg-[#0AA0BF] text-white border-none"
+              >
+                Close
+              </motion.button>
+            </form>
+          </div>
+        </div>
+      </dialog>
       {/* Deep space background with electronic effects */}
       <div className="absolute inset-0">
         <div className="absolute w-full h-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#0CC0DF] via-black to-[#020309] opacity-10" />
@@ -197,7 +214,7 @@ export default function Contact() {
                 <label className="label">
                   <span className="label-text text-[#0CC0DF]">Email</span>
                 </label>
-                <input name="email" type="email" className="input bg-[#0CC0DF]/10 border-[#0CC0DF]/30 w-full focus:border-[#0CC0DF]" />
+                <input name="email" type="email" required className="input bg-[#0CC0DF]/10 border-[#0CC0DF]/30 w-full focus:border-[#0CC0DF]" />
               </div>
 
               {userType === 'studio' && (
@@ -218,12 +235,12 @@ export default function Contact() {
                 </div>
               )}
 
-              {/* <div className="form-control">
+              <div className="form-control">
                 <label className="label">
-                  <span className="label-text text-[#0CC0DF]">Message</span>
+                  <span className="label-text text-[#0CC0DF]">Wallet Address</span>
                 </label>
-                <textarea name="message" className="textarea bg-[#0CC0DF]/10 border-[#0CC0DF]/30 h-20 focus:border-[#0CC0DF]"></textarea>
-              </div> */}
+                <input name="wallet" type="text" className="input bg-[#0CC0DF]/10 border-[#0CC0DF]/30 w-full focus:border-[#0CC0DF]" />
+              </div>
 
               <div className="form-control">
                 <label className="cursor-pointer label">
