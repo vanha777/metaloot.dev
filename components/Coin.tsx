@@ -46,7 +46,7 @@ export default function Coin() {
   }, [])
 
   return (
-    <div className="hero min-h-screen h-screen bg-[#020309] relative overflow-hidden flex items-center justify-center">
+    <div className="hero min-h-screen bg-[#020309] relative overflow-hidden flex items-center justify-center">
       {/* Static background */}
       <div className="absolute inset-0">
         {/* Static gradient background */}

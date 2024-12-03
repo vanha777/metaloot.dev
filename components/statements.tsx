@@ -66,7 +66,7 @@ export default function Statements() {
   ];
 
   return (
-    <section className="h-screen bg-[#010205] relative overflow-hidden flex items-center justify-center px-2 md:px-4 text-white">
+    <section className="bg-[#010205] relative overflow-hidden flex items-center justify-center px-2 md:px-4 text-white py-24">
       {/* Cyberpunk grid background */}
       <div className="absolute inset-0">
         {/* Dark gradient overlay */}
@@ -116,7 +116,7 @@ export default function Statements() {
       </div>
 
       <motion.div
-        className="w-full h-full relative z-10 px-4 md:px-8 lg:px-16 flex items-center"
+        className="w-full relative z-10 px-4 md:px-8 lg:px-16 flex items-center"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
@@ -138,7 +138,7 @@ export default function Statements() {
           {/* Image Carousel */}
           <motion.div
             variants={itemVariants}
-            className={`${isMobile ? 'w-full h-[50vh]' : 'w-1/2 h-[500px]'} relative`}
+            className={`${isMobile ? 'w-full' : 'w-1/2'} relative aspect-[4/3]`}
           >
             <motion.div
               className="relative w-full h-full rounded-xl overflow-hidden cursor-pointer group"

@@ -19,7 +19,7 @@ export default function Hero() {
   }, [])
 
   return (
-    <div className="hero min-h-screen h-screen bg-[#020309] relative overflow-hidden">
+    <div className="hero min-h-screen bg-[#020309] relative overflow-hidden">
       {/* Deep space background with electronic effects */}
       <div className="absolute inset-0">
         <div className="absolute w-full h-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#0CC0DF] via-black to-[#020309] opacity-10" />
