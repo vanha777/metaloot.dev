@@ -207,7 +207,7 @@ export default function Contact() {
             <form onSubmit={handleSubmit} className="flex-1 space-y-6 bg-[#0CC0DF]/10 backdrop-blur-sm p-8 rounded-xl border border-[#0CC0DF]/30">
               <div className="flex justify-between items-center">
                 <h3 className="text-xl font-bold text-[#0CC0DF]">
-                  {userType === 'player' ? 'Player Contact Form' : 'Studio Contact Form'}
+                  {userType === 'player' ? 'Player Mission Waiver' : 'Recon Contact Form'}
                 </h3>
                 <button
                   type="button"
