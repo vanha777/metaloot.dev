@@ -39,7 +39,7 @@ export default function About() {
           playsInline
           className="w-full h-full object-cover"
         >
-          <source src="https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/copy_4ECEA0DD-01D9-4342-BF57-73B5570F4860.mp4?t=2024-12-02T10%3A44%3A15.619Z" type="video/mp4" />
+          <source src="/vision.mp4" type="video/mp4" />
         </video>
         {/* Overlay gradient */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#020309] via-[#020309]/50 to-transparent" />

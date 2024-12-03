@@ -140,7 +140,7 @@ export default function Contact() {
               >
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10" />
                 <Image
-                  src="https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/futuristic-ninja-digital-art-2-removebg.png"
+                  src="/player_1.png"
                   alt="Player"
                   fill
                   priority
@@ -158,7 +158,7 @@ export default function Contact() {
               >
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10" />
                 <Image
-                  src="https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/view-futuristic-music-robot-droid.png"
+                  src="/developer_1.png"
                   alt="Game Developer"
                   fill
                   priority
@@ -178,8 +178,8 @@ export default function Contact() {
             <div className="w-[600px] h-[800px] relative flex-shrink-0">
               <Image
                 src={userType === 'player'
-                  ? "https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/futuristic-ninja-digital-art-2.png"
-                  : "https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/view-futuristic-music-robot-droid.png"
+                  ? "/player_2.png"
+                  : "/developer_1.png"
                 }
                 alt={userType === 'player' ? "Player" : "Game Developer"}
                 fill

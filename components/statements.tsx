@@ -40,17 +40,17 @@ export default function Statements() {
     {
       title: "P-2-Earn",
       description: "Ready to cash out? Convert your in-game currency to $MTL anytime. Our tokenomics system spans all games, allowing players to purchase $MTL with their in-game currency.",
-      image: "https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/rb_2151866862.png"
+      image: "/statement_1.png"
     },
     {
       title: "X-Game Exchanges",
       description: "Join our gaming network where your items are real assets - tradeable and usable across multiple games, all securely synced to your blockchain wallet.",
-      image: "https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/abstract-glowing-graphics-template-team-versus-team-b-sport-event-generative-ai.png"
+      image: "/statement_2.png"
     },
     {
       title: "No-Fuss Items Marketplace",
       description: "Freely trade valuable game assets, discover rare items, or cash out your gaming inventory - powered by secure NFT trading.",
-      image: "https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/rb_2151866858.png"
+      image: "/statement_3.png"
     },
   ];
 

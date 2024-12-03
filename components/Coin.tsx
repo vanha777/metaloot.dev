@@ -1,16 +1,46 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { useEffect, useState } from 'react'
 
 export default function Coin() {
+  const [timeLeft, setTimeLeft] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0
+  })
+
+  useEffect(() => {
+    const targetDate = new Date('2024-12-06')
+
+    const timer = setInterval(() => {
+      const now = new Date()
+      const difference = targetDate.getTime() - now.getTime()
+
+      const totalHours = Math.floor(difference / (1000 * 60 * 60))
+      const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60))
+      const seconds = Math.floor((difference % (1000 * 60)) / 1000)
+
+      setTimeLeft({
+        days: 0,
+        hours: totalHours,
+        minutes,
+        seconds
+      })
+    }, 1000)
+
+    return () => clearInterval(timer)
+  }, [])
+
   return (
     <div className="hero min-h-screen bg-[#020309] relative overflow-hidden flex items-center justify-center">
-      {/* Deep space background with electronic effects */}
+      {/* Static background */}
       <div className="absolute inset-0">
-        {/* Enhanced gradient background */}
+        {/* Static gradient background */}
         <div className="absolute w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#0CC0DF] via-[#020309] to-[#020309] opacity-20" />
-        
-        {/* Static grid lines */}
+
+        {/* Static grid pattern */}
         <div className="grid grid-cols-12 gap-4 absolute inset-0 opacity-15">
           {[...Array(48)].map((_, i) => (
             <div
@@ -20,31 +50,50 @@ export default function Coin() {
           ))}
         </div>
 
-        {/* Static ambient dots */}
+        {/* Static dots pattern */}
         <div className="absolute inset-0">
           {[...Array(20)].map((_, i) => (
             <div
               key={i}
               className="absolute w-1 h-1 bg-[#0CC0DF]/30 rounded-full"
               style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`
+                left: `${(i * 5)}%`,
+                top: `${(i * 5)}%`
               }}
             />
           ))}
         </div>
       </div>
 
-      {/* Release Date Banner - Clickable */}
+      {/* Release Date Banner - Countdown */}
       <motion.button
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => window.open('https://twitter.com/playmetaloot', '_blank')}
         className="absolute top-8 left-8 bg-[#0CC0DF]/10 backdrop-blur-sm rounded-xl border border-[#0CC0DF]/30 p-4 cursor-pointer hover:bg-[#0CC0DF]/20 transition-all duration-300"
       >
-        <p className="text-gray-300">Next Drops</p>
-        <p className="text-2xl font-bold text-[#0CC0DF]">6/12/2024</p>
-        <p className="text-sm text-[#0CC0DF]/70 mt-1">@playmetaloot</p>
+        <p className="text-[#0CC0DF]">Next Drops</p>
+        <div className="flex gap-4">
+          <div className="flex items-center">
+            <span className="countdown font-mono text-2xl text-[#0CC0DF]">
+              <span style={{ "--value": timeLeft.hours } as any}></span>
+            </span>
+            <span className="ml-1">hours</span>
+          </div>
+          <div className="flex items-center">
+            <span className="countdown font-mono text-2xl text-[#0CC0DF]">
+              <span style={{ "--value": timeLeft.minutes } as any}></span>
+            </span>
+            <span className="ml-1">min</span>
+          </div>
+          <div className="flex items-center">
+            <span className="countdown font-mono text-2xl text-[#0CC0DF]">
+              <span style={{ "--value": timeLeft.seconds } as any}></span>
+            </span>
+            <span className="ml-1">sec</span>
+          </div>
+        </div>
+        <p className="text-sm text-[#0CC0DF]/70 mt-1">visit x.com/@playmetaloot</p>
       </motion.button>
 
       <div className="relative z-10 container mx-auto px-4">
@@ -55,11 +104,11 @@ export default function Coin() {
             <div className="flex gap-4 justify-center flex-wrap">
               <div className="bg-[#0CC0DF]/10 backdrop-blur-sm rounded-xl border border-[#0CC0DF]/30 p-4">
                 <p className="text-gray-300">Total Supply</p>
-                <p className="text-2xl font-bold text-[#0CC0DF]">1,000,000,000</p>
+                <p className="text-2xl font-bold text-[#0CC0DF]">$1,000,000,000</p>
               </div>
               <div className="bg-[#0CC0DF]/10 backdrop-blur-sm rounded-xl border border-[#0CC0DF]/30 p-4">
                 <p className="text-gray-300">Circulating Supply</p>
-                <p className="text-2xl font-bold text-[#0CC0DF]">1,000,000</p>
+                <p className="text-2xl font-bold text-[#0CC0DF]">$~</p>
               </div>
               <div className="bg-[#0CC0DF]/10 backdrop-blur-sm rounded-xl border border-[#0CC0DF]/30 p-4">
                 <p className="text-gray-300">Market Cap</p>
@@ -70,52 +119,107 @@ export default function Coin() {
 
           {/* Central Coin with Connected Text Boxes */}
           <div className="relative w-96 h-96">
-            {/* Main Static Coin */}
-            <div 
+            {/* Main Static Coin with Enhanced 3D Effect */}
+            <div
+              style={{
+                transform: "perspective(1000px) rotateY(-30deg) rotateX(5deg)",
+                transformStyle: "preserve-3d",
+                position: "relative"
+              }}
               className="w-full h-full rounded-full bg-gradient-to-r from-[#0CC0DF] to-[#0AA0BF] shadow-[0_0_50px_rgba(12,192,223,0.3)] flex items-center justify-center overflow-hidden"
             >
-              <img 
-                src="https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/download.png"
+              {/* Side edge of coin - thicker for more depth */}
+              <div
+                style={{
+                  position: "absolute",
+                  width: "20px",
+                  height: "100%",
+                  right: "-10px",
+                  background: "linear-gradient(90deg, #0AA0BF 0%, #076778 100%)",
+                  transform: "rotateY(-90deg)",
+                  transformOrigin: "right",
+                  borderRadius: "10px"
+                }}
+              />
+
+              {/* Bottom edge highlight */}
+              <div
+                style={{
+                  position: "absolute",
+                  width: "100%",
+                  height: "20px",
+                  bottom: "-10px",
+                  background: "linear-gradient(180deg, #0AA0BF 0%, #076778 100%)",
+                  transform: "rotateX(90deg)",
+                  transformOrigin: "bottom",
+                  borderRadius: "10px"
+                }}
+              />
+
+              {/* Main coin face with enhanced shadows */}
+              <img
+                src="/coin.png"
                 alt="MetaLoot Token"
                 className="w-full h-full object-cover"
+                style={{
+                  transform: "translateZ(2px)",
+                  boxShadow: "-8px 8px 15px rgba(0,0,0,0.4), inset -2px 2px 15px rgba(255,255,255,0.3)",
+                  border: "4px solid #0CC0DF",
+                  borderRadius: "50%",
+                  filter: "drop-shadow(0 0 10px rgba(12,192,223,0.5))"
+                }}
+              />
+
+              {/* Static highlight overlay */}
+              <div
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  background: "linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%, rgba(0,0,0,0.2) 100%)",
+                  borderRadius: "50%",
+                  pointerEvents: "none"
+                }}
               />
             </div>
 
             {/* Left Text Box */}
-            <div 
+            <div
               className="absolute left-0 top-1/2 -translate-x-full -translate-y-1/2"
             >
               <div className="flex items-center">
                 <div className="w-64 p-4 bg-[#0CC0DF]/10 backdrop-blur-sm rounded-xl border border-[#0CC0DF]/30">
-                  <h3 className="text-xl font-bold text-[#0CC0DF] mb-2">Cross-Game Assets</h3>
-                  <p className="text-sm text-gray-300">Transfer your items seamlessly between supported games</p>
+                  <h3 className="text-xl font-bold text-[#0CC0DF] mb-2">MetaLoot Tokens</h3>
+                  <p className="text-sm text-gray-300">Used to value all items, NFT trades, and in-game currencies.</p>
                 </div>
                 <div className="w-16 h-0.5 bg-[#0CC0DF]" />
               </div>
             </div>
 
             {/* Right Upper Text Box */}
-            <div 
+            <div
               className="absolute right-0 top-1/4 translate-x-full -translate-y-1/2"
             >
               <div className="flex items-center">
                 <div className="w-16 h-0.5 bg-[#0CC0DF]" />
                 <div className="w-64 p-4 bg-[#0CC0DF]/10 backdrop-blur-sm rounded-xl border border-[#0CC0DF]/30">
-                  <h3 className="text-xl font-bold text-[#0CC0DF] mb-2">Secure Storage</h3>
-                  <p className="text-sm text-gray-300">Your items are safely stored on the blockchain</p>
+                  <h3 className="text-xl font-bold text-[#0CC0DF] mb-2">Limited Supply</h3>
+                  <p className="text-sm text-gray-300">There will only ever be 1 billion tokens.</p>
                 </div>
               </div>
             </div>
 
             {/* Right Lower Text Box */}
-            <div 
+            <div
               className="absolute right-0 top-3/4 translate-x-full -translate-y-1/2"
             >
               <div className="flex items-center">
                 <div className="w-16 h-0.5 bg-[#0CC0DF]" />
                 <div className="w-64 p-4 bg-[#0CC0DF]/10 backdrop-blur-sm rounded-xl border border-[#0CC0DF]/30">
-                  <h3 className="text-xl font-bold text-[#0CC0DF] mb-2">Trade & Earn</h3>
-                  <p className="text-sm text-gray-300">Marketplace for trading your valuable game items</p>
+                  <h3 className="text-xl font-bold text-[#0CC0DF] mb-2">A Substantial Ecosystem</h3>
+                  <p className="text-sm text-gray-300">Strict measures are in place to manage tokenomics and preserve the value of our tokens.</p>
                 </div>
               </div>
             </div>
