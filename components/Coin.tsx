@@ -24,7 +24,7 @@ export default function Coin() {
   }, [])
 
   useEffect(() => {
-    const targetDate = new Date('2024-12-06')
+    const targetDate = new Date('2024-12-09T00:00:00')
 
     const timer = setInterval(() => {
       const now = new Date()
@@ -138,61 +138,16 @@ export default function Coin() {
                 transformStyle: "preserve-3d",
                 position: "relative"
               }}
-              className="w-full h-full rounded-full bg-gradient-to-r from-[#0CC0DF] to-[#0AA0BF] shadow-[0_0_50px_rgba(12,192,223,0.3)] flex items-center justify-center overflow-hidden"
+              className="w-full h-full rounded-full flex items-center justify-center overflow-hidden"
             >
-              {/* Side edge of coin - thicker for more depth */}
-              <div
-                style={{
-                  position: "absolute",
-                  width: "20px",
-                  height: "100%",
-                  right: "-10px",
-                  background: "linear-gradient(90deg, #0AA0BF 0%, #076778 100%)",
-                  transform: "rotateY(-90deg)",
-                  transformOrigin: "right",
-                  borderRadius: "10px"
-                }}
-              />
-
-              {/* Bottom edge highlight */}
-              <div
-                style={{
-                  position: "absolute",
-                  width: "100%",
-                  height: "20px",
-                  bottom: "-10px",
-                  background: "linear-gradient(180deg, #0AA0BF 0%, #076778 100%)",
-                  transform: "rotateX(90deg)",
-                  transformOrigin: "bottom",
-                  borderRadius: "10px"
-                }}
-              />
-
-              {/* Main coin face with enhanced shadows */}
+              {/* Main coin face */}
               <img
                 src="/coin.png"
                 alt="MetaLoot Token"
                 className="w-full h-full object-cover"
                 style={{
                   transform: "translateZ(2px)",
-                  boxShadow: "-8px 8px 15px rgba(0,0,0,0.4), inset -2px 2px 15px rgba(255,255,255,0.3)",
-                  border: "4px solid #0CC0DF",
-                  borderRadius: "50%",
                   filter: "drop-shadow(0 0 10px rgba(12,192,223,0.5))"
-                }}
-              />
-
-              {/* Static highlight overlay */}
-              <div
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  background: "linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%, rgba(0,0,0,0.2) 100%)",
-                  borderRadius: "50%",
-                  pointerEvents: "none"
                 }}
               />
             </div>
