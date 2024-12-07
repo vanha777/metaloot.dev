@@ -136,12 +136,12 @@ export default function Coin() {
           >
             <div className="flex justify-center items-center">
               <span className="font-mono text-xl text-[#0CC0DF]">{participantCount}</span>
-              <span className="ml-2 text-[#0CC0DF]/70">/ 10 participants</span>
+              <span className="ml-2 text-[#0CC0DF]/70">/ 20 participants</span>
             </div>
             <div className="w-full bg-[#0CC0DF]/20 rounded-full h-2 mt-2">
               <div 
                 className="bg-[#0CC0DF] h-2 rounded-full transition-all duration-500"
-                style={{ width: `${(participantCount / 10) * 100}%` }}
+                style={{ width: `${(participantCount / 20) * 100}%` }}
               />
             </div>
           </motion.div>
@@ -184,12 +184,12 @@ export default function Coin() {
           >
             <div className="flex justify-center items-center">
               <span className="font-mono text-xl text-[#0CC0DF]">{participantCount}</span>
-              <span className="ml-2 text-[#0CC0DF]/70">/ 10 participants</span>
+              <span className="ml-2 text-[#0CC0DF]/70">/ 20 participants</span>
             </div>
             <div className="w-full bg-[#0CC0DF]/20 rounded-full h-2 mt-2">
               <div 
                 className="bg-[#0CC0DF] h-2 rounded-full transition-all duration-500"
-                style={{ width: `${(participantCount / 10) * 100}%` }}
+                style={{ width: `${(participantCount / 20) * 100}%` }}
               />
             </div>
           </motion.div>
@@ -200,7 +200,7 @@ export default function Coin() {
         <div className="flex flex-col items-center">
           {/* Token Info */}
           <div className={`mb-12 text-center ${isMobile ? 'mt-48' : ''}`}>
-            <h2 className={`${isMobile ? 'text-5xl' : 'text-7xl'} font-bold text-[#0CC0DF] mb-6`}>$MTL</h2>
+            <h2 className={`${isMobile ? 'text-5xl' : 'text-7xl'} font-bold text-[#0CC0DF] mb-6 mt-10`}>$MTL</h2>
             <div className="flex gap-4 justify-center flex-wrap">
               <div className="bg-[#0CC0DF]/10 backdrop-blur-sm rounded-xl border border-[#0CC0DF]/30 p-4">
                 <p className="text-gray-300">Total Supply</p>
