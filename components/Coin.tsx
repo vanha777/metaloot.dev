@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
+import { Auth } from '../app/auth';
 
 export default function Coin() {
   const [timeLeft, setTimeLeft] = useState({
@@ -12,6 +13,7 @@ export default function Coin() {
   })
 
   const [isMobile, setIsMobile] = useState(false)
+  const [participantCount, setParticipantCount] = useState(0)
 
   useEffect(() => {
     const checkMobile = () => {
@@ -22,6 +24,24 @@ export default function Coin() {
     window.addEventListener('resize', checkMobile)
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
+
+  useEffect(() => {
+    const fetchParticipants = async () => {
+      try {
+        const supabase = await Auth;
+        const { count, error } = await supabase
+          .from('subscribers')
+          .select('*', { count: 'exact' });
+        
+        if (error) throw error;
+        setParticipantCount(count || 0);
+      } catch (error) {
+        console.error('Error fetching participants:', error);
+      }
+    };
+
+    fetchParticipants();
+  }, []);
 
   useEffect(() => {
     const targetDate = new Date('2024-12-09T00:00:00')
@@ -78,40 +98,108 @@ export default function Coin() {
       </div>
 
       {/* Release Date Banner - Countdown */}
-      <motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={() => window.open('https://twitter.com/playmetaloot', '_blank')}
-        className={`absolute ${isMobile ? 'top-4 left-1/2 -translate-x-1/2' : 'top-8 left-8'} bg-[#0CC0DF]/10 backdrop-blur-sm rounded-xl border border-[#0CC0DF]/30 p-4 cursor-pointer hover:bg-[#0CC0DF]/20 transition-all duration-300`}
-      >
-        <p className="text-[#0CC0DF]">Next Drops</p>
-        <div className="flex gap-4">
-          <div className="flex items-center">
-            <span className="countdown font-mono text-2xl text-[#0CC0DF]">
-              <span style={{ "--value": timeLeft.hours } as any}></span>
-            </span>
-            <span className="ml-1">hours</span>
-          </div>
-          <div className="flex items-center">
-            <span className="countdown font-mono text-2xl text-[#0CC0DF]">
-              <span style={{ "--value": timeLeft.minutes } as any}></span>
-            </span>
-            <span className="ml-1">min</span>
-          </div>
-          <div className="flex items-center">
-            <span className="countdown font-mono text-2xl text-[#0CC0DF]">
-              <span style={{ "--value": timeLeft.seconds } as any}></span>
-            </span>
-            <span className="ml-1">sec</span>
-          </div>
+      {isMobile ? (
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 flex flex-col gap-2 ">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => window.open('https://twitter.com/playmetaloot', '_blank')}
+            className="bg-[#0CC0DF]/10 backdrop-blur-sm rounded-xl border border-[#0CC0DF]/30 p-4 cursor-pointer hover:bg-[#0CC0DF]/20 transition-all duration-300"
+          >
+            <p className="text-[#0CC0DF]">Next Drops</p>
+            <div className="flex gap-4">
+              <div className="flex items-center">
+                <span className="countdown font-mono text-2xl text-[#0CC0DF]">
+                  <span style={{ "--value": timeLeft.hours } as any}></span>
+                </span>
+                <span className="ml-1">hours</span>
+              </div>
+              <div className="flex items-center">
+                <span className="countdown font-mono text-2xl text-[#0CC0DF]">
+                  <span style={{ "--value": timeLeft.minutes } as any}></span>
+                </span>
+                <span className="ml-1">min</span>
+              </div>
+              <div className="flex items-center">
+                <span className="countdown font-mono text-2xl text-[#0CC0DF]">
+                  <span style={{ "--value": timeLeft.seconds } as any}></span>
+                </span>
+                <span className="ml-1">sec</span>
+              </div>
+            </div>
+            <p className="text-sm text-[#0CC0DF]/70 mt-1">visit x.com/@playmetaloot</p>
+          </motion.button>
+
+          <motion.div 
+            whileHover={{ scale: 1.05 }}
+            className="bg-[#0CC0DF]/10 backdrop-blur-sm rounded-xl border border-[#0CC0DF]/30 p-4"
+          >
+            <div className="flex justify-center items-center">
+              <span className="font-mono text-xl text-[#0CC0DF]">{participantCount}</span>
+              <span className="ml-2 text-[#0CC0DF]/70">/ 10 participants</span>
+            </div>
+            <div className="w-full bg-[#0CC0DF]/20 rounded-full h-2 mt-2">
+              <div 
+                className="bg-[#0CC0DF] h-2 rounded-full transition-all duration-500"
+                style={{ width: `${(participantCount / 10) * 100}%` }}
+              />
+            </div>
+          </motion.div>
         </div>
-        <p className="text-sm text-[#0CC0DF]/70 mt-1">visit x.com/@playmetaloot</p>
-      </motion.button>
+      ) : (
+        <div className="absolute top-8 w-full px-8 flex justify-between items-start">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => window.open('https://twitter.com/playmetaloot', '_blank')}
+            className="bg-[#0CC0DF]/10 backdrop-blur-sm rounded-xl border border-[#0CC0DF]/30 p-4 cursor-pointer hover:bg-[#0CC0DF]/20 transition-all duration-300"
+          >
+            <p className="text-[#0CC0DF]">Next Drops</p>
+            <div className="flex gap-4">
+              <div className="flex items-center">
+                <span className="countdown font-mono text-2xl text-[#0CC0DF]">
+                  <span style={{ "--value": timeLeft.hours } as any}></span>
+                </span>
+                <span className="ml-1">hours</span>
+              </div>
+              <div className="flex items-center">
+                <span className="countdown font-mono text-2xl text-[#0CC0DF]">
+                  <span style={{ "--value": timeLeft.minutes } as any}></span>
+                </span>
+                <span className="ml-1">min</span>
+              </div>
+              <div className="flex items-center">
+                <span className="countdown font-mono text-2xl text-[#0CC0DF]">
+                  <span style={{ "--value": timeLeft.seconds } as any}></span>
+                </span>
+                <span className="ml-1">sec</span>
+              </div>
+            </div>
+            <p className="text-sm text-[#0CC0DF]/70 mt-1">visit x.com/@playmetaloot</p>
+          </motion.button>
+
+          <motion.div 
+            whileHover={{ scale: 1.05 }}
+            className="bg-[#0CC0DF]/10 backdrop-blur-sm rounded-xl border border-[#0CC0DF]/30 p-4"
+          >
+            <div className="flex justify-center items-center">
+              <span className="font-mono text-xl text-[#0CC0DF]">{participantCount}</span>
+              <span className="ml-2 text-[#0CC0DF]/70">/ 10 participants</span>
+            </div>
+            <div className="w-full bg-[#0CC0DF]/20 rounded-full h-2 mt-2">
+              <div 
+                className="bg-[#0CC0DF] h-2 rounded-full transition-all duration-500"
+                style={{ width: `${(participantCount / 10) * 100}%` }}
+              />
+            </div>
+          </motion.div>
+        </div>
+      )}
 
       <div className="relative z-10 container mx-auto px-4">
         <div className="flex flex-col items-center">
           {/* Token Info */}
-          <div className={`mb-12 text-center ${isMobile ? 'mt-32' : ''}`}>
+          <div className={`mb-12 text-center ${isMobile ? 'mt-48' : ''}`}>
             <h2 className={`${isMobile ? 'text-5xl' : 'text-7xl'} font-bold text-[#0CC0DF] mb-6`}>$MTL</h2>
             <div className="flex gap-4 justify-center flex-wrap">
               <div className="bg-[#0CC0DF]/10 backdrop-blur-sm rounded-xl border border-[#0CC0DF]/30 p-4">
