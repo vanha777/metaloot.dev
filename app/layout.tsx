@@ -19,6 +19,15 @@ export const metadata: Metadata = {
       },
     ],
   },
+  icons: {
+    icon: '/logo.png',
+    // You can also specify different sizes
+    apple: [
+      { url: '/logo.png' },
+      { url: '/apple.png', sizes: '180x180' }
+    ],
+    shortcut: '/favicon.ico'
+  },
 };
 
 export default function RootLayout({
@@ -28,7 +37,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" data-theme="metaloot">
-        <Head>
+      <Head>
         {/* General Meta Tags */}
         <meta name="title" content="MetaLoot - Bridge Between Gaming and Reality" />
         <meta name="description" content="Multiverse On-Chain Gaming Protocol: Revolutionizing Gaming Experiences." />

@@ -24,7 +24,7 @@ const phases = [
   },
   {
     title: "Digital Genesis",
-    description: "Achieve complete synthesis of the $LOOT token with global fiat exchanges, heralding a new era of digital finance.",
+    description: "Achieve complete synthesis of the $MTL token with global fiat exchanges, heralding a new era of digital finance.",
     icon: "🌐",
     isActive: false
   }
