@@ -204,7 +204,7 @@ export default function Coin() {
             <div className="flex gap-4 justify-center flex-wrap">
               <div className="bg-[#0CC0DF]/10 backdrop-blur-sm rounded-xl border border-[#0CC0DF]/30 p-4">
                 <p className="text-gray-300">Total Supply</p>
-                <p className={`${isMobile ? 'text-xl' : 'text-2xl'} font-bold text-[#0CC0DF]`}>$1,000,000,000 MTL</p>
+                <p className={`${isMobile ? 'text-xl' : 'text-2xl'} font-bold text-[#0CC0DF]`}>1B MTL</p>
               </div>
               <div className="bg-[#0CC0DF]/10 backdrop-blur-sm rounded-xl border border-[#0CC0DF]/30 p-4">
                 <p className="text-gray-300">Circulating Supply</p>
