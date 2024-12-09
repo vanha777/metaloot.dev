@@ -44,19 +44,20 @@ export default function Coin() {
   }, []);
 
   useEffect(() => {
-    const targetDate = new Date('2024-12-09T00:00:00')
+    const targetDate = new Date('2024-12-20T00:00:00')
 
     const timer = setInterval(() => {
       const now = new Date()
       const difference = targetDate.getTime() - now.getTime()
 
-      const totalHours = Math.floor(difference / (1000 * 60 * 60))
+      const days = Math.floor(difference / (1000 * 60 * 60 * 24))
+      const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
       const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60))
       const seconds = Math.floor((difference % (1000 * 60)) / 1000)
 
       setTimeLeft({
-        days: 0,
-        hours: totalHours,
+        days,
+        hours,
         minutes,
         seconds
       })
@@ -108,6 +109,14 @@ export default function Coin() {
           >
             <p className="text-[#0CC0DF]">Next Drops</p>
             <div className="flex gap-4">
+              {timeLeft.days > 0 && (
+                <div className="flex items-center">
+                  <span className="countdown font-mono text-2xl text-[#0CC0DF]">
+                    <span style={{ "--value": timeLeft.days } as any}></span>
+                  </span>
+                  <span className="ml-1">days</span>
+                </div>
+              )}
               <div className="flex items-center">
                 <span className="countdown font-mono text-2xl text-[#0CC0DF]">
                   <span style={{ "--value": timeLeft.hours } as any}></span>
@@ -156,6 +165,14 @@ export default function Coin() {
           >
             <p className="text-[#0CC0DF]">Next Drops</p>
             <div className="flex gap-4">
+              {timeLeft.days > 0 && (
+                <div className="flex items-center">
+                  <span className="countdown font-mono text-2xl text-[#0CC0DF]">
+                    <span style={{ "--value": timeLeft.days } as any}></span>
+                  </span>
+                  <span className="ml-1">days</span>
+                </div>
+              )}
               <div className="flex items-center">
                 <span className="countdown font-mono text-2xl text-[#0CC0DF]">
                   <span style={{ "--value": timeLeft.hours } as any}></span>
