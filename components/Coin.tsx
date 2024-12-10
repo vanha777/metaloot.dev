@@ -225,7 +225,7 @@ export default function Coin() {
               </div>
               <div className="bg-[#0CC0DF]/10 backdrop-blur-sm rounded-xl border border-[#0CC0DF]/30 p-4">
                 <p className="text-gray-300">Circulating Supply</p>
-                <p className={`${isMobile ? 'text-xl' : 'text-2xl'} font-bold text-[#0CC0DF]`}>$60,000 MTL</p>
+                <p className={`${isMobile ? 'text-xl' : 'text-2xl'} font-bold text-[#0CC0DF]`}>$110,000 MTL</p>
               </div>
               <div className="bg-[#0CC0DF]/10 backdrop-blur-sm rounded-xl border border-[#0CC0DF]/30 p-4">
                 <p className="text-gray-300">Market Cap</p>
