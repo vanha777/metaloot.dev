@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { Auth } from '../../app/auth'
 import { Canvas } from '@react-three/fiber'
 import { Environment, Float, PerspectiveCamera } from '@react-three/drei'
+import Details from './details'
 
 interface Game {
   id: string
@@ -22,11 +23,11 @@ interface Game {
   intro?: string
   trailer?: string
   gameplay?: string
-  credits?: {
-    director?: string
-    producer?: string
-    artDirector?: string
-    soundDesign?: string
+  models?: {
+    playToEarn?: boolean
+    payToPlay?: boolean
+    freeToPlay?: boolean
+    stakeToEarn?: boolean
   }
 }
 
@@ -46,11 +47,11 @@ const games: Game[] = [
     intro: 'Welcome to Los Santos, a vast sun-soaked metropolis full of self-help gurus, starlets, and fading celebrities...',
     trailer: 'https://www.youtube.com/embed/QkkoHAzjnUs',
     gameplay: 'https://www.youtube.com/embed/3DBrG2YjqQA',
-    credits: {
-      director: 'Leslie Benzies',
-      producer: 'Sam Houser',
-      artDirector: 'Aaron Garbut',
-      soundDesign: 'Craig Conner'
+    models: {
+      playToEarn: false,
+      payToPlay: true,
+      freeToPlay: true,
+      stakeToEarn: false
     }
   },
   {
@@ -68,11 +69,11 @@ const games: Game[] = [
     intro: 'Rainbow Six Siege is an intense, new approach to the first-person shooter experience...',
     trailer: 'https://www.youtube.com/embed/6wlvYh0h63k',
     gameplay: 'https://www.youtube.com/embed/kqDwcjF5gW8',
-    credits: {
-      director: 'Xavier Marquis',
-      producer: 'Leroy Athanassoff',
-      artDirector: 'Po Yuen Kenny Lam',
-      soundDesign: 'Louis Philippe Dion'
+    models: {
+      playToEarn: false,
+      payToPlay: true,
+      freeToPlay: true,
+      stakeToEarn: false
     }
   },
   {
@@ -90,11 +91,11 @@ const games: Game[] = [
     intro: 'Enter a world where strategy meets blockchain in this revolutionary mobile MOBA...',
     trailer: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
     gameplay: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-    credits: {
-      director: 'Sarah Chen',
-      producer: 'Mike Ross',
-      artDirector: 'David Kim',
-      soundDesign: 'Lisa Wong'
+    models: {
+      playToEarn: false,
+      payToPlay: true,
+      freeToPlay: true,
+      stakeToEarn: false
     }
   },
   {
@@ -112,11 +113,11 @@ const games: Game[] = [
     intro: 'Ride and fight into a deadly, post pandemic America. Play as Deacon St. John, a drifter and bounty hunter...',
     trailer: 'https://www.youtube.com/embed/FKtaOY9lMvM',
     gameplay: 'https://www.youtube.com/embed/qh8yJMN9Wts',
-    credits: {
-      director: 'Jeff Ross',
-      producer: 'Ron Allen',
-      artDirector: 'Yumi Yang',
-      soundDesign: 'Nathan Whitehead'
+    models: {
+      playToEarn: false,
+      payToPlay: true,
+      freeToPlay: true,
+      stakeToEarn: false
     }
   }
 ]
@@ -285,101 +286,7 @@ export default function Dashboard() {
 
         {/* Game Details Section */}
         {focusedGame && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mt-8 bg-gradient-to-r from-[#0CC0DF]/20 via-[#0CC0DF]/10 to-transparent 
-                       backdrop-blur-md rounded-xl p-8 border border-[#0CC0DF]/20"
-          >
-            <div className="flex gap-4 mb-6">
-              {(['details', 'trailer', 'gameplay'] as const).map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={`px-6 py-2 rounded-lg capitalize ${
-                    activeTab === tab
-                      ? 'bg-[#0CC0DF] text-white'
-                      : 'bg-[#0CC0DF]/10 text-[#0CC0DF]'
-                  }`}
-                >
-                  {tab}
-                </button>
-              ))}
-            </div>
-
-            {activeTab === 'details' && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div>
-                  <h4 className="text-xl font-bold text-white mb-4">About</h4>
-                  <p className="text-gray-300 mb-4">{focusedGame.intro}</p>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <p className="text-[#0CC0DF] text-sm">Developer</p>
-                      <p className="text-white">{focusedGame.developer}</p>
-                    </div>
-                    <div>
-                      <p className="text-[#0CC0DF] text-sm">Publisher</p>
-                      <p className="text-white">{focusedGame.publisher}</p>
-                    </div>
-                    <div>
-                      <p className="text-[#0CC0DF] text-sm">Release Date</p>
-                      <p className="text-white">{focusedGame.releaseDate}</p>
-                    </div>
-                    <div>
-                      <p className="text-[#0CC0DF] text-sm">Genre</p>
-                      <p className="text-white">{focusedGame.genre}</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <h4 className="text-xl font-bold text-white mb-4">Credits</h4>
-                  <div className="grid grid-cols-1 gap-3">
-                    <div>
-                      <p className="text-[#0CC0DF] text-sm">Director</p>
-                      <p className="text-white">{focusedGame.credits?.director}</p>
-                    </div>
-                    <div>
-                      <p className="text-[#0CC0DF] text-sm">Producer</p>
-                      <p className="text-white">{focusedGame.credits?.producer}</p>
-                    </div>
-                    <div>
-                      <p className="text-[#0CC0DF] text-sm">Art Director</p>
-                      <p className="text-white">{focusedGame.credits?.artDirector}</p>
-                    </div>
-                    <div>
-                      <p className="text-[#0CC0DF] text-sm">Sound Design</p>
-                      <p className="text-white">{focusedGame.credits?.soundDesign}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {activeTab === 'trailer' && (
-              <div className="aspect-video w-full">
-                <iframe
-                  className="w-full h-full rounded-xl"
-                  src={focusedGame.trailer}
-                  title={`${focusedGame.title} Trailer`}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              </div>
-            )}
-
-            {activeTab === 'gameplay' && (
-              <div className="aspect-video w-full">
-                <iframe
-                  className="w-full h-full rounded-xl"
-                  src={focusedGame.gameplay}
-                  title={`${focusedGame.title} Gameplay`}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              </div>
-            )}
-          </motion.div>
+          <Details focusedGame={focusedGame} />
         )}
       </div>
     </div>
