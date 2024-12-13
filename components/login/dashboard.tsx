@@ -7,12 +7,13 @@ import { Auth } from '../../app/auth'
 import { Canvas } from '@react-three/fiber'
 import { Environment, Float, PerspectiveCamera } from '@react-three/drei'
 import Details from './details'
+import { FaDesktop, FaMobile, FaGamepad, FaGlobe } from 'react-icons/fa'
 
 interface Game {
   id: string
   title: string
   image: string
-  platform: 'ios' | 'mobile' | 'desktop'
+  platform: 'desktop' | 'mobile' | 'console'
   rewards: number
   description: string
   link: string
@@ -55,7 +56,7 @@ const games: Game[] = [
     }
   },
   {
-    id: '2', 
+    id: '2',
     title: 'Rainbow Six',
     image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%204.jpeg',
     platform: 'mobile',
@@ -79,8 +80,8 @@ const games: Game[] = [
   {
     id: '3',
     title: 'Moba War',
-    image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%206.jpeg', 
-    platform: 'ios',
+    image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%206.jpeg',
+    platform: 'console',
     rewards: 400,
     description: 'Trading card battles with NFT rewards',
     link: 'https://www.halowaypoint.com/en-gb',
@@ -101,8 +102,8 @@ const games: Game[] = [
   {
     id: '4',
     title: 'Day Gone',
-    image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%207.jpeg', 
-    platform: 'ios',
+    image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%207.jpeg',
+    platform: 'console',
     rewards: 400,
     description: 'Trading card battles with NFT rewards',
     link: 'https://www.halowaypoint.com/en-gb',
@@ -122,13 +123,19 @@ const games: Game[] = [
   }
 ]
 
+const platformIcons = {
+  all: <FaGlobe size={64} />,
+  desktop: <FaDesktop size={64} />,
+  mobile: <FaMobile size={64} />,
+  console: <FaGamepad size={64} />
+}
+
 export default function Dashboard() {
-  const [selectedPlatform, setSelectedPlatform] = useState<string>('all')
+  const [selectedPlatform, setSelectedPlatform] = useState<'desktop' | 'mobile' | 'console' | 'all'>('all')
   const [walletAddress, setWalletAddress] = useState<string>('')
   const [mtlBalance, setMtlBalance] = useState<number>(0)
   const [filteredGames, setFilteredGames] = useState<Game[]>(games)
   const [focusedGame, setFocusedGame] = useState<Game | null>(null)
-  const [scrollPosition, setScrollPosition] = useState(0)
   const [activeTab, setActiveTab] = useState<'details' | 'trailer' | 'gameplay'>('details')
 
   useEffect(() => {
@@ -175,7 +182,7 @@ export default function Dashboard() {
           >
             <mesh>
               <torusKnotGeometry args={[9, 2, 256, 32]} />
-              <meshStandardMaterial 
+              <meshStandardMaterial
                 color="#0CC0DF"
                 emissive="#0CC0DF"
                 emissiveIntensity={0.5}
@@ -190,7 +197,7 @@ export default function Dashboard() {
 
       <div className="relative z-10 p-6">
         {/* Wallet Info */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           className="bg-gradient-to-r from-[#0CC0DF]/20 via-[#0CC0DF]/10 to-transparent 
@@ -201,7 +208,7 @@ export default function Dashboard() {
           </h2>
           <div className="flex flex-col md:flex-row justify-between">
             <p className="text-[#0CC0DF] font-mono text-lg">
-              Wallet: {walletAddress.slice(0,6)}...{walletAddress.slice(-4)}
+              Wallet: {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
             </p>
             <p className="text-[#0CC0DF] font-bold text-lg">
               ${mtlBalance} MTL
@@ -210,26 +217,29 @@ export default function Dashboard() {
         </motion.div>
 
         {/* Platform Filter */}
-        <div className="flex gap-4 mb-8 overflow-x-auto pb-2">
-          {['all', 'desktop', 'mobile', 'ios'].map(platform => (
+        <div className="flex gap-24 mb-26 p-24">
+          {Object.entries(platformIcons).map(([platform, icon]) => (
             <motion.button
               key={platform}
-              whileHover={{ scale: 1.05, backgroundColor: 'rgba(12, 192, 223, 0.3)' }}
+              whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => setSelectedPlatform(platform)}
-              className={`px-8 py-3 rounded-full capitalize whitespace-nowrap backdrop-blur-sm
-                ${selectedPlatform === platform 
-                  ? 'bg-[#0CC0DF] text-white shadow-lg shadow-[#0CC0DF]/30' 
-                  : 'bg-[#0CC0DF]/10 text-[#0CC0DF] border border-[#0CC0DF]/30'}`}
+              onClick={() => setSelectedPlatform(platform as 'desktop' | 'mobile' | 'console')}
+              className={`px-24 py-16 rounded-[3rem] backdrop-blur-sm relative
+                ${selectedPlatform === platform
+                  ? 'border-4 border-[#0CC0DF] text-[#0CC0DF] shadow-lg shadow-[#0CC0DF]/30'
+                  : 'border-2 border-white/30 text-white'} 
+                before:content-[""] before:absolute before:inset-0 before:rounded-[3rem] 
+                before:bg-gradient-to-r before:from-[#0CC0DF]/5 before:to-transparent before:z-[-1]
+                hover:border-[#0CC0DF]/60 transition-colors duration-300`}
             >
-              {platform}
+              {icon}
             </motion.button>
           ))}
         </div>
 
         {/* Horizontal Game Carousel */}
         <div className="relative">
-          <motion.div 
+          <motion.div
             className="flex space-x-6 px-4 overflow-x-auto pb-8"
             drag="x"
             dragConstraints={{ left: -1000, right: 0 }}
