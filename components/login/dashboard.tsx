@@ -7,7 +7,9 @@ import { Auth } from '../../app/auth'
 import { Canvas } from '@react-three/fiber'
 import { Environment, Float, PerspectiveCamera } from '@react-three/drei'
 import Details from './details'
-import { FaDesktop, FaMobile, FaGamepad, FaGlobe } from 'react-icons/fa'
+import { FaDesktop, FaMobile, FaGamepad, FaGlobe, FaStore } from 'react-icons/fa'
+import GamesDashboard from './gamesDashboard'
+import Marketplace from './marketplace'
 
 interface Game {
   id: string
@@ -124,19 +126,14 @@ const games: Game[] = [
 ]
 
 const platformIcons = {
-  all: <FaGlobe size={64} />,
-  desktop: <FaDesktop size={64} />,
-  mobile: <FaMobile size={64} />,
-  console: <FaGamepad size={64} />
+  games: <FaGamepad size={64} />,
+  marketplace: <FaStore size={64} />
 }
 
 export default function Dashboard() {
-  const [selectedPlatform, setSelectedPlatform] = useState<'desktop' | 'mobile' | 'console' | 'all'>('all')
   const [walletAddress, setWalletAddress] = useState<string>('')
   const [mtlBalance, setMtlBalance] = useState<number>(0)
-  const [filteredGames, setFilteredGames] = useState<Game[]>(games)
-  const [focusedGame, setFocusedGame] = useState<Game | null>(null)
-  const [activeTab, setActiveTab] = useState<'details' | 'trailer' | 'gameplay'>('details')
+  const [selectedPlatform, setSelectedPlatform] = useState<'games' | 'marketplace'>('games')
 
   useEffect(() => {
     const getWalletDetails = async () => {
@@ -149,24 +146,6 @@ export default function Dashboard() {
     }
     getWalletDetails()
   }, [])
-
-  useEffect(() => {
-    if (selectedPlatform === 'all') {
-      setFilteredGames(games)
-    } else {
-      setFilteredGames(games.filter(game => game.platform === selectedPlatform))
-    }
-    setFocusedGame(null)
-  }, [selectedPlatform])
-
-  const handleGameLaunch = (link: string) => {
-    window.open(link, '_blank')
-  }
-
-  const handleGameFocus = (game: Game) => {
-    setFocusedGame(focusedGame?.id === game.id ? null : game)
-    setActiveTab('details')
-  }
 
   return (
     <div className="min-h-screen bg-[#020309] text-white">
@@ -223,7 +202,7 @@ export default function Dashboard() {
               key={platform}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => setSelectedPlatform(platform as 'desktop' | 'mobile' | 'console')}
+              onClick={() => setSelectedPlatform(platform as 'games' | 'marketplace')}
               className={`px-24 py-16 rounded-[3rem] backdrop-blur-sm relative
                 ${selectedPlatform === platform
                   ? 'border-4 border-[#0CC0DF] text-[#0CC0DF] shadow-lg shadow-[#0CC0DF]/30'
@@ -237,67 +216,11 @@ export default function Dashboard() {
           ))}
         </div>
 
-        {/* Horizontal Game Carousel */}
-        <div className="relative">
-          <motion.div
-            className="flex space-x-6 px-4 overflow-x-auto pb-8"
-            drag="x"
-            dragConstraints={{ left: -1000, right: 0 }}
-          >
-            {filteredGames.map((game) => (
-              <motion.div
-                key={game.id}
-                className={`relative flex-shrink-0 cursor-pointer transition-all duration-300
-                           ${focusedGame?.id === game.id ? 'w-[500px] h-[700px]' : 'w-[300px] h-[450px]'}`}
-                onClick={() => handleGameFocus(game)}
-                layout
-              >
-                <div className="relative h-full rounded-2xl overflow-hidden 
-                               bg-gradient-to-b from-[#0CC0DF]/10 to-transparent backdrop-blur-sm
-                               border border-[#0CC0DF]/20">
-                  <Image
-                    src={game.image}
-                    alt={game.title}
-                    fill
-                    className="object-cover opacity-80"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                  <div className="absolute bottom-0 w-full p-8">
-                    <div className="flex justify-between items-center mb-4">
-                      <h3 className="text-3xl font-bold text-white">{game.title}</h3>
-                      <span className="text-[#0CC0DF] font-bold text-xl">
-                        ${game.rewards} MTL
-                      </span>
-                    </div>
-                    <p className="text-gray-300 mb-6 text-lg">{game.description}</p>
-                    {focusedGame?.id === game.id && (
-                      <motion.button
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() => handleGameLaunch(game.link)}
-                        className="w-full bg-[#0CC0DF] hover:bg-[#0AA0BF] text-white 
-                                 font-bold py-4 px-6 rounded-xl flex items-center justify-center gap-3
-                                 shadow-lg shadow-[#0CC0DF]/30 text-lg"
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
-                        </svg>
-                        Launch Game
-                      </motion.button>
-                    )}
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
+        {/* Content Based on Selected Platform */}
+        <div>
+          {selectedPlatform === 'games' && <GamesDashboard games={games} />}
+          {selectedPlatform === 'marketplace' && <Marketplace />}
         </div>
-
-        {/* Game Details Section */}
-        {focusedGame && (
-          <Details focusedGame={focusedGame} />
-        )}
       </div>
     </div>
   )
