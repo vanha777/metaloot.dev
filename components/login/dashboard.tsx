@@ -229,7 +229,7 @@ export default function Dashboard() {
                   ? 'border-4 border-[#0CC0DF] text-[#0CC0DF] shadow-lg shadow-[#0CC0DF]/30'
                   : 'border-2 border-white/30 text-white'} 
                 before:content-[""] before:absolute before:inset-0 before:rounded-[3rem] 
-                before:bg-gradient-to-r before:from-[#0CC0DF]/5 before:to-transparent before:z-[-1]
+                before:bg-gradient-to-r before:from-gray-900 before:to-gray-800 before:z-[-1]
                 hover:border-[#0CC0DF]/60 transition-colors duration-300`}
             >
               {icon}
