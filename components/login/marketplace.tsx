@@ -39,7 +39,7 @@ const nfts: NFT[] = [
     {
         id: '1',
         name: 'Optimus Prime Weapon #1347',
-        image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/view-3d-religious-tech-cross.png',
+        image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/fantasy-warrior-sword-artwork-2.png',
         description: 'Rare Optimus Prime Weapon NFT',
         price: 0.5,
         currency: 'ETH'

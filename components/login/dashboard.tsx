@@ -222,7 +222,7 @@ export default function Dashboard() {
         <div>
           {selectedPlatform === 'games' && <GamesDashboard games={games} />}
           {selectedPlatform === 'marketplace' && <Marketplace />}
-          {selectedPlatform === 'wallet' && <Wallet walletAddress={walletAddress} mtlBalance={mtlBalance} nfts={[]} />}
+          {selectedPlatform === 'wallet' && <Wallet/>}
         </div>
       </div>
     </div>
