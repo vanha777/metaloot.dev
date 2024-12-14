@@ -7,9 +7,10 @@ import { Auth } from '../../app/auth'
 import { Canvas } from '@react-three/fiber'
 import { Environment, Float, PerspectiveCamera } from '@react-three/drei'
 import Details from './details'
-import { FaDesktop, FaMobile, FaGamepad, FaGlobe, FaStore } from 'react-icons/fa'
+import { FaDesktop, FaMobile, FaGamepad, FaGlobe, FaStore, FaWallet } from 'react-icons/fa'
 import GamesDashboard from './gamesDashboard'
 import Marketplace from './marketplace'
+import Wallet from './wallet'
 
 interface Game {
   id: string
@@ -127,13 +128,14 @@ const games: Game[] = [
 
 const platformIcons = {
   games: <FaGamepad size={64} />,
-  marketplace: <FaStore size={64} />
+  marketplace: <FaStore size={64} />,
+  wallet: <FaWallet size={64} />
 }
 
 export default function Dashboard() {
   const [walletAddress, setWalletAddress] = useState<string>('')
   const [mtlBalance, setMtlBalance] = useState<number>(0)
-  const [selectedPlatform, setSelectedPlatform] = useState<'games' | 'marketplace'>('games')
+  const [selectedPlatform, setSelectedPlatform] = useState<'games' | 'marketplace' | 'wallet'>('games')
 
   useEffect(() => {
     const getWalletDetails = async () => {
@@ -202,7 +204,7 @@ export default function Dashboard() {
               key={platform}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => setSelectedPlatform(platform as 'games' | 'marketplace')}
+              onClick={() => setSelectedPlatform(platform as 'games' | 'marketplace' | 'wallet')}
               className={`px-24 py-16 rounded-[3rem] backdrop-blur-sm relative
                 ${selectedPlatform === platform
                   ? 'border-4 border-[#0CC0DF] text-[#0CC0DF] shadow-lg shadow-[#0CC0DF]/30'
@@ -220,6 +222,7 @@ export default function Dashboard() {
         <div>
           {selectedPlatform === 'games' && <GamesDashboard games={games} />}
           {selectedPlatform === 'marketplace' && <Marketplace />}
+          {selectedPlatform === 'wallet' && <Wallet walletAddress={walletAddress} mtlBalance={mtlBalance} nfts={[]} />}
         </div>
       </div>
     </div>
