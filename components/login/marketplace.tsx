@@ -7,6 +7,7 @@ import { Auth } from '../../app/auth'
 import { Canvas } from '@react-three/fiber'
 import { Environment, Float, PerspectiveCamera } from '@react-three/drei'
 import { FaBitcoin, FaEthereum, FaWallet, FaShoppingCart, FaTicketAlt, FaStore, FaCoins, FaTicketAlt as FaTicket } from 'react-icons/fa'
+import { SiSolana, SiTether } from 'react-icons/si'
 
 interface NFT {
     id: string
@@ -37,13 +38,28 @@ interface Voucher {
 const nfts: NFT[] = [
     {
         id: '1',
-        name: 'Cyber Punk #1337',
-        image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%208.jpeg',
-        description: 'Rare cyberpunk character NFT',
+        name: 'Optimus Prime Weapon #1347',
+        image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/view-3d-religious-tech-cross.png',
+        description: 'Rare Optimus Prime Weapon NFT',
         price: 0.5,
         currency: 'ETH'
     },
-    // Add more NFTs...
+    {
+        id: '2',
+        name: 'Cybertron All-spark #1666',
+        image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/view-3d-islamic-mecca-cube.png',
+        description: 'Rare All-spark cube NFT',
+        price: 0.5,
+        currency: 'ETH'
+    },
+    {
+        id: '3',
+        name: 'Cybertron Laser Gun #1686',
+        image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/3d-view-powerful-gun.png',
+        description: 'Cybertron Laser Gun NFT',
+        price: 0.5,
+        currency: 'ETH'
+    }
 ]
 
 const cryptoAssets: CryptoAsset[] = [
@@ -60,30 +76,66 @@ const cryptoAssets: CryptoAsset[] = [
         balance: 2.5,
         price: 3000,
         icon: <FaEthereum className="text-[#627EEA]" size={24} />
+    },
+    {
+        symbol: 'SOL',
+        name: 'Solana',
+        balance: 15.0,
+        price: 100,
+        icon: <SiSolana className="text-[#00FFA3]" size={24} />
+    },
+    {
+        symbol: 'USDT',
+        name: 'Tether',
+        balance: 1000,
+        price: 1,
+        icon: <SiTether className="text-[#26A17B]" size={24} />
     }
 ]
 
 const vouchers: Voucher[] = [
     {
         id: '1',
-        title: '50% Off Gaming Accessories',
+        title: '50% Off Jetstar',
         discount: '50%',
         validUntil: '2024-12-31',
-        image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%208.jpeg',
+        image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%2010.jpeg',
         price: 100
     },
-    // Add more vouchers...
+    {
+        id: '2',
+        title: '30% Off Bunnings',
+        discount: '30%',
+        validUntil: '2024-12-31',
+        image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%2012.jpeg',
+        price: 100
+    },
+    {
+        id: '3',
+        title: '10% Off Coles',
+        discount: '10%',
+        validUntil: '2024-12-31',
+        image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%2013.jpeg',
+        price: 100
+    },
+    {
+        id: '4',
+        title: '10% Off Woolworths',
+        discount: '10%',
+        validUntil: '2024-12-31',
+        image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%2015.jpeg',
+        price: 100
+    },
 ]
 
 const tabIcons = {
     nfts: <FaStore size={64} />,
-    crypto: <FaCoins size={64} />,
-    vouchers: <FaTicket size={64} />
+    deals: <FaCoins size={64} />
 }
 
 export default function Marketplace() {
     const [walletAddress, setWalletAddress] = useState<string>('')
-    const [selectedTab, setSelectedTab] = useState<'nfts' | 'crypto' | 'vouchers'>('nfts')
+    const [selectedTab, setSelectedTab] = useState<'nfts' | 'deals'>('nfts')
 
     useEffect(() => {
         const getWalletDetails = async () => {
@@ -100,7 +152,7 @@ export default function Marketplace() {
         <>
             {/* Tab Navigation */}
             <div className="flex gap-24 mb-26 p-24">
-                {(['nfts', 'crypto', 'vouchers'] as const).map((tab) => (
+                {(['nfts', 'deals'] as const).map((tab) => (
                     <motion.button
                         key={tab}
                         whileHover={{ scale: 1.05 }}
@@ -120,77 +172,91 @@ export default function Marketplace() {
             </div>
 
             {/* Content Sections */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {selectedTab === 'nfts' && nfts.map((nft) => (
-                    <motion.div
-                        key={nft.id}
-                        whileHover={{ scale: 1.05 }}
-                        className="bg-gradient-to-b from-[#0CC0DF]/10 to-transparent backdrop-blur-sm 
-                         rounded-xl p-4 border border-[#0CC0DF]/20"
-                    >
-                        <div className="relative h-48 mb-4 rounded-lg overflow-hidden">
-                            <Image src={nft.image} alt={nft.name} fill className="object-cover" />
-                        </div>
-                        <h3 className="text-xl font-bold mb-2">{nft.name}</h3>
-                        <p className="text-gray-300 mb-4">{nft.description}</p>
-                        <div className="flex justify-between items-center">
-                            <span className="text-[#0CC0DF]">{nft.price} {nft.currency}</span>
-                            <button className="bg-[#0CC0DF] px-4 py-2 rounded-lg">Buy Now</button>
-                        </div>
-                    </motion.div>
-                ))}
+            <div className="flex flex-col gap-8">
+                {selectedTab === 'nfts' && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {nfts.map((nft) => (
+                            <motion.div
+                                key={nft.id}
+                                whileHover={{ scale: 1.05 }}
+                                className="bg-gradient-to-b from-[#0CC0DF]/10 to-transparent backdrop-blur-sm 
+                                 rounded-xl p-4 border border-[#0CC0DF]/20"
+                            >
+                                <div className="relative h-96 mb-4 rounded-lg overflow-hidden">
+                                    <Image src={nft.image} alt={nft.name} fill className="object-cover" />
+                                </div>
+                                <h3 className="text-xl font-bold mb-2">{nft.name}</h3>
+                                <p className="text-gray-300 mb-4">{nft.description}</p>
+                                <div className="flex justify-between items-center">
+                                    <span className="text-[#0CC0DF]">{nft.price} {nft.currency}</span>
+                                    <button className="bg-[#0CC0DF] px-4 py-2 rounded-lg">Buy Now</button>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
+                )}
 
-                {selectedTab === 'crypto' && cryptoAssets.map((asset) => (
-                    <motion.div
-                        key={asset.symbol}
-                        whileHover={{ scale: 1.05 }}
-                        className="bg-gradient-to-b from-[#0CC0DF]/10 to-transparent backdrop-blur-sm 
-                         rounded-xl p-6 border border-[#0CC0DF]/20"
-                    >
-                        <div className="flex items-center gap-4 mb-4">
-                            {asset.icon}
-                            <div>
-                                <h3 className="text-xl font-bold">{asset.name}</h3>
-                                <p className="text-gray-300">{asset.symbol}</p>
-                            </div>
+                {selectedTab === 'deals' && (
+                    <>
+                        {/* Crypto Section */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {cryptoAssets.map((asset) => (
+                                <motion.div
+                                    key={asset.symbol}
+                                    whileHover={{ scale: 1.05 }}
+                                    className="bg-gradient-to-b from-[#0CC0DF]/10 to-transparent backdrop-blur-sm 
+                                     rounded-xl p-6 border border-[#0CC0DF]/20"
+                                >
+                                    <div className="flex items-center gap-4 mb-4">
+                                        {asset.icon}
+                                        <div>
+                                            <h3 className="text-xl font-bold">{asset.name}</h3>
+                                            <p className="text-gray-300">{asset.symbol}</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex justify-between items-center">
+                                        <div>
+                                            <p className="text-sm text-gray-300">Balance</p>
+                                            <p className="text-xl font-bold">{asset.balance} {asset.symbol}</p>
+                                        </div>
+                                        <div className="text-right">
+                                            <p className="text-sm text-gray-300">Value</p>
+                                            <p className="text-xl font-bold">${(asset.balance * asset.price).toLocaleString()}</p>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            ))}
                         </div>
-                        <div className="flex justify-between items-center">
-                            <div>
-                                <p className="text-sm text-gray-300">Balance</p>
-                                <p className="text-xl font-bold">{asset.balance} {asset.symbol}</p>
-                            </div>
-                            <div className="text-right">
-                                <p className="text-sm text-gray-300">Value</p>
-                                <p className="text-xl font-bold">${(asset.balance * asset.price).toLocaleString()}</p>
-                            </div>
-                        </div>
-                    </motion.div>
-                ))}
 
-                {selectedTab === 'vouchers' && vouchers.map((voucher) => (
-                    <motion.div
-                        key={voucher.id}
-                        whileHover={{ scale: 1.05 }}
-                        className="bg-gradient-to-b from-[#0CC0DF]/10 to-transparent backdrop-blur-sm 
-                         rounded-xl p-4 border border-[#0CC0DF]/20"
-                    >
-                        <div className="relative h-48 mb-4 rounded-lg overflow-hidden">
-                            <Image src={voucher.image} alt={voucher.title} fill className="object-cover" />
-                            <div className="absolute top-2 right-2 bg-[#0CC0DF] px-3 py-1 rounded-full">
-                                {voucher.discount} OFF
-                            </div>
+                        {/* Vouchers Section */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {vouchers.map((voucher) => (
+                                <motion.div
+                                    key={voucher.id}
+                                    whileHover={{ scale: 1.05 }}
+                                    className="bg-gradient-to-b from-[#0CC0DF]/10 to-transparent backdrop-blur-sm 
+                                     rounded-xl p-4 border border-[#0CC0DF]/20"
+                                >
+                                    <div className="relative h-48 mb-4 rounded-lg overflow-hidden">
+                                        <Image src={voucher.image} alt={voucher.title} fill className="object-cover" />
+                                        <div className="absolute top-2 right-2 bg-[#0CC0DF] px-3 py-1 rounded-full">
+                                            {voucher.discount} OFF
+                                        </div>
+                                    </div>
+                                    <h3 className="text-xl font-bold mb-2">{voucher.title}</h3>
+                                    <p className="text-gray-300 mb-4">Valid until: {voucher.validUntil}</p>
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-[#0CC0DF]">${voucher.price}</span>
+                                        <button className="bg-[#0CC0DF] px-4 py-2 rounded-lg flex items-center gap-2">
+                                            <FaTicketAlt />
+                                            Claim
+                                        </button>
+                                    </div>
+                                </motion.div>
+                            ))}
                         </div>
-                        <h3 className="text-xl font-bold mb-2">{voucher.title}</h3>
-                        <p className="text-gray-300 mb-4">Valid until: {voucher.validUntil}</p>
-                        <div className="flex justify-between items-center">
-                            <span className="text-[#0CC0DF]">${voucher.price}</span>
-                            <button className="bg-[#0CC0DF] px-4 py-2 rounded-lg flex items-center gap-2">
-                                <FaTicketAlt />
-                                Claim
-                            </button>
-                        </div>
-                    </motion.div>
-                ))}
+                    </>
+                )}
             </div>
         </>
     )
