@@ -32,10 +32,6 @@ interface Game {
       enabled: boolean
       price?: string
     }
-    freeToPlay?: {
-      enabled: boolean
-      price?: string
-    }
     stakeToEarn?: {
       enabled: boolean
       price?: string
@@ -64,10 +60,6 @@ const games: Game[] = [
         enabled: true,
         price: "60"
       },
-      freeToPlay: {
-        enabled: true,
-        price: "0"
-      },
       stakeToEarn: {
         enabled: true,
         price: "6%"
@@ -92,10 +84,6 @@ const games: Game[] = [
     models: {
       playToEarn: {
         enabled: false,
-        price: "0"
-      },
-      freeToPlay: {
-        enabled: true,
         price: "0"
       },
       stakeToEarn: {
@@ -124,10 +112,6 @@ const games: Game[] = [
         enabled: false,
         price: "0" 
       },
-      freeToPlay: {
-        enabled: true,
-        price: "0"
-      },
       stakeToEarn: {
         enabled: false,
         price: "0"
@@ -153,10 +137,6 @@ const games: Game[] = [
       playToEarn: {
         enabled: false,
         price: "0"  
-      },
-      freeToPlay: {
-        enabled: true,
-        price: "0"
       },
       stakeToEarn: {
         enabled: false,

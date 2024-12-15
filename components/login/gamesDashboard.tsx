@@ -11,7 +11,6 @@ interface Game {
     title: string
     image: string
     platform: 'desktop' | 'mobile' | 'console'
-    rewards: number
     description: string
     link: string
     developer?: string
@@ -23,10 +22,6 @@ interface Game {
     gameplay?: string
     models?: {
         playToEarn?: {
-            enabled: boolean
-            price?: string
-        }
-        freeToPlay?: {
             enabled: boolean
             price?: string
         }
@@ -115,13 +110,6 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                                 <div className="absolute bottom-0 w-full p-8">
-                                    <div className="flex justify-between items-center mb-4">
-                                        <h3 className="text-3xl font-bold text-white">{game.title}</h3>
-                                        <span className="text-[#0CC0DF] font-bold text-xl">
-                                            ${game.rewards} MTL
-                                        </span>
-                                    </div>
-                                    <p className="text-gray-300 mb-6 text-lg">{game.description}</p>
                                     {focusedGame?.id === game.id && (
                                         <motion.button
                                             initial={{ opacity: 0 }}

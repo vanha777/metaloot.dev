@@ -15,10 +15,6 @@ interface DetailsProps {
         enabled: boolean
         price?: string
       }
-      freeToPlay?: {
-        enabled: boolean
-        price?: string
-      }
       stakeToEarn?: {
         enabled: boolean
         price?: string
@@ -64,19 +60,6 @@ export default function Details({ focusedGame }: DetailsProps) {
                     </div>
                   </div>
                   <h4 className="text-[#0CC0DF] text-lg font-bold mt-4">Play to Earn</h4>
-                </motion.div>
-              )}
-              {focusedGame.models.freeToPlay?.enabled && (
-                <motion.div 
-                  whileHover={{ scale: 1.02 }}
-                  className="relative bg-gradient-to-r from-emerald-500/20 to-gray-800 p-6 rounded-xl border border-emerald-500/30"
-                >
-                  <div className="absolute -right-2 -top-2">
-                    <div className="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-bold px-4 py-2 rounded-lg shadow-lg shadow-emerald-500/20">
-                      <span className="text-2xl">FREE</span>
-                    </div>
-                  </div>
-                  <h4 className="text-emerald-400 text-lg font-bold mt-4">Free to Play</h4>
                 </motion.div>
               )}
               {focusedGame.models.stakeToEarn?.enabled && (
