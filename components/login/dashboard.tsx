@@ -201,19 +201,41 @@ export default function Dashboard() {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-gradient-to-r from-[#0CC0DF]/30 via-[#0CC0DF]/20 to-transparent 
-                     backdrop-blur-md rounded-xl p-6 mb-8 border border-[#0CC0DF]/40"
+          className="flex items-center justify-between p-6 mb-8"
         >
-          <h2 className="text-3xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-[#0CC0DF] to-white">
-            Player One Dashboard
-          </h2>
-          <div className="flex flex-col md:flex-row justify-between">
-            <p className="text-[#0CC0DF] font-mono text-lg">
-              Wallet: {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
-            </p>
-            <p className="text-[#0CC0DF] font-bold text-lg">
-              ${mtlBalance} MTL
-            </p>
+          <div className="flex items-center gap-6">
+            <div className="w-16 h-16 rounded-full bg-[#0CC0DF]/10 flex items-center justify-center relative">
+              <FaGamepad className="text-[#0CC0DF] w-10 h-10" />
+              <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                <div className="w-3 h-3 bg-white rounded-full animate-pulse"></div>
+              </div>
+            </div>
+            <div>
+              <h2 className="text-xl font-medium text-white/80">
+                {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
+              </h2>
+              <p className="text-sm text-white/60">Testnet</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-6">
+            <div className="w-16 h-16 rounded-full bg-[#0CC0DF]/10 flex items-center justify-center relative overflow-hidden group">
+              <Image 
+                src="https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/MTL.png"
+                alt="MTL Logo"
+                width={80}
+                height={80}
+                className="group-hover:scale-110 transition-transform duration-200"
+              />
+              <div className="absolute inset-0 bg-[#0CC0DF]/20 group-hover:bg-transparent transition-colors duration-200"></div>
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-white/80">
+                <span className="text-[#0CC0DF]">$ </span>
+                {mtlBalance}
+              </p>
+              <p className="text-sm text-white/60">Phase Metalian Dawn</p>
+            </div>
           </div>
         </motion.div>
 
