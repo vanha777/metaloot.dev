@@ -170,25 +170,25 @@ export default function Dashboard() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-[#020309] text-white">
+    <div className="min-h-screen bg-[#0A1628] text-white">
       {/* 3D Background */}
       <div className="fixed inset-0 z-0">
         <Canvas>
           <PerspectiveCamera makeDefault position={[0, 0, 5]} />
-          <Environment preset="night" />
+          <Environment preset="sunset" />
           <Float
-            speed={1.5}
-            rotationIntensity={0.5}
-            floatIntensity={0.5}
+            speed={2}
+            rotationIntensity={1}
+            floatIntensity={1}
           >
             <mesh>
-              <torusKnotGeometry args={[9, 2, 256, 32]} />
+              <torusKnotGeometry args={[9, 2.5, 300, 40]} />
               <meshStandardMaterial
                 color="#0CC0DF"
                 emissive="#0CC0DF"
-                emissiveIntensity={0.5}
+                emissiveIntensity={1}
                 transparent
-                opacity={0.1}
+                opacity={0.3}
                 wireframe
               />
             </mesh>
@@ -201,8 +201,8 @@ export default function Dashboard() {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-gradient-to-r from-[#0CC0DF]/20 via-[#0CC0DF]/10 to-transparent 
-                     backdrop-blur-md rounded-xl p-6 mb-8 border border-[#0CC0DF]/20"
+          className="bg-gradient-to-r from-[#0CC0DF]/30 via-[#0CC0DF]/20 to-transparent 
+                     backdrop-blur-md rounded-xl p-6 mb-8 border border-[#0CC0DF]/40"
         >
           <h2 className="text-3xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-[#0CC0DF] to-white">
             Player One Dashboard
@@ -227,11 +227,11 @@ export default function Dashboard() {
               onClick={() => setSelectedPlatform(platform as 'games' | 'marketplace' | 'wallet')}
               className={`px-24 py-16 rounded-[3rem] backdrop-blur-sm relative
                 ${selectedPlatform === platform
-                  ? 'border-4 border-[#0CC0DF] text-[#0CC0DF] shadow-lg shadow-[#0CC0DF]/30'
-                  : 'border-2 border-white/30 text-white'} 
+                  ? 'border-4 border-[#0CC0DF] text-[#0CC0DF] shadow-lg shadow-[#0CC0DF]/50'
+                  : 'border-2 border-white/50 text-white'} 
                 before:content-[""] before:absolute before:inset-0 before:rounded-[3rem] 
-                before:bg-gradient-to-r before:from-gray-900 before:to-gray-800 before:z-[-1]
-                hover:border-[#0CC0DF]/60 transition-colors duration-300`}
+                before:bg-gradient-to-r before:from-[#0A1628] before:to-[#162A44] before:z-[-1]
+                hover:border-[#0CC0DF]/80 transition-colors duration-300`}
             >
               {icon}
             </motion.button>

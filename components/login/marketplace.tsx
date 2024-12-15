@@ -90,6 +90,13 @@ const cryptoAssets: CryptoAsset[] = [
         balance: 1000,
         price: 1,
         icon: <SiTether className="text-[#26A17B]" size={24} />
+    },
+    {
+        symbol: 'MTL',
+        name: 'MetaLoot',
+        balance: 1250,
+        price: 1,
+        icon: <Image src="https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/MTL.png" width={36} height={36} alt="MTL" />
     }
 ]
 
@@ -235,9 +242,9 @@ export default function Marketplace() {
                                     key={voucher.id}
                                     whileHover={{ scale: 1.05 }}
                                     className="bg-gradient-to-b from-[#0CC0DF]/10 to-transparent backdrop-blur-sm 
-                                     rounded-xl p-4 border border-[#0CC0DF]/20 h-[500px]"
+                                 rounded-xl p-4 border border-[#0CC0DF]/20"
                                 >
-                                    <div className="relative h-56 mb-4 rounded-lg overflow-hidden">
+                                    <div className="relative h-72 mb-4 rounded-lg overflow-hidden">
                                         <Image src={voucher.image} alt={voucher.title} fill className="object-cover" />
                                         <div className="absolute top-2 right-2 bg-[#0CC0DF] px-3 py-1 rounded-full">
                                             {voucher.discount} OFF
