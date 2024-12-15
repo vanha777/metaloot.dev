@@ -7,7 +7,7 @@ import { Auth } from '../../app/auth'
 import { Canvas } from '@react-three/fiber'
 import { Environment, Float, PerspectiveCamera } from '@react-three/drei'
 import Details from './details'
-import { FaDesktop, FaMobile, FaGamepad, FaGlobe, FaStore, FaWallet } from 'react-icons/fa'
+import { FaDesktop, FaMobile, FaGamepad, FaGlobe, FaStore, FaWallet ,FaAffiliatetheme} from 'react-icons/fa'
 import GamesDashboard from './gamesDashboard'
 import Marketplace from './marketplace'
 import Wallet from './wallet'
@@ -205,7 +205,7 @@ export default function Dashboard() {
         >
           <div className="flex items-center gap-6">
             <div className="w-16 h-16 rounded-full bg-[#0CC0DF]/10 flex items-center justify-center relative">
-              <FaGamepad className="text-[#0CC0DF] w-10 h-10" />
+              <FaGamepad className="text-[#0CC0DF] w-20 h-20" />
               <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
                 <div className="w-3 h-3 bg-white rounded-full animate-pulse"></div>
               </div>
@@ -216,11 +216,19 @@ export default function Dashboard() {
               </h2>
               <p className="text-sm text-white/60">Testnet</p>
             </div>
+            <div className="w-16 h-16 rounded-full bg-[#0CC0DF]/10 flex items-center justify-center relative">
+              <FaAffiliatetheme className="text-[#0CC0DF] w-12 h-12" />
+              <div className="absolute -top-2 -right-2 w-8 h-8 bg-[#0CC0DF] rounded-full flex items-center justify-center text-sm font-bold">
+                +5
+              </div>
+            </div>
           </div>
+
+
 
           <div className="flex items-center gap-6">
             <div className="w-16 h-16 rounded-full bg-[#0CC0DF]/10 flex items-center justify-center relative overflow-hidden group">
-              <Image 
+              <Image
                 src="https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/MTL.png"
                 alt="MTL Logo"
                 width={80}
@@ -264,7 +272,7 @@ export default function Dashboard() {
         <div>
           {selectedPlatform === 'games' && <GamesDashboard games={games} />}
           {selectedPlatform === 'marketplace' && <Marketplace />}
-          {selectedPlatform === 'wallet' && <Wallet/>}
+          {selectedPlatform === 'wallet' && <Wallet />}
         </div>
       </div>
     </div>
