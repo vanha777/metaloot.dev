@@ -6,6 +6,8 @@ import { useState, useEffect } from 'react'
 import { FaBitcoin, FaEthereum, FaWallet, FaShoppingCart, FaTicketAlt, FaStore, FaCoins, FaCreditCard } from 'react-icons/fa'
 import { SiSolana, SiTether } from 'react-icons/si'
 import { Auth } from '../../app/auth'
+import { useUser } from '../../app/context/userContext';
+import { Connection, PublicKey, clusterApiUrl } from "@solana/web3.js";
 
 interface NFT {
     id: string
@@ -67,30 +69,85 @@ const cryptoAssets: CryptoAsset[] = [
 ]
 
 export default function Wallet() {
-    const [walletAddress, setWalletAddress] = useState<string>('')
-    const [mtlBalance, setMtlBalance] = useState<number>(0)
+    const { user, setUser } = useUser();
     const [isMobile, setIsMobile] = useState(false)
+    //Metaloots token mint address
+    const TOKEN_MINT_ADDRESS = "813b3AwivU6uxBicnXdZsCNrfzJy4U3Cr4ejwvH4V1Fz";
+
+    const connectWallet = async () => {
+        const solana = (window as any).solana;
+        if (solana) {
+            try {
+                const resp = await solana.connect();
+                if (resp.publicKey) {
+                    const publicKey = resp.publicKey.toString();
+                    // Check the user's balance for the specific token
+                    const tokenBalance = await getTokenBalance(publicKey, TOKEN_MINT_ADDRESS);
+                    return { publicKey, mtl: tokenBalance.toString() };
+                }
+            } catch (err) {
+                console.error("User rejected the request or another error occurred:", err);
+            }
+        } else {
+            console.error("Please install Phantom wallet");
+        }
+    };
+
+    const getTokenBalance = async (walletAddress: string, tokenMintAddress: string) => {
+        try {
+            // Use devnet instead of mainnet-beta to avoid 403 errors
+            const connection = new Connection(clusterApiUrl("testnet"), "confirmed");
+            const ownerPublicKey = new PublicKey(walletAddress);
+            const mintPublicKey = new PublicKey(tokenMintAddress);
+
+            // Fetch all token accounts owned by the wallet
+            const tokenAccounts = await connection.getParsedTokenAccountsByOwner(ownerPublicKey, {
+                mint: mintPublicKey,
+            });
+
+            // Sum up balances from all accounts holding the specified token
+            const tokenBalance = tokenAccounts.value.reduce((sum, accountInfo) => {
+                const amount = accountInfo.account.data.parsed.info.tokenAmount.uiAmount;
+                return sum + amount;
+            }, 0);
+
+            return tokenBalance;
+        } catch (error) {
+            console.error("Failed to fetch token balance:", error);
+            return 0;
+        }
+    };
 
     useEffect(() => {
-        const checkMobile = () => {
-            setIsMobile(window.innerWidth < 768)
+        const checkAndConnectWallet = async () => {
+            const address = await connectWallet();
+            if (address) {
+                setUser({
+                    publicKey: address.publicKey,
+                    mtl: address.mtl
+                });
+            }
         }
-        
+        checkAndConnectWallet();
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 768);
+        }
+
         checkMobile()
         window.addEventListener('resize', checkMobile)
         return () => window.removeEventListener('resize', checkMobile)
     }, [])
 
-    useEffect(() => {
-        // Simulating fetching wallet data
-        const fetchWalletData = async () => {
-            // This would normally come from your wallet connection
-            setWalletAddress('0x1234567890abcdef')
-            setMtlBalance(1000)
-        }
+    // useEffect(() => {
+    //     // Simulating fetching wallet data
+    //     const fetchWalletData = async () => {
+    //         // This would normally come from your wallet connection
+    //         setWalletAddress('0x1234567890abcdef')
+    //         setMtlBalance(1000)
+    //     }
 
-        fetchWalletData()
-    }, [])
+    //     fetchWalletData()
+    // }, [])
 
     return (
         <div className="p-6 space-y-8">
@@ -104,7 +161,7 @@ export default function Wallet() {
                 <div className="absolute inset-0">
                     {/* Background gradient */}
                     <div className="absolute w-full h-full bg-gradient-to-r from-gray-900 to-gray-800 opacity-90" />
-                    
+
                     {/* Grid pattern */}
                     <div className="grid grid-cols-12 gap-4 absolute inset-0 opacity-15">
                         {[...Array(48)].map((_, i) => (
@@ -137,7 +194,7 @@ export default function Wallet() {
                     <div className="space-y-6">
                         <div className="flex items-center gap-2">
                             <p className="font-mono text-white text-xl tracking-wider">
-                                {walletAddress.slice(0, 4)} {walletAddress.slice(4, 8)} {walletAddress.slice(8, 12)} {walletAddress.slice(12, 16)}
+                                {user?.publicKey}
                             </p>
                         </div>
 
@@ -145,7 +202,7 @@ export default function Wallet() {
                         <div className="flex justify-between items-end">
                             <div>
                                 <p className="text-white/70 text-lg">Balance</p>
-                                <p className="text-white text-2xl font-bold">${mtlBalance.toLocaleString()} MTL</p>
+                                <p className="text-white text-2xl font-bold">${user?.mtl?.toLocaleString()} MTL</p>
                             </div>
                             <div className="flex items-center gap-2">
                                 <span className="text-white text-xl font-bold">METALOOT</span>

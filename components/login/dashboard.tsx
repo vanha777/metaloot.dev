@@ -7,11 +7,12 @@ import { Auth } from '../../app/auth'
 import { Canvas } from '@react-three/fiber'
 import { Environment, Float, PerspectiveCamera } from '@react-three/drei'
 import Details from './details'
-import { FaDesktop, FaMobile, FaGamepad, FaGlobe, FaStore, FaWallet ,FaAffiliatetheme} from 'react-icons/fa'
+import { FaDesktop, FaMobile, FaGamepad, FaGlobe, FaStore, FaWallet, FaAffiliatetheme, FaSignOutAlt } from 'react-icons/fa'
 import GamesDashboard from './gamesDashboard'
 import Marketplace from './marketplace'
 import Wallet from './wallet'
-
+import { useUser } from '../../app/context/userContext';
+import { Connection, PublicKey, clusterApiUrl } from "@solana/web3.js";
 interface Game {
   id: string
   title: string
@@ -153,21 +154,110 @@ const platformIcons = {
 }
 
 export default function Dashboard() {
-  const [walletAddress, setWalletAddress] = useState<string>('')
-  const [mtlBalance, setMtlBalance] = useState<number>(0)
+  const { user, setUser } = useUser();
   const [selectedPlatform, setSelectedPlatform] = useState<'games' | 'marketplace' | 'wallet'>('games')
+  const [showDropdown, setShowDropdown] = useState(false)
 
-  useEffect(() => {
-    const getWalletDetails = async () => {
-      const supabase = await Auth
-      const { data: { user } } = await supabase.auth.getUser()
-      if (user) {
-        setWalletAddress(user.email || '')
-        setMtlBalance(1250)
+  //const TOKEN_MINT_ADDRESS = "Hq1mb3fkB98g4vgk7ViPAmZFVaFVsw8GeQc8bWzBmm92"; // e.g., "So11111111111111111111111111111111111111112" for SOL
+  const TOKEN_MINT_ADDRESS = "813b3AwivU6uxBicnXdZsCNrfzJy4U3Cr4ejwvH4V1Fz";
+  const connectWallet = async () => {
+    const solana = (window as any).solana;
+    if (solana) {
+      try {
+        const resp = await solana.connect();
+        if (resp.publicKey) {
+          const publicKey = resp.publicKey.toString();
+          // Check the user's balance for the specific token
+          const tokenBalance = await getTokenBalance(publicKey, TOKEN_MINT_ADDRESS);
+          return { publicKey, mtl: tokenBalance.toString() };
+        }
+      } catch (err) {
+        console.error("User rejected the request or another error occurred:", err);
+      }
+    } else {
+      console.error("Please install Phantom wallet");
+    }
+  };
+
+  // Function to get the balance of a specific token for a given wallet address
+  const getTokenBalance = async (walletAddress: string, tokenMintAddress: string) => {
+    try {
+      // Use devnet instead of mainnet-beta to avoid 403 errors
+      const connection = new Connection(clusterApiUrl("testnet"), "confirmed");
+      const ownerPublicKey = new PublicKey(walletAddress);
+      const mintPublicKey = new PublicKey(tokenMintAddress);
+
+      // Fetch all token accounts owned by the wallet
+      const tokenAccounts = await connection.getParsedTokenAccountsByOwner(ownerPublicKey, {
+        mint: mintPublicKey,
+      });
+
+      // Sum up balances from all accounts holding the specified token
+      const tokenBalance = tokenAccounts.value.reduce((sum, accountInfo) => {
+        const amount = accountInfo.account.data.parsed.info.tokenAmount.uiAmount;
+        return sum + amount;
+      }, 0);
+
+      return tokenBalance;
+    } catch (error) {
+      console.error("Failed to fetch token balance:", error);
+      return 0;
+    }
+  };
+
+  // const connectWallet = async () => {
+  //   const solana = (window as any).solana;
+  //   if (solana) {
+  //     try {
+  //       const resp = await solana.connect();
+  //       if (resp.publicKey) {
+  //         const publicKey = resp.publicKey.toString();
+  //         setUser({ publicKey });
+  //         return publicKey;
+  //       }
+  //     } catch (err) {
+  //       console.error("User rejected the request or another error:", err);
+  //     }
+  //   }
+  // };
+
+  const disconnectWallet = async () => {
+    const solana = (window as any).solana;
+    if (solana) {
+      try {
+        await solana.disconnect();
+        setUser(null);
+        setShowDropdown(false);
+        console.log("Wallet disconnected");
+      } catch (err) {
+        console.error("Error disconnecting wallet:", err);
       }
     }
-    getWalletDetails()
-  }, [])
+  };
+
+  useEffect(() => {
+    const checkAndConnectWallet = async () => {
+      // Check if Phantom is installed
+      const solana = (window as any).solana;
+      if (!solana) {
+        console.error("Please install Phantom wallet");
+        return;
+      }
+
+      // If user is not connected, try to connect
+      if (!user?.publicKey) {
+        const address = await connectWallet();
+        if (address) {
+          console.log("This is user", address);
+          setUser({ publicKey: address.publicKey, mtl: address.mtl });
+        }
+      } else {
+        // If user is already connected, set the wallet address
+      }
+    };
+
+    checkAndConnectWallet();
+  }, []); // Add user as dependency to re-run when user state changes 
 
   return (
     <div className="min-h-screen bg-[#0A1628] text-white">
@@ -204,15 +294,32 @@ export default function Dashboard() {
           className="flex items-center justify-between p-6 mb-8"
         >
           <div className="flex items-center gap-6">
-            <div className="w-16 h-16 rounded-full bg-[#0CC0DF]/10 flex items-center justify-center relative">
-              <FaGamepad className="text-[#0CC0DF] w-20 h-20" />
-              <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                <div className="w-3 h-3 bg-white rounded-full animate-pulse"></div>
-              </div>
+            <div className="relative">
+              <button
+                onClick={() => setShowDropdown(!showDropdown)}
+                className="w-16 h-16 rounded-full bg-[#0CC0DF]/10 flex items-center justify-center relative"
+              >
+                <FaGamepad className="text-[#0CC0DF] w-20 h-20" />
+                <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                  <div className="w-3 h-3 bg-white rounded-full animate-pulse"></div>
+                </div>
+              </button>
+
+              {showDropdown && (
+                <div className="absolute top-full mt-2 w-48 bg-[#0A1628] border border-[#0CC0DF] rounded-lg shadow-lg">
+                  <button
+                    onClick={disconnectWallet}
+                    className="w-full px-4 py-2 text-left hover:bg-[#0CC0DF]/10 flex items-center gap-2"
+                  >
+                    <FaSignOutAlt className="text-[#0CC0DF]" />
+                    Sign Out
+                  </button>
+                </div>
+              )}
             </div>
             <div>
               <h2 className="text-xl font-medium text-white/80">
-                {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
+                {user?.publicKey ? `${user.publicKey.slice(0, 6)}...${user.publicKey.slice(-4)}` : 'Not Connected'}
               </h2>
               <p className="text-sm text-white/60">Testnet</p>
             </div>
@@ -227,7 +334,10 @@ export default function Dashboard() {
 
 
           <div className="flex items-center gap-6">
-            <div className="w-16 h-16 rounded-full bg-[#0CC0DF]/10 flex items-center justify-center relative overflow-hidden group">
+            <button
+              onClick={() => setSelectedPlatform('wallet')}
+              className="w-16 h-16 rounded-full bg-[#0CC0DF]/10 flex items-center justify-center relative overflow-hidden group cursor-pointer"
+            >
               <Image
                 src="https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/MTL.png"
                 alt="MTL Logo"
@@ -236,11 +346,11 @@ export default function Dashboard() {
                 className="group-hover:scale-110 transition-transform duration-200"
               />
               <div className="absolute inset-0 bg-[#0CC0DF]/20 group-hover:bg-transparent transition-colors duration-200"></div>
-            </div>
+            </button>
             <div>
               <p className="text-2xl font-bold text-white/80">
                 <span className="text-[#0CC0DF]">$ </span>
-                {mtlBalance}
+                {user?.mtl}
               </p>
               <p className="text-sm text-white/60">Phase Metalian Dawn</p>
             </div>
