@@ -28,10 +28,18 @@ interface Game {
   trailer?: string
   gameplay?: string
   models?: {
-    playToEarn?: boolean
-    payToPlay?: boolean
-    freeToPlay?: boolean
-    stakeToEarn?: boolean
+    playToEarn?: {
+      enabled: boolean
+      price?: string
+    }
+    freeToPlay?: {
+      enabled: boolean
+      price?: string
+    }
+    stakeToEarn?: {
+      enabled: boolean
+      price?: string
+    }
   }
 }
 
@@ -52,10 +60,18 @@ const games: Game[] = [
     trailer: 'https://www.youtube.com/embed/QkkoHAzjnUs',
     gameplay: 'https://www.youtube.com/embed/3DBrG2YjqQA',
     models: {
-      playToEarn: false,
-      payToPlay: true,
-      freeToPlay: true,
-      stakeToEarn: false
+      playToEarn: {
+        enabled: true,
+        price: "60"
+      },
+      freeToPlay: {
+        enabled: true,
+        price: "0"
+      },
+      stakeToEarn: {
+        enabled: true,
+        price: "6%"
+      }
     }
   },
   {
@@ -74,10 +90,18 @@ const games: Game[] = [
     trailer: 'https://www.youtube.com/embed/6wlvYh0h63k',
     gameplay: 'https://www.youtube.com/embed/kqDwcjF5gW8',
     models: {
-      playToEarn: false,
-      payToPlay: true,
-      freeToPlay: true,
-      stakeToEarn: false
+      playToEarn: {
+        enabled: false,
+        price: "0"
+      },
+      freeToPlay: {
+        enabled: true,
+        price: "0"
+      },
+      stakeToEarn: {
+        enabled: false,
+        price: "0"
+      }
     }
   },
   {
@@ -96,10 +120,18 @@ const games: Game[] = [
     trailer: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
     gameplay: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
     models: {
-      playToEarn: false,
-      payToPlay: true,
-      freeToPlay: true,
-      stakeToEarn: false
+      playToEarn: {
+        enabled: false,
+        price: "0" 
+      },
+      freeToPlay: {
+        enabled: true,
+        price: "0"
+      },
+      stakeToEarn: {
+        enabled: false,
+        price: "0"
+      }
     }
   },
   {
@@ -118,10 +150,18 @@ const games: Game[] = [
     trailer: 'https://www.youtube.com/embed/FKtaOY9lMvM',
     gameplay: 'https://www.youtube.com/embed/qh8yJMN9Wts',
     models: {
-      playToEarn: false,
-      payToPlay: true,
-      freeToPlay: true,
-      stakeToEarn: false
+      playToEarn: {
+        enabled: false,
+        price: "0"  
+      },
+      freeToPlay: {
+        enabled: true,
+        price: "0"
+      },
+      stakeToEarn: {
+        enabled: false,
+        price: "0"      
+      }
     }
   }
 ]

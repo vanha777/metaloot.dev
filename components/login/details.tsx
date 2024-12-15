@@ -11,10 +11,18 @@ interface DetailsProps {
     releaseDate?: string
     genre?: string
     models?: {
-      playToEarn?: boolean
-      payToPlay?: boolean
-      freeToPlay?: boolean
-      stakeToEarn?: boolean
+      playToEarn?: {
+        enabled: boolean
+        price?: string
+      }
+      freeToPlay?: {
+        enabled: boolean
+        price?: string
+      }
+      stakeToEarn?: {
+        enabled: boolean
+        price?: string
+      }
     }
     trailer?: string
     gameplay?: string
@@ -45,68 +53,43 @@ export default function Details({ focusedGame }: DetailsProps) {
             </div>
             <div className="border-b border-[#0CC0DF]/30 mb-4"></div>
             <div className="grid grid-cols-2 gap-4">
-              {focusedGame.models.playToEarn && (
+              {focusedGame.models.playToEarn?.enabled && (
                 <motion.div 
-                  whileHover={{ scale: 1.05, borderColor: '#0CC0DF' }}
-                  className="relative bg-gray-800 p-4 rounded-lg border-2 border-gray-700 overflow-hidden transition-colors duration-300"
+                  whileHover={{ scale: 1.02 }}
+                  className="relative bg-gradient-to-r from-[#0CC0DF]/20 to-gray-800 p-6 rounded-xl border border-[#0CC0DF]/30"
                 >
-                  <div className="absolute -right-4 -top-4 bg-[#0CC0DF]/10 w-16 h-16 rounded-full blur-xl" />
-                  <p className="text-white text-lg font-bold">Play to Earn</p>
-                  <p className="text-gray-300 text-sm mt-1">Earn while playing</p>
-                  <div className="mt-2 flex items-center">
-                    <div className="h-2 w-full bg-gray-700 rounded-full">
-                      <div className="h-2 w-[85%] bg-gradient-to-r from-[#0CC0DF] to-[#0AA0BF] rounded-full" />
+                  <div className="absolute -right-2 -top-2">
+                    <div className="bg-gradient-to-r from-[#0CC0DF] to-[#0AA0BF] text-white font-bold px-4 py-2 rounded-lg shadow-lg shadow-[#0CC0DF]/20">
+                      <span className="text-2xl">${focusedGame.models.playToEarn.price || 0}</span>
                     </div>
-                    <span className="ml-2 text-white text-sm">85%</span>
                   </div>
+                  <h4 className="text-[#0CC0DF] text-lg font-bold mt-4">Play to Earn</h4>
                 </motion.div>
               )}
-              {focusedGame.models.payToPlay && (
+              {focusedGame.models.freeToPlay?.enabled && (
                 <motion.div 
-                  whileHover={{ scale: 1.05, borderColor: '#0CC0DF' }}
-                  className="relative bg-gray-800 p-4 rounded-lg border-2 border-gray-700 overflow-hidden transition-colors duration-300"
+                  whileHover={{ scale: 1.02 }}
+                  className="relative bg-gradient-to-r from-emerald-500/20 to-gray-800 p-6 rounded-xl border border-emerald-500/30"
                 >
-                  <div className="absolute -right-4 -top-4 bg-[#0CC0DF]/10 w-16 h-16 rounded-full blur-xl" />
-                  <p className="text-white text-lg font-bold">Pay to Play</p>
-                  <p className="text-gray-300 text-sm mt-1">Initial investment required</p>
-                  <div className="mt-2 flex items-center">
-                    <div className="h-2 w-full bg-gray-700 rounded-full">
-                      <div className="h-2 w-[60%] bg-gradient-to-r from-[#0CC0DF] to-[#0AA0BF] rounded-full" />
+                  <div className="absolute -right-2 -top-2">
+                    <div className="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-bold px-4 py-2 rounded-lg shadow-lg shadow-emerald-500/20">
+                      <span className="text-2xl">FREE</span>
                     </div>
-                    <span className="ml-2 text-white text-sm">60%</span>
                   </div>
+                  <h4 className="text-emerald-400 text-lg font-bold mt-4">Free to Play</h4>
                 </motion.div>
               )}
-              {focusedGame.models.freeToPlay && (
+              {focusedGame.models.stakeToEarn?.enabled && (
                 <motion.div 
-                  whileHover={{ scale: 1.05, borderColor: '#0CC0DF' }}
-                  className="relative bg-gray-800 p-4 rounded-lg border-2 border-gray-700 overflow-hidden transition-colors duration-300"
+                  whileHover={{ scale: 1.02 }}
+                  className="relative bg-gradient-to-r from-purple-500/20 to-gray-800 p-6 rounded-xl border border-purple-500/30"
                 >
-                  <div className="absolute -right-4 -top-4 bg-[#0CC0DF]/10 w-16 h-16 rounded-full blur-xl" />
-                  <p className="text-white text-lg font-bold">Free to Play</p>
-                  <p className="text-gray-300 text-sm mt-1">No initial cost</p>
-                  <div className="mt-2 flex items-center">
-                    <div className="h-2 w-full bg-gray-700 rounded-full">
-                      <div className="h-2 w-[100%] bg-gradient-to-r from-[#0CC0DF] to-[#0AA0BF] rounded-full" />
+                  <div className="absolute -right-2 -top-2">
+                    <div className="bg-gradient-to-r from-purple-500 to-purple-600 text-white font-bold px-4 py-2 rounded-lg shadow-lg shadow-purple-500/20">
+                      <span className="text-2xl">${focusedGame.models.stakeToEarn.price || 0}</span>
                     </div>
-                    <span className="ml-2 text-white text-sm">100%</span>
                   </div>
-                </motion.div>
-              )}
-              {focusedGame.models.stakeToEarn && (
-                <motion.div 
-                  whileHover={{ scale: 1.05, borderColor: '#0CC0DF' }}
-                  className="relative bg-gray-800 p-4 rounded-lg border-2 border-gray-700 overflow-hidden transition-colors duration-300"
-                >
-                  <div className="absolute -right-4 -top-4 bg-[#0CC0DF]/10 w-16 h-16 rounded-full blur-xl" />
-                  <p className="text-white text-lg font-bold">Stake to Earn</p>
-                  <p className="text-gray-300 text-sm mt-1">Earn through staking</p>
-                  <div className="mt-2 flex items-center">
-                    <div className="h-2 w-full bg-gray-700 rounded-full">
-                      <div className="h-2 w-[75%] bg-gradient-to-r from-[#0CC0DF] to-[#0AA0BF] rounded-full" />
-                    </div>
-                    <span className="ml-2 text-white text-sm">75%</span>
-                  </div>
+                  <h4 className="text-purple-400 text-lg font-bold mt-4">Stake to Earn</h4>
                 </motion.div>
               )}
             </div>

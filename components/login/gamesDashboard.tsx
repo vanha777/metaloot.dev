@@ -22,10 +22,18 @@ interface Game {
     trailer?: string
     gameplay?: string
     models?: {
-        playToEarn?: boolean
-        payToPlay?: boolean
-        freeToPlay?: boolean
-        stakeToEarn?: boolean
+        playToEarn?: {
+            enabled: boolean
+            price?: string
+        }
+        freeToPlay?: {
+            enabled: boolean
+            price?: string
+        }
+        stakeToEarn?: {
+            enabled: boolean
+            price?: string
+        }
     }
 }
 
