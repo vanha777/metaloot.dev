@@ -83,12 +83,12 @@ const games: Game[] = [
     gameplay: 'https://www.youtube.com/embed/kqDwcjF5gW8',
     models: {
       playToEarn: {
-        enabled: false,
-        price: "0"
+        enabled: true,
+        price: "60"
       },
       stakeToEarn: {
-        enabled: false,
-        price: "0"
+        enabled: true,
+        price: "6%"
       }
     }
   },
@@ -109,12 +109,12 @@ const games: Game[] = [
     gameplay: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
     models: {
       playToEarn: {
-        enabled: false,
-        price: "0" 
+        enabled: true,
+        price: "60"
       },
       stakeToEarn: {
-        enabled: false,
-        price: "0"
+        enabled: true,
+        price: "6%"
       }
     }
   },
@@ -135,12 +135,12 @@ const games: Game[] = [
     gameplay: 'https://www.youtube.com/embed/qh8yJMN9Wts',
     models: {
       playToEarn: {
-        enabled: false,
-        price: "0"  
+        enabled: true,
+        price: "60"
       },
       stakeToEarn: {
-        enabled: false,
-        price: "0"      
+        enabled: true,
+        price: "6%"
       }
     }
   }
