@@ -42,37 +42,69 @@ export default function Details({ focusedGame }: DetailsProps) {
           <div className="mb-8">
             <div className="flex items-center gap-2 mb-4">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-[#0CC0DF]" viewBox="0 0 20 20" fill="currentColor">
-                <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"/>
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clipRule="evenodd"/>
+                <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clipRule="evenodd" />
               </svg>
               <h3 className="text-white text-xl font-bold">Earning Models</h3>
             </div>
             <div className="border-b border-[#0CC0DF]/30 mb-4"></div>
             <div className="grid grid-cols-2 gap-4">
               {focusedGame.models.playToEarn?.enabled && (
-                <motion.div 
-                  whileHover={{ scale: 1.02 }}
-                  className="relative bg-gradient-to-r from-[#0CC0DF]/20 to-gray-800 p-6 rounded-xl border border-[#0CC0DF]/30"
+                <motion.div
+                  whileHover={{ scale: 1.03 }}
+                  className="relative overflow-hidden bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 p-4 rounded-xl shadow-lg"
                 >
-                  <div className="absolute -right-2 -top-2">
-                    <div className="bg-gradient-to-r from-[#0CC0DF] to-[#0AA0BF] text-white font-bold px-4 py-2 rounded-lg shadow-lg shadow-[#0CC0DF]/20">
-                      <span className="text-2xl">${focusedGame.models.playToEarn.price || 0}</span>
+                  <motion.div
+                    className="absolute inset-0 h-full bg-gradient-to-r from-transparent via-white/30 to-transparent"
+                    animate={{
+                      x: [-200, 400],
+                    }}
+                    transition={{
+                      duration: 2,
+                      ease: "linear",
+                      repeat: Infinity,
+                    }}
+                  />
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-center space-x-2">
+                      <span className="text-white font-bold text-lg">Play to Earn</span>
+                      <div className="animate-bounce">
+                        <span className="text-yellow-200">🔥</span>
+                      </div>
+                    </div>
+                    <div className="text-white font-bold text-2xl">
+                      ${focusedGame.models.playToEarn.price || 0}
                     </div>
                   </div>
-                  <h4 className="text-[#0CC0DF] text-lg font-bold mt-4">Play to Earn</h4>
                 </motion.div>
               )}
               {focusedGame.models.stakeToEarn?.enabled && (
-                <motion.div 
-                  whileHover={{ scale: 1.02 }}
-                  className="relative bg-gradient-to-r from-purple-500/20 to-gray-800 p-6 rounded-xl border border-purple-500/30"
+                <motion.div
+                  whileHover={{ scale: 1.03 }}
+                  className="relative overflow-hidden bg-gradient-to-r from-purple-600 via-violet-600 to-indigo-600 p-4 rounded-xl shadow-lg"
                 >
-                  <div className="absolute -right-2 -top-2">
-                    <div className="bg-gradient-to-r from-purple-500 to-purple-600 text-white font-bold px-4 py-2 rounded-lg shadow-lg shadow-purple-500/20">
-                      <span className="text-2xl">${focusedGame.models.stakeToEarn.price || 0}</span>
+                  <motion.div
+                    className="absolute inset-0 h-full bg-gradient-to-r from-transparent via-white/30 to-transparent"
+                    animate={{
+                      x: [-200, 400],
+                    }}
+                    transition={{
+                      duration: 2,
+                      ease: "linear",
+                      repeat: Infinity,
+                    }}
+                  />
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-center space-x-2">
+                      <span className="text-white font-bold text-lg">Stake to Earn</span>
+                      <div className="animate-bounce">
+                        <span className="text-purple-200">💎</span>
+                      </div>
+                    </div>
+                    <div className="text-white font-bold text-2xl">
+                      ${focusedGame.models.stakeToEarn.price || 0}
                     </div>
                   </div>
-                  <h4 className="text-purple-400 text-lg font-bold mt-4">Stake to Earn</h4>
                 </motion.div>
               )}
             </div>
