@@ -47,6 +47,9 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
     const [selectedPlatform, setSelectedPlatform] = useState<'desktop' | 'mobile' | 'console' | 'all'>('all')
     const [focusedGame, setFocusedGame] = useState<Game | null>(null)
     const [filteredGames, setFilteredGames] = useState<Game[]>(games)
+    const [showModal, setShowModal] = useState(false)
+    const [transferStatus, setTransferStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+    const [transferMessage, setTransferMessage] = useState('')
 
     useEffect(() => {
         if (selectedPlatform === 'all') {
@@ -63,36 +66,47 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
 
     const transferMTL = async () => {
         if (!publicKey) {
-            console.error("Wallet not connected");
+            setTransferStatus('error')
+            setTransferMessage('Wallet not connected')
             return;
         }
 
         try {
-            // Connection to Solana testnet
+            setTransferStatus('loading')
+            setTransferMessage('Authorizing MTL tokens...')
+
             const senderKeypair = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(process.env.NEXT_PUBLIC_METALOOT_KEY!)));
             console.log("Sender Keypair:", senderKeypair.publicKey.toBase58());
 
-            // Convert amount to smallest units
-            // Phase 1 rewarding 10,000 MTL
             const amount = Math.round(1000 * 10 ** 9);
 
-            // Transfer SPL Token (MTL)
             const splSignature = await transferSplToken(
                 senderKeypair,
                 publicKey.toBase58(),
-                TOKEN_MINT_ADDRESS, // Using the MTL token mint address
+                TOKEN_MINT_ADDRESS,
                 amount
             );
+            
+            setTransferStatus('success')
+            setTransferMessage('Earned $1000 MTL !')
             console.log("MTL Token Transaction Signature:", splSignature);
 
         } catch (error) {
             console.error("Transfer Error:", error);
+            setTransferStatus('error')
+            setTransferMessage('Failed to transfer tokens. Please try again.')
         }
     }
 
-    const onGameLaunch = (link: string) => {
-        window.open(link, '_blank')
-        transferMTL();
+    const onGameLaunch = async (link: string) => {
+        setShowModal(true)
+        await transferMTL();
+        setTimeout(() => {
+            window.open(link, '_blank')
+            setShowModal(false)
+            setTransferStatus('idle')
+            setTransferMessage('')
+        }, 2000)
     }
 
     return (
@@ -172,6 +186,54 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
             {focusedGame && (
                 <Details focusedGame={focusedGame} />
             )}
+
+            {/* Transfer Modal */}
+            <input type="checkbox" id="transfer-modal" className="modal-toggle" checked={showModal} onChange={() => setShowModal(!showModal)} />
+            <div className="modal backdrop-blur-sm">
+                <div className="modal-box relative bg-gradient-to-br from-gray-900 to-gray-800 border-2 border-[#0CC0DF] shadow-xl shadow-[#0CC0DF]/20 rounded-2xl">
+                    <h3 className="font-bold text-2xl text-center mb-6 text-transparent bg-clip-text bg-gradient-to-r from-[#0CC0DF] to-[#0AA0BF]">MTL Transfer Status</h3>
+                    <div className="flex flex-col items-center justify-center p-6">
+                        {transferStatus === 'loading' && (
+                            <div className="relative">
+                                <div className="w-24 h-24 relative">
+                                    {/* Outer rotating ring */}
+                                    <div className="absolute inset-0 border-4 border-[#0CC0DF]/20 rounded-full animate-[spin_3s_linear_infinite]" />
+                                    
+                                    {/* Inner counter-rotating ring with particles */}
+                                    <div className="absolute inset-2 border-4 border-[#0CC0DF]/40 rounded-full animate-[spin_2s_linear_infinite_reverse]">
+                                        <div className="absolute -top-1 left-1/2 w-2 h-2 bg-[#0CC0DF] rounded-full animate-pulse" />
+                                        <div className="absolute top-1/2 -right-1 w-2 h-2 bg-[#0CC0DF] rounded-full animate-pulse" />
+                                        <div className="absolute -bottom-1 left-1/2 w-2 h-2 bg-[#0CC0DF] rounded-full animate-pulse" />
+                                        <div className="absolute top-1/2 -left-1 w-2 h-2 bg-[#0CC0DF] rounded-full animate-pulse" />
+                                    </div>
+                                    
+                                    {/* Center pulsing orb */}
+                                    <div className="absolute inset-6 bg-[#0CC0DF] rounded-full animate-pulse opacity-75" />
+                                </div>
+                            </div>
+                        )}
+                        {transferStatus === 'success' && (
+                            <div className="relative">
+                                <div className="w-16 h-16 rounded-full bg-gradient-to-r from-green-400 to-green-600 animate-pulse flex items-center justify-center">
+                                    <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        )}
+                        {transferStatus === 'error' && (
+                            <div className="relative">
+                                <div className="w-16 h-16 rounded-full bg-gradient-to-r from-red-400 to-red-600 animate-pulse flex items-center justify-center">
+                                    <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        )}
+                        <p className="mt-6 text-center text-lg font-medium text-gray-200">{transferMessage}</p>
+                    </div>
+                </div>
+            </div>
         </>
     )
 }
