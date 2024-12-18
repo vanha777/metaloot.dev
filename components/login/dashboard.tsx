@@ -201,14 +201,44 @@ export default function Dashboard() {
             const amount = accountInfo.account.data.parsed.info.tokenAmount.uiAmount;
             return sum + amount;
           }, 0);
-  
-          // Format balance if in millions or billions
-          if (tokenBalance >= 1000000000) {
-            return `${Math.round(tokenBalance / 1000000000)} Billion`;
-          } else if (tokenBalance >= 1000000) {
-            return `${Math.round(tokenBalance / 1000000)} Million`;
+          console.log("tokenBalance is ", tokenBalance);
+
+          // Helper function to format decimals
+          const formatDecimals = (num: number) => {
+            const decimals = num % 1;
+            if (decimals === 0) return '';
+            return decimals.toFixed(9).substring(1);
+          };
+
+          // Format balance with appropriate units
+          const millions = Math.floor(tokenBalance / 1000000);
+          const thousands = Math.floor((tokenBalance % 1000000) / 1000);
+          const ones = Math.floor(tokenBalance % 1000);
+          const decimals = formatDecimals(tokenBalance);
+
+          let formattedBalance = '';
+          
+          if (millions > 0) {
+            formattedBalance += `${millions} Million `;
           }
-          return tokenBalance.toString();
+          if (thousands > 0) {
+            formattedBalance += `${thousands} Thousand `;
+          }
+          if (ones > 0) {
+            formattedBalance += ones;
+          }
+          
+          // Add decimals if they exist
+          if (decimals) {
+            formattedBalance += decimals;
+          }
+
+          // Handle case where balance is 0
+          if (formattedBalance === '') {
+            formattedBalance = '0';
+          }
+
+          return formattedBalance.trim();
         } catch (error) {
           console.error("Failed to fetch token balance:", error);
           return "0";
@@ -220,6 +250,8 @@ export default function Dashboard() {
         console.log("mtl is ", mtl);
         setMtl(mtl);
       });
+    } else {
+      setMtl("~");
     }
   }, [publicKey]); // Add dependencies
 
@@ -258,26 +290,60 @@ export default function Dashboard() {
           className="flex items-center justify-between p-6 mb-8"
         >
           <div className="flex items-center gap-6">
-            <div className="hover:scale-105 transition-transform duration-200">
-              <WalletMultiButton
-                endIcon={<FaGamepad className="text-[#0CC0DF] w-48 h-48" />}
-                style={{
-                  backgroundColor: "rgba(12, 192, 223, 0.1)", // Changed to transparent version of #0CC0DF
-                  color: "white",
-                  padding: "16px 32px", // Reduced from 24px/48px
-                  borderRadius: "16px", // Reduced from 24px
-                  border: "none",
-                  fontSize: "20px", // Reduced from 24px
-                  fontWeight: "600",
-                  cursor: "pointer",
-                  transition: "all 0.2s ease",
-                  boxShadow: "0 6px 8px rgba(12, 192, 223, 0.2)", // Reduced shadow
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "12px" // Reduced from 16px
+            {!publicKey ? (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1.1 }}
+                transition={{
+                  duration: 0.5, // Faster duration
+                  repeat: Infinity,
+                  repeatType: "reverse",
+                  ease: "easeInOut"
                 }}
-              />
-            </div>
+                className="hover:scale-110 transition-transform duration-300"
+              >
+                <WalletMultiButton
+                  endIcon={<FaGamepad className="text-white w-48 h-48" />}
+                  style={{
+                    background: "#0CC0DF",
+                    color: "white", 
+                    padding: "16px 32px", 
+                    borderRadius: "16px",
+                    border: "3px solid rgba(255,255,255,0.5)",
+                    fontSize: "20px",
+                    fontWeight: "600",
+                    cursor: "pointer",
+                    transition: "all 0.3s ease",
+                    boxShadow: "0 0 25px rgba(12,192,223,0.8), inset 0 0 15px rgba(255,255,255,0.2)",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "12px",
+                    backdropFilter: "blur(8px)"
+                  }}
+                />
+              </motion.div>
+            ) : (
+              <div className="hover:scale-105 transition-transform duration-200">
+                <WalletMultiButton
+                  endIcon={<FaGamepad className="text-[#0CC0DF] w-48 h-48" />}
+                  style={{
+                    backgroundColor: "rgba(12, 192, 223, 0.1)",
+                    color: "white",
+                    padding: "16px 32px",
+                    borderRadius: "16px", 
+                    border: "none",
+                    fontSize: "20px",
+                    fontWeight: "600",
+                    cursor: "pointer",
+                    transition: "all 0.2s ease",
+                    boxShadow: "0 6px 8px rgba(12, 192, 223, 0.2)",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "12px"
+                  }}
+                />
+              </div>
+            )}
             <div>
               <p className="text-sm text-white/60">Testnet</p>
             </div>

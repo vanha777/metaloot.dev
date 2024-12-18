@@ -161,14 +161,44 @@ export default function Wallet() {
                 const amount = accountInfo.account.data.parsed.info.tokenAmount.uiAmount;
                 return sum + amount;
               }, 0);
-      
-              // Format balance if in millions or billions
-              if (tokenBalance >= 1000000000) {
-                return `${Math.round(tokenBalance / 1000000000)} Billion`;
-              } else if (tokenBalance >= 1000000) {
-                return `${Math.round(tokenBalance / 1000000)} Million`;
+              console.log("tokenBalance is ", tokenBalance);
+
+              // Helper function to format decimals
+              const formatDecimals = (num: number) => {
+                const decimals = num % 1;
+                if (decimals === 0) return '';
+                return decimals.toFixed(9).substring(1);
+              };
+
+              // Format balance with appropriate units
+              const millions = Math.floor(tokenBalance / 1000000);
+              const thousands = Math.floor((tokenBalance % 1000000) / 1000);
+              const ones = Math.floor(tokenBalance % 1000);
+              const decimals = formatDecimals(tokenBalance);
+
+              let formattedBalance = '';
+              
+              if (millions > 0) {
+                formattedBalance += `${millions} Million `;
               }
-              return tokenBalance.toString();
+              if (thousands > 0) {
+                formattedBalance += `${thousands} Thousand `;
+              }
+              if (ones > 0) {
+                formattedBalance += ones;
+              }
+              
+              // Add decimals if they exist
+              if (decimals) {
+                formattedBalance += decimals;
+              }
+
+              // Handle case where balance is 0
+              if (formattedBalance === '') {
+                formattedBalance = '0';
+              }
+
+              return formattedBalance.trim();
             } catch (error) {
               console.error("Failed to fetch token balance:", error);
               return "0";
@@ -180,7 +210,9 @@ export default function Wallet() {
             console.log("mtl is ", mtl);
             setMtl(mtl);
           });
-        }
+        } else {
+            setMtl("~");
+          }
       }, [publicKey]); // Add dependencies
 
     // useEffect(() => {

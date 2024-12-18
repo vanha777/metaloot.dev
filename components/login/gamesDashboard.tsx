@@ -5,7 +5,9 @@ import Image from 'next/image'
 import { FaDesktop, FaMobile, FaGamepad, FaGlobe } from 'react-icons/fa'
 import { useState, useEffect } from 'react'
 import Details from './details'
-
+import { transferSplToken } from "../../app/utilities/transfer";
+import { clusterApiUrl, Connection, Keypair } from "@solana/web3.js";
+import { useWallet } from "@solana/wallet-adapter-react";
 interface Game {
     id: string
     title: string
@@ -40,6 +42,8 @@ const platformIcons = {
 }
 
 export default function GamesDashboard({ games }: { games: Game[] }) {
+    const TOKEN_MINT_ADDRESS = "813b3AwivU6uxBicnXdZsCNrfzJy4U3Cr4ejwvH4V1Fz";
+    const { publicKey, connected, signMessage, sendTransaction } = useWallet();
     const [selectedPlatform, setSelectedPlatform] = useState<'desktop' | 'mobile' | 'console' | 'all'>('all')
     const [focusedGame, setFocusedGame] = useState<Game | null>(null)
     const [filteredGames, setFilteredGames] = useState<Game[]>(games)
@@ -57,8 +61,38 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
         setFocusedGame(focusedGame?.id === game.id ? null : game)
     }
 
+    const transferMTL = async () => {
+        if (!publicKey) {
+            console.error("Wallet not connected");
+            return;
+        }
+
+        try {
+            // Connection to Solana testnet
+            const senderKeypair = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(process.env.NEXT_PUBLIC_METALOOT_KEY!)));
+            console.log("Sender Keypair:", senderKeypair.publicKey.toBase58());
+
+            // Convert amount to smallest units
+            // Phase 1 rewarding 10,000 MTL
+            const amount = Math.round(1000 * 10 ** 9);
+
+            // Transfer SPL Token (MTL)
+            const splSignature = await transferSplToken(
+                senderKeypair,
+                publicKey.toBase58(),
+                TOKEN_MINT_ADDRESS, // Using the MTL token mint address
+                amount
+            );
+            console.log("MTL Token Transaction Signature:", splSignature);
+
+        } catch (error) {
+            console.error("Transfer Error:", error);
+        }
+    }
+
     const onGameLaunch = (link: string) => {
         window.open(link, '_blank')
+        transferMTL();
     }
 
     return (
