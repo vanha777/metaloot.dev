@@ -8,7 +8,7 @@ import { SiSolana, SiTether } from 'react-icons/si'
 import { Auth } from '../../app/auth'
 import { useUser } from '../../app/context/userContext';
 import { Connection, PublicKey, clusterApiUrl } from "@solana/web3.js";
-
+import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
 interface NFT {
     id: string
     name: string
