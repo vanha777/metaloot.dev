@@ -8,6 +8,7 @@ import { Canvas } from '@react-three/fiber'
 import { Environment, Float, PerspectiveCamera } from '@react-three/drei'
 import { FaBitcoin, FaEthereum, FaWallet, FaShoppingCart, FaTicketAlt, FaStore, FaCoins, FaTicketAlt as FaTicket } from 'react-icons/fa'
 import { SiSolana, SiTether } from 'react-icons/si'
+import Modal from './modal'
 
 interface NFT {
     id: string
@@ -143,6 +144,9 @@ const tabIcons = {
 export default function Marketplace() {
     const [walletAddress, setWalletAddress] = useState<string>('')
     const [selectedTab, setSelectedTab] = useState<'nfts' | 'deals'>('nfts')
+    const [showModal, setShowModal] = useState(false)
+    const [transferStatus, setTransferStatus] = useState<'loading' | 'success' | 'error'>('loading')
+    const [transferMessage, setTransferMessage] = useState('')
 
     useEffect(() => {
         const getWalletDetails = async () => {
@@ -154,6 +158,23 @@ export default function Marketplace() {
         }
         getWalletDetails()
     }, [])
+
+    const handleClaim = async (voucher: Voucher) => {
+        setShowModal(true)
+        setTransferStatus('loading')
+        setTransferMessage('Processing your claim...')
+
+        try {
+            // Simulate API call
+            await new Promise(resolve => setTimeout(resolve, 2000))
+            
+            setTransferStatus('success')
+            setTransferMessage(`Successfully claimed ${voucher.title}!`)
+        } catch (error) {
+            setTransferStatus('error')
+            setTransferMessage('Failed to claim voucher. Please try again.')
+        }
+    }
 
     return (
         <>
@@ -254,7 +275,10 @@ export default function Marketplace() {
                                     <p className="text-gray-300 mb-4">Valid until: {voucher.validUntil}</p>
                                     <div className="flex justify-between items-center">
                                         <span className="text-[#0CC0DF]">${voucher.price}</span>
-                                        <button className="bg-[#0CC0DF] px-4 py-2 rounded-lg flex items-center gap-2">
+                                        <button 
+                                            onClick={() => handleClaim(voucher)}
+                                            className="bg-[#0CC0DF] px-4 py-2 rounded-lg flex items-center gap-2"
+                                        >
                                             <FaTicketAlt />
                                             Claim
                                         </button>
@@ -265,6 +289,13 @@ export default function Marketplace() {
                     </>
                 )}
             </div>
+
+            <Modal 
+                showModal={showModal}
+                setShowModal={setShowModal}
+                transferStatus={transferStatus}
+                transferMessage={transferMessage}
+            />
         </>
     )
 }
