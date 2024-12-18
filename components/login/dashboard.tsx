@@ -11,8 +11,9 @@ import { FaDesktop, FaMobile, FaGamepad, FaGlobe, FaStore, FaWallet, FaAffiliate
 import GamesDashboard from './gamesDashboard'
 import Marketplace from './marketplace'
 import Wallet from './wallet'
-import { useUser } from '../../app/context/userContext';
 import { Connection, PublicKey, clusterApiUrl } from "@solana/web3.js";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 interface Game {
   id: string
   title: string
@@ -152,112 +153,75 @@ const platformIcons = {
   marketplace: <FaStore size={64} />,
   wallet: <FaWallet size={64} />
 }
-
 export default function Dashboard() {
-  const { user, setUser } = useUser();
-  const [selectedPlatform, setSelectedPlatform] = useState<'games' | 'marketplace' | 'wallet'>('games')
-  const [showDropdown, setShowDropdown] = useState(false)
+  const { publicKey, connected, signMessage, sendTransaction } = useWallet();
+  const [mtl, setMtl] = useState<string>("~");
+  const getProvider = () => {
+    console.log("Getting provider");
+    if ('phantom' in window) {
+      // Type assertion to handle the window.phantom type
+      const phantom = (window as any).phantom;
+      const provider = phantom?.solana;
 
+      if (provider?.isPhantom) {
+        return provider;
+      }
+    }
+
+    window.open('https://phantom.app/', '_blank');
+  };
+
+  const [selectedPlatform, setSelectedPlatform] = useState<'games' | 'marketplace' | 'wallet'>('games')
   //const TOKEN_MINT_ADDRESS = "Hq1mb3fkB98g4vgk7ViPAmZFVaFVsw8GeQc8bWzBmm92"; // e.g., "So11111111111111111111111111111111111111112" for SOL
   const TOKEN_MINT_ADDRESS = "813b3AwivU6uxBicnXdZsCNrfzJy4U3Cr4ejwvH4V1Fz";
-  const connectWallet = async () => {
-    const solana = (window as any).solana;
-    if (solana) {
-      try {
-        const resp = await solana.connect();
-        if (resp.publicKey) {
-          const publicKey = resp.publicKey.toString();
-          // Check the user's balance for the specific token
-          const tokenBalance = await getTokenBalance(publicKey, TOKEN_MINT_ADDRESS);
-          return { publicKey, mtl: tokenBalance.toString() };
-        }
-      } catch (err) {
-        console.error("User rejected the request or another error occurred:", err);
-      }
-    } else {
-      console.error("Please install Phantom wallet");
-    }
-  };
-
-  // Function to get the balance of a specific token for a given wallet address
-  const getTokenBalance = async (walletAddress: string, tokenMintAddress: string) => {
-    try {
-      // Use devnet instead of mainnet-beta to avoid 403 errors
-      const connection = new Connection(clusterApiUrl("testnet"), "confirmed");
-      const ownerPublicKey = new PublicKey(walletAddress);
-      const mintPublicKey = new PublicKey(tokenMintAddress);
-
-      // Fetch all token accounts owned by the wallet
-      const tokenAccounts = await connection.getParsedTokenAccountsByOwner(ownerPublicKey, {
-        mint: mintPublicKey,
-      });
-
-      // Sum up balances from all accounts holding the specified token
-      const tokenBalance = tokenAccounts.value.reduce((sum, accountInfo) => {
-        const amount = accountInfo.account.data.parsed.info.tokenAmount.uiAmount;
-        return sum + amount;
-      }, 0);
-
-      return tokenBalance;
-    } catch (error) {
-      console.error("Failed to fetch token balance:", error);
-      return 0;
-    }
-  };
-
-  // const connectWallet = async () => {
-  //   const solana = (window as any).solana;
-  //   if (solana) {
-  //     try {
-  //       const resp = await solana.connect();
-  //       if (resp.publicKey) {
-  //         const publicKey = resp.publicKey.toString();
-  //         setUser({ publicKey });
-  //         return publicKey;
-  //       }
-  //     } catch (err) {
-  //       console.error("User rejected the request or another error:", err);
-  //     }
-  //   }
-  // };
-
-  const disconnectWallet = async () => {
-    const solana = (window as any).solana;
-    if (solana) {
-      try {
-        await solana.disconnect();
-        setUser(null);
-        setShowDropdown(false);
-        console.log("Wallet disconnected");
-      } catch (err) {
-        console.error("Error disconnecting wallet:", err);
-      }
-    }
-  };
 
   useEffect(() => {
-    const checkAndConnectWallet = async () => {
-      // Check if Phantom is installed
-      const solana = (window as any).solana;
-      if (!solana) {
-        console.error("Please install Phantom wallet");
-        return;
-      }
+    getProvider();
+  }, []);
 
-      // If user is not connected, try to connect
-      if (!user?.publicKey) {
-        const address = await connectWallet();
-        if (address) {
-          console.log("This is user", address);
-          setUser({ publicKey: address.publicKey, mtl: address.mtl });
+  useEffect(() => {
+    console.log("publicKey is ", publicKey);
+  
+    if (publicKey) {
+      // Define an async function to fetch the token balance
+      const fetchTokenBalance = async () => {
+        try {
+          // Connection to the Solana testnet
+          const connection = new Connection(clusterApiUrl("testnet"), "confirmed");
+          const ownerPublicKey = new PublicKey(publicKey.toBase58());
+          const mintPublicKey = new PublicKey(TOKEN_MINT_ADDRESS);
+  
+          // Fetch all token accounts owned by the wallet
+          const tokenAccounts = await connection.getParsedTokenAccountsByOwner(ownerPublicKey, {
+            mint: mintPublicKey,
+          });
+  
+          // Sum up balances from all accounts holding the specified token
+          const tokenBalance = tokenAccounts.value.reduce((sum, accountInfo) => {
+            const amount = accountInfo.account.data.parsed.info.tokenAmount.uiAmount;
+            return sum + amount;
+          }, 0);
+  
+          // Format balance if in millions or billions
+          if (tokenBalance >= 1000000000) {
+            return `${Math.round(tokenBalance / 1000000000)} Billion`;
+          } else if (tokenBalance >= 1000000) {
+            return `${Math.round(tokenBalance / 1000000)} Million`;
+          }
+          return tokenBalance.toString();
+        } catch (error) {
+          console.error("Failed to fetch token balance:", error);
+          return "0";
         }
-      } else {
-        // If user is already connected, set the wallet address
-      }
-    };
-
-    checkAndConnectWallet();
-  }, []); // Add user as dependency to re-run when user state changes 
+      };
+  
+      // Call the async function
+      fetchTokenBalance().then((mtl) => {
+        console.log("mtl is ", mtl);
+        setMtl(mtl);
+      });
+    }
+  }, [publicKey]); // Add dependencies
 
   return (
     <div className="min-h-screen bg-[#0A1628] text-white">
@@ -294,33 +258,27 @@ export default function Dashboard() {
           className="flex items-center justify-between p-6 mb-8"
         >
           <div className="flex items-center gap-6">
-            <div className="relative">
-              <button
-                onClick={() => setShowDropdown(!showDropdown)}
-                className="w-16 h-16 rounded-full bg-[#0CC0DF]/10 flex items-center justify-center relative"
-              >
-                <FaGamepad className="text-[#0CC0DF] w-20 h-20" />
-                <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                  <div className="w-3 h-3 bg-white rounded-full animate-pulse"></div>
-                </div>
-              </button>
-
-              {showDropdown && (
-                <div className="absolute top-full mt-2 w-48 bg-[#0A1628] border border-[#0CC0DF] rounded-lg shadow-lg">
-                  <button
-                    onClick={disconnectWallet}
-                    className="w-full px-4 py-2 text-left hover:bg-[#0CC0DF]/10 flex items-center gap-2"
-                  >
-                    <FaSignOutAlt className="text-[#0CC0DF]" />
-                    Sign Out
-                  </button>
-                </div>
-              )}
+            <div className="hover:scale-105 transition-transform duration-200">
+              <WalletMultiButton
+                endIcon={<FaGamepad className="text-[#0CC0DF] w-48 h-48" />}
+                style={{
+                  backgroundColor: "rgba(12, 192, 223, 0.1)", // Changed to transparent version of #0CC0DF
+                  color: "white",
+                  padding: "16px 32px", // Reduced from 24px/48px
+                  borderRadius: "16px", // Reduced from 24px
+                  border: "none",
+                  fontSize: "20px", // Reduced from 24px
+                  fontWeight: "600",
+                  cursor: "pointer",
+                  transition: "all 0.2s ease",
+                  boxShadow: "0 6px 8px rgba(12, 192, 223, 0.2)", // Reduced shadow
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "12px" // Reduced from 16px
+                }}
+              />
             </div>
             <div>
-              <h2 className="text-xl font-medium text-white/80">
-                {user?.publicKey ? `${user.publicKey.slice(0, 6)}...${user.publicKey.slice(-4)}` : 'Not Connected'}
-              </h2>
               <p className="text-sm text-white/60">Testnet</p>
             </div>
             <div className="w-16 h-16 rounded-full bg-[#0CC0DF]/10 flex items-center justify-center relative">
@@ -330,8 +288,6 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
-
-
 
           <div className="flex items-center gap-6">
             <button
@@ -350,9 +306,10 @@ export default function Dashboard() {
             <div>
               <p className="text-2xl font-bold text-white/80">
                 <span className="text-[#0CC0DF]">$ </span>
-                {user?.mtl}
+                {mtl}
               </p>
-              <p className="text-sm text-white/60">Phase Metalian Dawn</p>
+              <p className="text-sm text-white/60">MetaLoot Token</p>
+              {/* <p className="text-sm text-white/60">Phase Metalian Dawn</p> */}
             </div>
           </div>
         </motion.div>

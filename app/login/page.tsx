@@ -1,11 +1,11 @@
 'use client'
 import Dashboard from '../../components/login/dashboard'
-import { UserProvider } from '../context/userContext'
+import { WalletConnectionProvider } from '../context/WalletConnectionProvider'
 
 export default function LoginPage() {
   return (
-    <UserProvider>
-      <Dashboard />
-    </UserProvider>
+      <WalletConnectionProvider>
+        <Dashboard />
+      </WalletConnectionProvider>
   )
 }

@@ -6,9 +6,9 @@ import { useState, useEffect } from 'react'
 import { FaBitcoin, FaEthereum, FaWallet, FaShoppingCart, FaTicketAlt, FaStore, FaCoins, FaCreditCard } from 'react-icons/fa'
 import { SiSolana, SiTether } from 'react-icons/si'
 import { Auth } from '../../app/auth'
-import { useUser } from '../../app/context/userContext';
 import { Connection, PublicKey, clusterApiUrl } from "@solana/web3.js";
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
+import { useWallet } from "@solana/wallet-adapter-react";
 interface NFT {
     id: string
     name: string
@@ -69,8 +69,9 @@ const cryptoAssets: CryptoAsset[] = [
 ]
 
 export default function Wallet() {
-    const { user, setUser } = useUser();
-    const [isMobile, setIsMobile] = useState(false)
+    const { publicKey, connected, signMessage, sendTransaction } = useWallet();
+    const [isMobile, setIsMobile] = useState(false);
+    const [mtl, setMtl] = useState<string>("~");
     //Metaloots token mint address
     const TOKEN_MINT_ADDRESS = "813b3AwivU6uxBicnXdZsCNrfzJy4U3Cr4ejwvH4V1Fz";
 
@@ -119,16 +120,16 @@ export default function Wallet() {
     };
 
     useEffect(() => {
-        const checkAndConnectWallet = async () => {
-            const address = await connectWallet();
-            if (address) {
-                setUser({
-                    publicKey: address.publicKey,
-                    mtl: address.mtl
-                });
-            }
-        }
-        checkAndConnectWallet();
+        // const checkAndConnectWallet = async () => {
+        //     const address = await connectWallet();
+        //     if (address) {
+        //         setUser({
+        //             publicKey: address.publicKey,
+        //             mtl: address.mtl
+        //         });
+        //     }
+        // }
+        // checkAndConnectWallet();
         const checkMobile = () => {
             setIsMobile(window.innerWidth < 768);
         }
@@ -137,6 +138,50 @@ export default function Wallet() {
         window.addEventListener('resize', checkMobile)
         return () => window.removeEventListener('resize', checkMobile)
     }, [])
+
+    useEffect(() => {
+        console.log("publicKey is ", publicKey);
+      
+        if (publicKey) {
+          // Define an async function to fetch the token balance
+          const fetchTokenBalance = async () => {
+            try {
+              // Connection to the Solana testnet
+              const connection = new Connection(clusterApiUrl("testnet"), "confirmed");
+              const ownerPublicKey = new PublicKey(publicKey.toBase58());
+              const mintPublicKey = new PublicKey(TOKEN_MINT_ADDRESS);
+      
+              // Fetch all token accounts owned by the wallet
+              const tokenAccounts = await connection.getParsedTokenAccountsByOwner(ownerPublicKey, {
+                mint: mintPublicKey,
+              });
+      
+              // Sum up balances from all accounts holding the specified token
+              const tokenBalance = tokenAccounts.value.reduce((sum, accountInfo) => {
+                const amount = accountInfo.account.data.parsed.info.tokenAmount.uiAmount;
+                return sum + amount;
+              }, 0);
+      
+              // Format balance if in millions or billions
+              if (tokenBalance >= 1000000000) {
+                return `${Math.round(tokenBalance / 1000000000)} Billion`;
+              } else if (tokenBalance >= 1000000) {
+                return `${Math.round(tokenBalance / 1000000)} Million`;
+              }
+              return tokenBalance.toString();
+            } catch (error) {
+              console.error("Failed to fetch token balance:", error);
+              return "0";
+            }
+          };
+      
+          // Call the async function
+          fetchTokenBalance().then((mtl) => {
+            console.log("mtl is ", mtl);
+            setMtl(mtl);
+          });
+        }
+      }, [publicKey]); // Add dependencies
 
     // useEffect(() => {
     //     // Simulating fetching wallet data
@@ -194,7 +239,7 @@ export default function Wallet() {
                     <div className="space-y-6">
                         <div className="flex items-center gap-2">
                             <p className="font-mono text-white text-xl tracking-wider">
-                                {user?.publicKey}
+                              {publicKey?.toBase58()}
                             </p>
                         </div>
 
@@ -202,7 +247,7 @@ export default function Wallet() {
                         <div className="flex justify-between items-end">
                             <div>
                                 <p className="text-white/70 text-lg">Balance</p>
-                                <p className="text-white text-2xl font-bold">${user?.mtl?.toLocaleString()} MTL</p>
+                                <p className="text-white text-2xl font-bold">${mtl.toLocaleString()} MTL</p>
                             </div>
                             <div className="flex items-center gap-2">
                                 <span className="text-white text-xl font-bold">METALOOT</span>
