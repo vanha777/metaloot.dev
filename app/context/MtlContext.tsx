@@ -62,7 +62,7 @@ interface MTLContextType {
     marketplaceVouchers: Voucher[]
     exchangeRates: CryptoRate[]
     games: Game[]
-    fetchTokenBalance: () => Promise<string>
+    fetchTokenBalance: () => Promise<void>
 }
 
 const MTLContext = createContext<MTLContextType>({
@@ -72,7 +72,7 @@ const MTLContext = createContext<MTLContextType>({
     marketplaceVouchers: [],
     exchangeRates: [],
     games: [],
-    fetchTokenBalance: async () => "~"
+    fetchTokenBalance: async () => {}
 })
 
 const TOKEN_MINT_ADDRESS = "813b3AwivU6uxBicnXdZsCNrfzJy4U3Cr4ejwvH4V1Fz";
@@ -87,6 +87,12 @@ export function MTLProvider({ children }: { children: ReactNode }) {
     const [games, setGames] = useState<Game[]>([])
 
     const fetchTokenBalance = async () => {
+        const token = await TokenBalance();
+        console.log("mtl is ", token);
+        setBalance(token);
+    }
+
+    const TokenBalance = async () => {
         if (publicKey) {
             try {
                 // Connection to the Solana testnet
@@ -152,48 +158,39 @@ export function MTLProvider({ children }: { children: ReactNode }) {
         }
     };
 
-
     useEffect(() => {
-        // Initial data fetch
-        // get MTL token
-        if (publicKey) {
-            // Define an async function to fetch the token balance
-
-            // Call the async function
-            fetchTokenBalance().then((mtl) => {
-                console.log("mtl is ", mtl);
-                setBalance(mtl);
-            });
-        } else {
-            console.log("no key");
-            setBalance("~");
-        }
         const fetchData = async () => {
             try {
-                const supabase = Auth
-                const { data: { user } } = await supabase.auth.getUser()
+                // Initial data fetch
+                // get MTL token
+                const token = await TokenBalance();
+                console.log("mtl is ", token);
+                setBalance(token);
 
-                if (user) {
-                    // Fetch user's NFTs
-                    const nftResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/nfts/${user.id}`)
-                    const nftData = await nftResponse.json()
-                    setOwnedNFTs(nftData)
+                // const supabase = Auth
+                // const { data: { user } } = await supabase.auth.getUser()
 
-                    // Fetch marketplace NFTs
-                    const marketNFTResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/marketplace/nfts`)
-                    const marketNFTData = await marketNFTResponse.json()
-                    setMarketplaceNFTs(marketNFTData)
+                // if (user) {
+                //     // Fetch user's NFTs
+                //     const nftResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/nfts/${user.id}`)
+                //     const nftData = await nftResponse.json()
+                //     setOwnedNFTs(nftData)
 
-                    // Fetch marketplace vouchers
-                    const voucherResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/marketplace/vouchers`)
-                    const voucherData = await voucherResponse.json()
-                    setMarketplaceVouchers(voucherData)
+                //     // Fetch marketplace NFTs
+                //     const marketNFTResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/marketplace/nfts`)
+                //     const marketNFTData = await marketNFTResponse.json()
+                //     setMarketplaceNFTs(marketNFTData)
 
-                    // Fetch exchange rates
-                    const ratesResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/exchange-rates`)
-                    const ratesData = await ratesResponse.json()
-                    setExchangeRates(ratesData)
-                }
+                //     // Fetch marketplace vouchers
+                //     const voucherResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/marketplace/vouchers`)
+                //     const voucherData = await voucherResponse.json()
+                //     setMarketplaceVouchers(voucherData)
+
+                //     // Fetch exchange rates
+                //     const ratesResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/exchange-rates`)
+                //     const ratesData = await ratesResponse.json()
+                //     setExchangeRates(ratesData)
+                // }
             } catch (error) {
                 console.error('Error fetching data:', error)
             }

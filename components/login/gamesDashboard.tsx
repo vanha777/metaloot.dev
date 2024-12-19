@@ -8,6 +8,7 @@ import Details from './details'
 import { transferSplToken } from "../../app/utilities/transfer";
 import { clusterApiUrl, Connection, Keypair } from "@solana/web3.js";
 import { useWallet } from "@solana/wallet-adapter-react";
+import { useMTL } from '../../app/context/MtlContext'
 interface Game {
     id: string
     title: string
@@ -42,6 +43,14 @@ const platformIcons = {
 }
 
 export default function GamesDashboard({ games }: { games: Game[] }) {
+    const {
+        balance,
+        ownedNFTs,
+        marketplaceNFTs,
+        marketplaceVouchers,
+        exchangeRates,
+        fetchTokenBalance
+      } = useMTL()
     const TOKEN_MINT_ADDRESS = "813b3AwivU6uxBicnXdZsCNrfzJy4U3Cr4ejwvH4V1Fz";
     const { publicKey, connected, signMessage, sendTransaction } = useWallet();
     const [selectedPlatform, setSelectedPlatform] = useState<'desktop' | 'mobile' | 'console' | 'all'>('all')
@@ -106,6 +115,7 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
             setShowModal(false)
             setTransferStatus('idle')
             setTransferMessage('')
+            fetchTokenBalance();
         }, 2000)
     }
 
