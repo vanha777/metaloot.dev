@@ -9,6 +9,7 @@ import { Auth } from '../../app/auth'
 import { Connection, PublicKey, clusterApiUrl } from "@solana/web3.js";
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import { useWallet } from "@solana/wallet-adapter-react";
+import { useMTL } from '../../app/context/MtlContext'
 interface NFT {
     id: string
     name: string
@@ -69,9 +70,9 @@ const cryptoAssets: CryptoAsset[] = [
 ]
 
 export default function Wallet() {
+    const { balance, ownedNFTs, marketplaceNFTs, marketplaceVouchers, exchangeRates, fetchTokenBalance } = useMTL();
     const { publicKey, connected, signMessage, sendTransaction } = useWallet();
     const [isMobile, setIsMobile] = useState(false);
-    const [mtl, setMtl] = useState<string>("~");
     //Metaloots token mint address
     const TOKEN_MINT_ADDRESS = "813b3AwivU6uxBicnXdZsCNrfzJy4U3Cr4ejwvH4V1Fz";
 
@@ -139,81 +140,81 @@ export default function Wallet() {
         return () => window.removeEventListener('resize', checkMobile)
     }, [])
 
-    useEffect(() => {
-        console.log("publicKey is ", publicKey);
+    // useEffect(() => {
+    //     console.log("publicKey is ", publicKey);
       
-        if (publicKey) {
-          // Define an async function to fetch the token balance
-          const fetchTokenBalance = async () => {
-            try {
-              // Connection to the Solana testnet
-              const connection = new Connection(clusterApiUrl("testnet"), "confirmed");
-              const ownerPublicKey = new PublicKey(publicKey.toBase58());
-              const mintPublicKey = new PublicKey(TOKEN_MINT_ADDRESS);
+    //     if (publicKey) {
+    //       // Define an async function to fetch the token balance
+    //       const fetchTokenBalance = async () => {
+    //         try {
+    //           // Connection to the Solana testnet
+    //           const connection = new Connection(clusterApiUrl("testnet"), "confirmed");
+    //           const ownerPublicKey = new PublicKey(publicKey.toBase58());
+    //           const mintPublicKey = new PublicKey(TOKEN_MINT_ADDRESS);
       
-              // Fetch all token accounts owned by the wallet
-              const tokenAccounts = await connection.getParsedTokenAccountsByOwner(ownerPublicKey, {
-                mint: mintPublicKey,
-              });
+    //           // Fetch all token accounts owned by the wallet
+    //           const tokenAccounts = await connection.getParsedTokenAccountsByOwner(ownerPublicKey, {
+    //             mint: mintPublicKey,
+    //           });
       
-              // Sum up balances from all accounts holding the specified token
-              const tokenBalance = tokenAccounts.value.reduce((sum, accountInfo) => {
-                const amount = accountInfo.account.data.parsed.info.tokenAmount.uiAmount;
-                return sum + amount;
-              }, 0);
-              console.log("tokenBalance is ", tokenBalance);
+    //           // Sum up balances from all accounts holding the specified token
+    //           const tokenBalance = tokenAccounts.value.reduce((sum, accountInfo) => {
+    //             const amount = accountInfo.account.data.parsed.info.tokenAmount.uiAmount;
+    //             return sum + amount;
+    //           }, 0);
+    //           console.log("tokenBalance is ", tokenBalance);
 
-              // Helper function to format decimals
-              const formatDecimals = (num: number) => {
-                const decimals = num % 1;
-                if (decimals === 0) return '';
-                return decimals.toFixed(9).substring(1);
-              };
+    //           // Helper function to format decimals
+    //           const formatDecimals = (num: number) => {
+    //             const decimals = num % 1;
+    //             if (decimals === 0) return '';
+    //             return decimals.toFixed(9).substring(1);
+    //           };
 
-              // Format balance with appropriate units
-              const millions = Math.floor(tokenBalance / 1000000);
-              const thousands = Math.floor((tokenBalance % 1000000) / 1000);
-              const ones = Math.floor(tokenBalance % 1000);
-              const decimals = formatDecimals(tokenBalance);
+    //           // Format balance with appropriate units
+    //           const millions = Math.floor(tokenBalance / 1000000);
+    //           const thousands = Math.floor((tokenBalance % 1000000) / 1000);
+    //           const ones = Math.floor(tokenBalance % 1000);
+    //           const decimals = formatDecimals(tokenBalance);
 
-              let formattedBalance = '';
+    //           let formattedBalance = '';
               
-              if (millions > 0) {
-                formattedBalance += `${millions} Million `;
-              }
-              if (thousands > 0) {
-                formattedBalance += `${thousands} Thousand `;
-              }
-              if (ones > 0) {
-                formattedBalance += ones;
-              }
+    //           if (millions > 0) {
+    //             formattedBalance += `${millions} Million `;
+    //           }
+    //           if (thousands > 0) {
+    //             formattedBalance += `${thousands} Thousand `;
+    //           }
+    //           if (ones > 0) {
+    //             formattedBalance += ones;
+    //           }
               
-              // Add decimals if they exist
-              if (decimals) {
-                formattedBalance += decimals;
-              }
+    //           // Add decimals if they exist
+    //           if (decimals) {
+    //             formattedBalance += decimals;
+    //           }
 
-              // Handle case where balance is 0
-              if (formattedBalance === '') {
-                formattedBalance = '0';
-              }
+    //           // Handle case where balance is 0
+    //           if (formattedBalance === '') {
+    //             formattedBalance = '0';
+    //           }
 
-              return formattedBalance.trim();
-            } catch (error) {
-              console.error("Failed to fetch token balance:", error);
-              return "0";
-            }
-          };
+    //           return formattedBalance.trim();
+    //         } catch (error) {
+    //           console.error("Failed to fetch token balance:", error);
+    //           return "0";
+    //         }
+    //       };
       
-          // Call the async function
-          fetchTokenBalance().then((mtl) => {
-            console.log("mtl is ", mtl);
-            setMtl(mtl);
-          });
-        } else {
-            setMtl("~");
-          }
-      }, [publicKey]); // Add dependencies
+    //       // Call the async function
+    //       fetchTokenBalance().then((mtl) => {
+    //         console.log("mtl is ", mtl);
+    //         setMtl(mtl);
+    //       });
+    //     } else {
+    //         setMtl("~");
+    //       }
+    //   }, [publicKey]); // Add dependencies
 
     // useEffect(() => {
     //     // Simulating fetching wallet data
@@ -279,7 +280,7 @@ export default function Wallet() {
                         <div className="flex justify-between items-end">
                             <div>
                                 <p className="text-white/70 text-lg">Balance</p>
-                                <p className="text-white text-2xl font-bold">${mtl.toLocaleString()} MTL</p>
+                                <p className="text-white text-2xl font-bold">${balance} MTL</p>
                             </div>
                             <div className="flex items-center gap-2">
                                 <span className="text-white text-xl font-bold">METALOOT</span>

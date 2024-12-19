@@ -74,13 +74,23 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                     {transferStatus === 'loading' ? (
                         <div className="flex flex-col items-center justify-center p-6">
                             <div className="relative">
-                                <div className="w-32 h-32 relative">
+                                <div className="w-24 h-24 relative">
+                                    {/* Outer rotating ring */}
                                     <div className="absolute inset-0 border-4 border-[#0CC0DF]/20 rounded-full animate-[spin_3s_linear_infinite]" />
-                                    <div className="absolute inset-2 border-4 border-[#0CC0DF]/40 rounded-full animate-[spin_2s_linear_infinite_reverse]" />
+                                    
+                                    {/* Inner counter-rotating ring with particles */}
+                                    <div className="absolute inset-2 border-4 border-[#0CC0DF]/40 rounded-full animate-[spin_2s_linear_infinite_reverse]">
+                                        <div className="absolute -top-1 left-1/2 w-2 h-2 bg-[#0CC0DF] rounded-full animate-pulse" />
+                                        <div className="absolute top-1/2 -right-1 w-2 h-2 bg-[#0CC0DF] rounded-full animate-pulse" />
+                                        <div className="absolute -bottom-1 left-1/2 w-2 h-2 bg-[#0CC0DF] rounded-full animate-pulse" />
+                                        <div className="absolute top-1/2 -left-1 w-2 h-2 bg-[#0CC0DF] rounded-full animate-pulse" />
+                                    </div>
+                                    
+                                    {/* Center pulsing orb */}
                                     <div className="absolute inset-6 bg-[#0CC0DF] rounded-full animate-pulse opacity-75" />
                                 </div>
                             </div>
-                            <p className="mt-6 text-center text-xl font-medium text-gray-200">{transferMessage}</p>
+                            <p className="mt-6 text-center text-lg font-medium text-gray-200">{transferMessage}</p>
                         </div>
                     ) : (
                         <div className="flex flex-col gap-8">
@@ -136,6 +146,9 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                                 >
                                     <div className="flex justify-between mb-4">
                                         <span className="text-gray-400 text-lg">To</span>
+                                        <div className="flex items-center gap-2 bg-[#0CC0DF]/20 px-4 py-2 rounded-lg">
+                                            <span>{selectedAsset === 'crypto' ? assets.crypto.name : 'Asset'}</span>
+                                        </div>
                                     </div>
                                     
                                     <div className="relative h-48 mb-4 rounded-xl overflow-hidden">
