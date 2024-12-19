@@ -1,40 +1,47 @@
 import { useState } from 'react';
 import Image from 'next/image';
-import { FaExchangeAlt, FaTimes } from 'react-icons/fa';
+import { FaBitcoin, FaEthereum, FaExchangeAlt, FaTimes } from 'react-icons/fa';
 import { motion } from 'framer-motion';
-import { SiSolana } from 'react-icons/si';
+import { SiSolana, SiTether } from 'react-icons/si';
+
+type VoucherAsset = {
+    name: string;
+    image: string;
+    price: number;
+}
+
+type CryptoAsset = {
+    name: string;
+    symbol: string;
+    balance: number;
+    price: number;
+    icon: JSX.Element;
+}
+
+type NFTAsset = {
+    name: string;
+    image: string;
+    price: number;
+}
+
+interface Assets {
+    voucher: VoucherAsset;
+    crypto: CryptoAsset;
+    nft: NFTAsset;
+}
 
 interface ModalProps {
     showModal: boolean;
     setShowModal: (show: boolean) => void;
     transferStatus: 'loading' | 'success' | 'error';
     transferMessage: string;
+    assets: Assets;
+    selectedAsset: 'voucher' | 'crypto' | 'nft';
 }
 
-export default function Modal({ showModal, setShowModal, transferStatus, transferMessage }: ModalProps) {
+export default function Modal({ showModal, setShowModal, transferStatus, transferMessage, assets, selectedAsset }: ModalProps) {
     const [fromAmount, setFromAmount] = useState('');
     const [toAmount, setToAmount] = useState('');
-    const [selectedAsset, setSelectedAsset] = useState('voucher');
-
-    const assets = {
-        voucher: {
-            name: '50% Off Jetstar',
-            image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%2010.jpeg',
-            price: 100
-        },
-        crypto: {
-            name: 'Solana',
-            symbol: 'SOL',
-            balance: 15.0,
-            price: 100,
-            icon: <SiSolana className="text-[#00FFA3]" size={64} />
-        },
-        nft: {
-            name: 'Optimus Prime Weapon #1347',
-            image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/fantasy-warrior-sword-artwork-2.png',
-            price: 0.5
-        }
-    };
 
     const handleSwap = () => {
         // Swap logic would go here
@@ -61,7 +68,7 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                     </button>
                     
                     <h3 className="font-bold text-3xl text-center mb-8 text-transparent bg-clip-text bg-gradient-to-r from-[#0CC0DF] to-[#0AA0BF]">
-                        Swap to MTL
+                        Swap from MTL
                     </h3>
 
                     {transferStatus === 'loading' ? (
@@ -78,7 +85,7 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                     ) : (
                         <div className="flex flex-col gap-8">
                             <div className="grid grid-cols-[1fr,auto,1fr] items-center gap-4">
-                                {/* From Asset */}
+                                {/* From Asset (MTL) */}
                                 <motion.div 
                                     className="bg-gray-800/50 p-6 rounded-xl"
                                     initial={{ x: -50, opacity: 0 }}
@@ -87,61 +94,8 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                                 >
                                     <div className="flex justify-between mb-4">
                                         <span className="text-gray-400 text-lg">From</span>
-                                        <select 
-                                            value={selectedAsset}
-                                            onChange={(e) => setSelectedAsset(e.target.value)}
-                                            className="bg-[#0CC0DF]/20 px-4 py-2 rounded-lg"
-                                        >
-                                            <option value="voucher">Jetstar Voucher</option>
-                                            <option value="crypto">SOL</option>
-                                            <option value="nft">Optimus Prime NFT</option>
-                                        </select>
-                                    </div>
-                                    
-                                    <div className="relative h-48 mb-4 rounded-xl overflow-hidden">
-                                        {selectedAsset === 'crypto' ? (
-                                            <div className="h-full flex items-center justify-center bg-gradient-to-br from-[#00FFA3]/20 to-transparent">
-                                                {assets.crypto.icon}
-                                            </div>
-                                        ) : (
-                                            <Image 
-                                                src={assets[selectedAsset as 'voucher' | 'nft'].image}
-                                                fill
-                                                className="object-cover"
-                                                alt={assets[selectedAsset as 'voucher' | 'nft'].name}
-                                            />
-                                        )}
-                                    </div>
-
-                                    <input
-                                        type="number"
-                                        value={fromAmount}
-                                        onChange={(e) => setFromAmount(e.target.value)}
-                                        className="bg-transparent text-2xl w-full focus:outline-none text-center"
-                                        placeholder="0.0"
-                                    />
-                                </motion.div>
-
-                                {/* Exchange Icon */}
-                                <motion.div
-                                    animate={{ rotate: 360 }}
-                                    transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                                    className="bg-[#0CC0DF]/20 p-4 rounded-full"
-                                >
-                                    <FaExchangeAlt className="text-[#0CC0DF] text-3xl" />
-                                </motion.div>
-
-                                {/* To Asset (MTL) */}
-                                <motion.div 
-                                    className="bg-gray-800/50 p-6 rounded-xl"
-                                    initial={{ x: 50, opacity: 0 }}
-                                    animate={{ x: 0, opacity: 1 }}
-                                    transition={{ type: "spring", stiffness: 100 }}
-                                >
-                                    <div className="flex justify-between mb-4">
-                                        <span className="text-gray-400 text-lg">To</span>
                                         <div className="flex items-center gap-2 bg-[#0CC0DF]/20 px-4 py-2 rounded-lg">
-                                            <span>MTL</span>
+                                            <span>$MTL</span>
                                         </div>
                                     </div>
 
@@ -156,11 +110,63 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
 
                                     <input
                                         type="number"
-                                        value={toAmount}
-                                        onChange={(e) => setToAmount(e.target.value)}
+                                        value={selectedAsset === 'crypto' ? fromAmount : assets[selectedAsset].price.toString()}
+                                        onChange={(e) => setFromAmount(e.target.value)}
                                         className="bg-transparent text-2xl w-full focus:outline-none text-center"
                                         placeholder="0.0"
+                                        readOnly={selectedAsset !== 'crypto'}
                                     />
+                                </motion.div>
+
+                                {/* Exchange Icon */}
+                                <motion.div
+                                    animate={{ rotate: 360 }}
+                                    transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                                    className="bg-[#0CC0DF]/20 p-4 rounded-full"
+                                >
+                                    <FaExchangeAlt className="text-[#0CC0DF] text-3xl" />
+                                </motion.div>
+
+                                {/* To Asset */}
+                                <motion.div 
+                                    className="bg-gray-800/50 p-6 rounded-xl"
+                                    initial={{ x: 50, opacity: 0 }}
+                                    animate={{ x: 0, opacity: 1 }}
+                                    transition={{ type: "spring", stiffness: 100 }}
+                                >
+                                    <div className="flex justify-between mb-4">
+                                        <span className="text-gray-400 text-lg">To</span>
+                                    </div>
+                                    
+                                    <div className="relative h-48 mb-4 rounded-xl overflow-hidden">
+                                        {selectedAsset === 'crypto' ? (
+                                            <div className="h-full flex items-center justify-center bg-gradient-to-br from-[#00FFA3]/20 to-transparent">
+                                                {assets.crypto.name === 'Bitcoin' && <FaBitcoin className="text-[#F7931A]" size={66} />}
+                                                {assets.crypto.name === 'Ethereum' && <FaEthereum className="text-[#627EEA]" size={66} />}
+                                                {assets.crypto.name === 'Solana' && <SiSolana className="text-[#00FFA3]" size={66} />}
+                                                {assets.crypto.name === 'Tether' && <SiTether className="text-[#26A17B]" size={66} />}
+                                            </div>
+                                        ) : (
+                                            <Image 
+                                                src={assets[selectedAsset].image}
+                                                fill
+                                                className="object-cover"
+                                                alt={assets[selectedAsset].name}
+                                            />
+                                        )}
+                                    </div>
+
+                                    {selectedAsset === 'crypto' ? (
+                                        <input
+                                            type="number"
+                                            value={toAmount}
+                                            onChange={(e) => setToAmount(e.target.value)}
+                                            className="bg-transparent text-2xl w-full focus:outline-none text-center"
+                                            placeholder="0.0"
+                                        />
+                                    ) : (
+                                        <div className="text-2xl text-center text-gray-400">1x {assets[selectedAsset].name}</div>
+                                    )}
                                 </motion.div>
                             </div>
 
@@ -170,7 +176,7 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
                             >
-                                Swap to MTL
+                                Swap from MTL
                             </motion.button>
                         </div>
                     )}

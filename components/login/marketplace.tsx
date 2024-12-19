@@ -42,24 +42,24 @@ const nfts: NFT[] = [
         name: 'Optimus Prime Weapon #1347',
         image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/fantasy-warrior-sword-artwork-2.png',
         description: 'Rare Optimus Prime Weapon NFT',
-        price: 0.5,
-        currency: 'ETH'
+        price: 600,
+        currency: '$MTL'
     },
     {
         id: '2',
         name: 'Cybertron All-spark #1666',
         image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/view-3d-islamic-mecca-cube.png',
         description: 'Rare All-spark cube NFT',
-        price: 0.5,
-        currency: 'ETH'
+        price: 5000,
+        currency: '$MTL'
     },
     {
         id: '3',
         name: 'Cybertron Laser Gun #1686',
         image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/3d-view-powerful-gun.png',
         description: 'Cybertron Laser Gun NFT',
-        price: 0.5,
-        currency: 'ETH'
+        price: 1200,
+        currency: '$MTL'
     }
 ]
 
@@ -69,21 +69,21 @@ const cryptoAssets: CryptoAsset[] = [
         name: 'Bitcoin',
         balance: 0.25,
         price: 45000,
-        icon: <FaBitcoin className="text-[#F7931A]" size={24} />
+        icon: <FaBitcoin className="text-[#F7931A]" size={36} />
     },
     {
         symbol: 'ETH',
         name: 'Ethereum',
         balance: 2.5,
         price: 3000,
-        icon: <FaEthereum className="text-[#627EEA]" size={24} />
+        icon: <FaEthereum className="text-[#627EEA]" size={36} />
     },
     {
         symbol: 'SOL',
         name: 'Solana',
         balance: 15.0,
         price: 100,
-        icon: <SiSolana className="text-[#00FFA3]" size={24} />
+        icon: <SiSolana className="text-[#00FFA3]" size={36} />
     },
     {
         symbol: 'USDT',
@@ -91,14 +91,14 @@ const cryptoAssets: CryptoAsset[] = [
         balance: 1000,
         price: 1,
         icon: <SiTether className="text-[#26A17B]" size={24} />
-    },
-    {
-        symbol: 'MTL',
-        name: 'MetaLoot',
-        balance: 1250,
-        price: 1,
-        icon: <Image src="https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/MTL.png" width={36} height={36} alt="MTL" />
     }
+    // {
+    //     symbol: 'MTL',
+    //     name: 'MetaLoot',
+    //     balance: 1250,
+    //     price: 1,
+    //     icon: <Image src="https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/MTL.png" width={36} height={36} alt="MTL" />
+    // }
 ]
 
 const vouchers: Voucher[] = [
@@ -147,6 +147,11 @@ export default function Marketplace() {
     const [showModal, setShowModal] = useState(false)
     const [transferStatus, setTransferStatus] = useState<'loading' | 'success' | 'error'>('loading')
     const [transferMessage, setTransferMessage] = useState('')
+    const [selectedAssets, setSelectedAssets] = useState<{
+        voucher?: Voucher;
+        crypto?: CryptoAsset;
+        nft?: NFT;
+    }>({})
 
     useEffect(() => {
         const getWalletDetails = async () => {
@@ -160,6 +165,7 @@ export default function Marketplace() {
     }, [])
 
     const handleClaim = async (voucher: Voucher) => {
+        setSelectedAssets({ voucher })
         setShowModal(true)
         setTransferStatus('loading')
         setTransferMessage('Processing your claim...')
@@ -173,6 +179,42 @@ export default function Marketplace() {
         } catch (error) {
             setTransferStatus('error')
             setTransferMessage('Failed to claim voucher. Please try again.')
+        }
+    }
+
+    const handleCryptoClick = async (crypto: CryptoAsset) => {
+        setSelectedAssets({ crypto })
+        setShowModal(true)
+        setTransferStatus('loading')
+        setTransferMessage('Preparing to swap...')
+
+        try {
+            // Simulate API call
+            await new Promise(resolve => setTimeout(resolve, 2000))
+            
+            setTransferStatus('success')
+            setTransferMessage(`Successfully claimed ${crypto.name}!`)
+        } catch (error) {
+            setTransferStatus('error')
+            setTransferMessage('Failed to claim crypto. Please try again.')
+        }
+    }
+
+    const handleNFTBuy = async (nft: NFT) => {
+        setSelectedAssets({ nft })
+        setShowModal(true)
+        setTransferStatus('loading')
+        setTransferMessage('Processing your purchase...')
+
+        try {
+            // Simulate API call
+            await new Promise(resolve => setTimeout(resolve, 2000))
+            
+            setTransferStatus('success')
+            setTransferMessage(`Successfully purchased ${nft.name}!`)
+        } catch (error) {
+            setTransferStatus('error')
+            setTransferMessage('Failed to purchase NFT. Please try again.')
         }
     }
 
@@ -217,7 +259,13 @@ export default function Marketplace() {
                                 <p className="text-gray-300 mb-4">{nft.description}</p>
                                 <div className="flex justify-between items-center">
                                     <span className="text-[#0CC0DF]">{nft.price} {nft.currency}</span>
-                                    <button className="bg-[#0CC0DF] px-4 py-2 rounded-lg">Buy Now</button>
+                                    <button 
+                                        onClick={() => handleNFTBuy(nft)}
+                                        className="bg-[#0CC0DF] px-4 py-2 rounded-lg flex items-center gap-2"
+                                    >
+                                        <FaShoppingCart />
+                                        Buy Now
+                                    </button>
                                 </div>
                             </motion.div>
                         ))}
@@ -232,8 +280,9 @@ export default function Marketplace() {
                                 <motion.div
                                     key={asset.symbol}
                                     whileHover={{ scale: 1.05 }}
+                                    onClick={() => handleCryptoClick(asset)}
                                     className="bg-gradient-to-b from-[#0CC0DF]/10 to-transparent backdrop-blur-sm 
-                                     rounded-xl p-6 border border-[#0CC0DF]/20"
+                                     rounded-xl p-6 border border-[#0CC0DF]/20 cursor-pointer"
                                 >
                                     <div className="flex items-center gap-4 mb-4">
                                         {asset.icon}
@@ -295,6 +344,40 @@ export default function Marketplace() {
                 setShowModal={setShowModal}
                 transferStatus={transferStatus}
                 transferMessage={transferMessage}
+                selectedAsset={selectedAssets.crypto ? 'crypto' : selectedAssets.voucher ? 'voucher' : 'nft'}
+                assets={{
+                    voucher: selectedAssets.voucher ? {
+                        name: selectedAssets.voucher.title,
+                        image: selectedAssets.voucher.image,
+                        price: selectedAssets.voucher.price
+                    } : {
+                        name: '',
+                        image: '',
+                        price: 0
+                    },
+                    crypto: selectedAssets.crypto ? {
+                        name: selectedAssets.crypto.name,
+                        symbol: selectedAssets.crypto.symbol,
+                        balance: selectedAssets.crypto.balance,
+                        price: selectedAssets.crypto.price,
+                        icon: selectedAssets.crypto.icon
+                    } : {
+                        name: '',
+                        symbol: '',
+                        balance: 0,
+                        price: 0,
+                        icon: <></>
+                    },
+                    nft: selectedAssets.nft ? {
+                        name: selectedAssets.nft.name,
+                        image: selectedAssets.nft.image,
+                        price: selectedAssets.nft.price
+                    } : {
+                        name: '',
+                        image: '',
+                        price: 0
+                    }
+                }}
             />
         </>
     )
