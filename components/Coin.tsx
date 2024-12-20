@@ -44,7 +44,7 @@ export default function Coin() {
   }, []);
 
   useEffect(() => {
-    const targetDate = new Date('2024-12-20T00:00:00')
+    const targetDate = new Date('2024-12-25T00:00:00')
 
     const timer = setInterval(() => {
       const now = new Date()
@@ -145,12 +145,12 @@ export default function Coin() {
           >
             <div className="flex justify-center items-center">
               <span className="font-mono text-xl text-[#0CC0DF]">{participantCount}</span>
-              <span className="ml-2 text-[#0CC0DF]/70">/ 20 participants</span>
+              <span className="ml-2 text-[#0CC0DF]/70">/ 50 participants</span>
             </div>
             <div className="w-full bg-[#0CC0DF]/20 rounded-full h-2 mt-2">
               <div 
                 className="bg-[#0CC0DF] h-2 rounded-full transition-all duration-500"
-                style={{ width: `${(participantCount / 20) * 100}%` }}
+                style={{ width: `${(participantCount / 50) * 100}%` }}
               />
             </div>
           </motion.div>
@@ -201,12 +201,12 @@ export default function Coin() {
           >
             <div className="flex justify-center items-center">
               <span className="font-mono text-xl text-[#0CC0DF]">{participantCount}</span>
-              <span className="ml-2 text-[#0CC0DF]/70">/ 20 participants</span>
+              <span className="ml-2 text-[#0CC0DF]/70">/ 50 participants</span>
             </div>
             <div className="w-full bg-[#0CC0DF]/20 rounded-full h-2 mt-2">
               <div 
                 className="bg-[#0CC0DF] h-2 rounded-full transition-all duration-500"
-                style={{ width: `${(participantCount / 20) * 100}%` }}
+                style={{ width: `${(participantCount / 50) * 100}%` }}
               />
             </div>
           </motion.div>

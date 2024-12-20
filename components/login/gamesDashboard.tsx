@@ -50,7 +50,7 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
         marketplaceVouchers,
         exchangeRates,
         fetchTokenBalance
-      } = useMTL()
+    } = useMTL()
     const TOKEN_MINT_ADDRESS = "813b3AwivU6uxBicnXdZsCNrfzJy4U3Cr4ejwvH4V1Fz";
     const { publicKey, connected, signMessage, sendTransaction } = useWallet();
     const [selectedPlatform, setSelectedPlatform] = useState<'desktop' | 'mobile' | 'console' | 'all'>('all')
@@ -95,7 +95,7 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
                 TOKEN_MINT_ADDRESS,
                 amount
             );
-            
+
             setTransferStatus('success')
             setTransferMessage('Earned $1000 MTL !')
             console.log("MTL Token Transaction Signature:", splSignature);
@@ -208,7 +208,7 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
                                 <div className="w-24 h-24 relative">
                                     {/* Outer rotating ring */}
                                     <div className="absolute inset-0 border-4 border-[#0CC0DF]/20 rounded-full animate-[spin_3s_linear_infinite]" />
-                                    
+
                                     {/* Inner counter-rotating ring with particles */}
                                     <div className="absolute inset-2 border-4 border-[#0CC0DF]/40 rounded-full animate-[spin_2s_linear_infinite_reverse]">
                                         <div className="absolute -top-1 left-1/2 w-2 h-2 bg-[#0CC0DF] rounded-full animate-pulse" />
@@ -216,7 +216,7 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
                                         <div className="absolute -bottom-1 left-1/2 w-2 h-2 bg-[#0CC0DF] rounded-full animate-pulse" />
                                         <div className="absolute top-1/2 -left-1 w-2 h-2 bg-[#0CC0DF] rounded-full animate-pulse" />
                                     </div>
-                                    
+
                                     {/* Center pulsing orb */}
                                     <div className="absolute inset-6 bg-[#0CC0DF] rounded-full animate-pulse opacity-75" />
                                 </div>
