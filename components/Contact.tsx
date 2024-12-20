@@ -5,11 +5,12 @@ import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { Auth } from '../app/auth';
 
-export default function Contact() {
+export default function Contact({ referal }: { referal?: string }) {
   const [userType, setUserType] = useState<'player' | 'studio' | null>(null)
   const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
+    console.log("referal is ", referal);
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768)
     }
@@ -39,7 +40,8 @@ export default function Contact() {
           favourite_game: formValues.favouriteGames || null,
           studio_name: formValues.studioName || null,
           wallet: formValues.wallet,
-          type: userType
+          type: userType,
+          ...(referal && { referal })
         }])
         .select()
         .single();

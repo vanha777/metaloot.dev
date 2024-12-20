@@ -34,7 +34,7 @@ export default function Hero() {
   // };
 
   const connectWallet = async () => {
-    window.location.href = '/login'; // Redirect to login page
+    // window.location.href = '/login'; // Redirect to login page
   };
 
   return (

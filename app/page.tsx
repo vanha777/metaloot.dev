@@ -8,8 +8,10 @@ import Contact from '@/components/Contact'
 import About from '@/components/about'
 import BigStatement from '@/components/BigStatement'
 import Coin from '@/components/Coin'
-
+import { useSearchParams } from 'next/navigation';
 export default function Home() {
+  const searchParams = useSearchParams();
+  const key = searchParams.get('referal'); // Access the value of "key"
   const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
@@ -31,7 +33,7 @@ export default function Home() {
           <BigStatement />
           <Coin />
           <Roadmap />
-          <Contact />
+          <Contact referal={key?.toString()} />
         </div>
 
         {/* Solana Stamp */}
