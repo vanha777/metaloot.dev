@@ -4,17 +4,18 @@ import { motion } from 'framer-motion'
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { Auth } from '../app/auth';
-
-export default function Contact({ referal }: { referal?: string }) {
+import { useSearchParams } from 'next/navigation';
+export default function Contact() {
   const [userType, setUserType] = useState<'player' | 'studio' | null>(null)
   const [isMobile, setIsMobile] = useState(false)
-
+  const searchParams = useSearchParams();
+  const referal = searchParams.get('referal');
   useEffect(() => {
     console.log("referal is ", referal);
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768)
     }
-    
+
     checkMobile()
     window.addEventListener('resize', checkMobile)
     return () => window.removeEventListener('resize', checkMobile)

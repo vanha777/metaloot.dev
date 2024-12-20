@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import Hero from '@/components/Hero'
 import Satements from '@/components/statements'
 import Roadmap from '@/components/Roadmap'
@@ -8,10 +8,7 @@ import Contact from '@/components/Contact'
 import About from '@/components/about'
 import BigStatement from '@/components/BigStatement'
 import Coin from '@/components/Coin'
-import { useSearchParams } from 'next/navigation';
 export default function Home() {
-  const searchParams = useSearchParams();
-  const key = searchParams.get('referal'); // Access the value of "key"
   const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
@@ -25,6 +22,7 @@ export default function Home() {
   }, []);
 
   return (
+    <Suspense fallback={<div>Loading...</div>}>
       <main className="bg-base-100 min-h-screen relative">
         <div className="flex flex-col">
           <Hero />
@@ -33,7 +31,7 @@ export default function Home() {
           <BigStatement />
           <Coin />
           <Roadmap />
-          <Contact referal={key?.toString()} />
+          <Contact/>
         </div>
 
         {/* Solana Stamp */}
@@ -58,5 +56,6 @@ export default function Home() {
           </div>
         </div>
       </main>
+    </Suspense>
   )
 }
