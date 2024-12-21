@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { FaBitcoin, FaEthereum, FaExchangeAlt, FaTimes } from 'react-icons/fa';
 import { motion } from 'framer-motion';
@@ -43,20 +43,30 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
     const [fromAmount, setFromAmount] = useState('');
     const [toAmount, setToAmount] = useState('');
 
+    useEffect(() => {
+        if (selectedAsset === 'crypto') {
+            // Calculate to amount based on exchange rates and from amount
+            const fromValue = parseFloat(fromAmount) || 0;
+            const toValue = fromValue * (assets.crypto?.price || 0);
+            setToAmount(toValue.toString());
+        }
+    }, [fromAmount]);
+
     const handleSwap = () => {
-        // Swap logic would go here
-        setFromAmount('');
-        setToAmount('');
+        console.log("swapping now !");
+        console.log("selected asset is ", assets[selectedAsset]);
+        const amount = selectedAsset !== 'crypto' ? assets[selectedAsset].price : fromAmount;
+        console.log("amount MTL is ", amount);
     };
 
     return (
         <>
-            <input 
-                type="checkbox" 
-                id="transfer-modal" 
-                className="modal-toggle" 
-                checked={showModal} 
-                onChange={() => setShowModal(!showModal)} 
+            <input
+                type="checkbox"
+                id="transfer-modal"
+                className="modal-toggle"
+                checked={showModal}
+                onChange={() => setShowModal(!showModal)}
             />
             <div className="modal backdrop-blur-sm">
                 <div className="modal-box relative bg-gradient-to-br from-gray-900 to-gray-800 border-2 border-[#0CC0DF] shadow-xl shadow-[#0CC0DF]/20 rounded-2xl max-w-4xl">
@@ -66,7 +76,7 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                     >
                         <FaTimes size={24} />
                     </button>
-                    
+
                     <h3 className="font-bold text-3xl text-center mb-8 text-transparent bg-clip-text bg-gradient-to-r from-[#0CC0DF] to-[#0AA0BF]">
                         Swap from MTL
                     </h3>
@@ -77,7 +87,7 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                                 <div className="w-24 h-24 relative">
                                     {/* Outer rotating ring */}
                                     <div className="absolute inset-0 border-4 border-[#0CC0DF]/20 rounded-full animate-[spin_3s_linear_infinite]" />
-                                    
+
                                     {/* Inner counter-rotating ring with particles */}
                                     <div className="absolute inset-2 border-4 border-[#0CC0DF]/40 rounded-full animate-[spin_2s_linear_infinite_reverse]">
                                         <div className="absolute -top-1 left-1/2 w-2 h-2 bg-[#0CC0DF] rounded-full animate-pulse" />
@@ -85,7 +95,7 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                                         <div className="absolute -bottom-1 left-1/2 w-2 h-2 bg-[#0CC0DF] rounded-full animate-pulse" />
                                         <div className="absolute top-1/2 -left-1 w-2 h-2 bg-[#0CC0DF] rounded-full animate-pulse" />
                                     </div>
-                                    
+
                                     {/* Center pulsing orb */}
                                     <div className="absolute inset-6 bg-[#0CC0DF] rounded-full animate-pulse opacity-75" />
                                 </div>
@@ -96,7 +106,7 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                         <div className="flex flex-col gap-8">
                             <div className="grid grid-cols-[1fr,auto,1fr] items-center gap-4">
                                 {/* From Asset (MTL) */}
-                                <motion.div 
+                                <motion.div
                                     className="bg-gray-800/50 p-6 rounded-xl"
                                     initial={{ x: -50, opacity: 0 }}
                                     animate={{ x: 0, opacity: 1 }}
@@ -110,7 +120,7 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                                     </div>
 
                                     <div className="relative h-48 mb-4 rounded-xl overflow-hidden">
-                                        <Image 
+                                        <Image
                                             src="https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/MTL.png"
                                             fill
                                             className="object-contain p-8"
@@ -120,7 +130,7 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
 
                                     <input
                                         type="number"
-                                        value={selectedAsset === 'crypto' ? fromAmount : assets[selectedAsset].price.toString()}
+                                        value={selectedAsset !== 'crypto' ? assets[selectedAsset].price : fromAmount}
                                         onChange={(e) => setFromAmount(e.target.value)}
                                         className="bg-transparent text-2xl w-full focus:outline-none text-center"
                                         placeholder="0.0"
@@ -138,7 +148,7 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                                 </motion.div>
 
                                 {/* To Asset */}
-                                <motion.div 
+                                <motion.div
                                     className="bg-gray-800/50 p-6 rounded-xl"
                                     initial={{ x: 50, opacity: 0 }}
                                     animate={{ x: 0, opacity: 1 }}
@@ -150,7 +160,7 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                                             <span>{selectedAsset === 'crypto' ? assets.crypto.name : 'Asset'}</span>
                                         </div>
                                     </div>
-                                    
+
                                     <div className="relative h-48 mb-4 rounded-xl overflow-hidden">
                                         {selectedAsset === 'crypto' ? (
                                             <div className="h-full flex items-center justify-center bg-gradient-to-br from-[#00FFA3]/20 to-transparent">
@@ -160,7 +170,7 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                                                 {assets.crypto.name === 'Tether' && <SiTether className="text-[#26A17B]" size={66} />}
                                             </div>
                                         ) : (
-                                            <Image 
+                                            <Image
                                                 src={assets[selectedAsset].image}
                                                 fill
                                                 className="object-cover"
@@ -170,20 +180,14 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                                     </div>
 
                                     {selectedAsset === 'crypto' ? (
-                                        <input
-                                            type="number"
-                                            value={toAmount}
-                                            onChange={(e) => setToAmount(e.target.value)}
-                                            className="bg-transparent text-2xl w-full focus:outline-none text-center"
-                                            placeholder="0.0"
-                                        />
+                                        <div className="text-2xl text-center text-gray-400">{toAmount}</div>
                                     ) : (
                                         <div className="text-2xl text-center text-gray-400">1x {assets[selectedAsset].name}</div>
                                     )}
                                 </motion.div>
                             </div>
 
-                            <motion.button 
+                            <motion.button
                                 onClick={handleSwap}
                                 className="bg-[#0CC0DF] text-white py-4 rounded-xl font-bold text-xl hover:bg-[#0AA0BF] transition-colors"
                                 whileHover={{ scale: 1.02 }}

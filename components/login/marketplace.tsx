@@ -68,28 +68,28 @@ const cryptoAssets: CryptoAsset[] = [
         symbol: 'BTC',
         name: 'Bitcoin',
         balance: 0.25,
-        price: 45000,
+        price: 0.0000065,
         icon: <FaBitcoin className="text-[#F7931A]" size={36} />
     },
     {
         symbol: 'ETH',
         name: 'Ethereum',
         balance: 2.5,
-        price: 3000,
+        price: 0.000085,
         icon: <FaEthereum className="text-[#627EEA]" size={36} />
     },
     {
         symbol: 'SOL',
         name: 'Solana',
         balance: 15.0,
-        price: 100,
+        price: 0.0025,
         icon: <SiSolana className="text-[#00FFA3]" size={36} />
     },
     {
         symbol: 'USDT',
         name: 'Tether',
         balance: 1000,
-        price: 1,
+        price: 0.15,
         icon: <SiTether className="text-[#26A17B]" size={24} />
     }
     // {
@@ -173,7 +173,7 @@ export default function Marketplace() {
         try {
             // Simulate API call
             await new Promise(resolve => setTimeout(resolve, 2000))
-            
+
             setTransferStatus('success')
             setTransferMessage(`Successfully claimed ${voucher.title}!`)
         } catch (error) {
@@ -191,7 +191,7 @@ export default function Marketplace() {
         try {
             // Simulate API call
             await new Promise(resolve => setTimeout(resolve, 2000))
-            
+
             setTransferStatus('success')
             setTransferMessage(`Successfully claimed ${crypto.name}!`)
         } catch (error) {
@@ -209,7 +209,7 @@ export default function Marketplace() {
         try {
             // Simulate API call
             await new Promise(resolve => setTimeout(resolve, 2000))
-            
+
             setTransferStatus('success')
             setTransferMessage(`Successfully purchased ${nft.name}!`)
         } catch (error) {
@@ -259,7 +259,7 @@ export default function Marketplace() {
                                 <p className="text-gray-300 mb-4">{nft.description}</p>
                                 <div className="flex justify-between items-center">
                                     <span className="text-[#0CC0DF]">{nft.price} {nft.currency}</span>
-                                    <button 
+                                    <button
                                         onClick={() => handleNFTBuy(nft)}
                                         className="bg-[#0CC0DF] px-4 py-2 rounded-lg flex items-center gap-2"
                                     >
@@ -293,12 +293,8 @@ export default function Marketplace() {
                                     </div>
                                     <div className="flex justify-between items-center">
                                         <div>
-                                            <p className="text-sm text-gray-300">Balance</p>
-                                            <p className="text-xl font-bold">{asset.balance} {asset.symbol}</p>
-                                        </div>
-                                        <div className="text-right">
-                                            <p className="text-sm text-gray-300">Value</p>
-                                            <p className="text-xl font-bold">${(asset.balance * asset.price).toLocaleString()}</p>
+                                            <p className="text-sm text-gray-300">Exchange Rate</p>
+                                            <p className="text-xl font-bold">1 MTL = <span className="text-[#0CC0DF]">{asset.price} {asset.symbol}</span> </p>
                                         </div>
                                     </div>
                                 </motion.div>
@@ -324,7 +320,7 @@ export default function Marketplace() {
                                     <p className="text-gray-300 mb-4">Valid until: {voucher.validUntil}</p>
                                     <div className="flex justify-between items-center">
                                         <span className="text-[#0CC0DF]">${voucher.price}</span>
-                                        <button 
+                                        <button
                                             onClick={() => handleClaim(voucher)}
                                             className="bg-[#0CC0DF] px-4 py-2 rounded-lg flex items-center gap-2"
                                         >
@@ -339,7 +335,7 @@ export default function Marketplace() {
                 )}
             </div>
 
-            <Modal 
+            <Modal
                 showModal={showModal}
                 setShowModal={setShowModal}
                 transferStatus={transferStatus}
