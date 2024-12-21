@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 import Image from 'next/image'
-import { FaDesktop, FaMobile, FaGamepad, FaGlobe } from 'react-icons/fa'
+import { FaDesktop, FaMobile, FaGamepad, FaGlobe, FaTimes } from 'react-icons/fa'
 import { useState, useEffect } from 'react'
 import Details from './details'
 import { transferSplToken } from "../../app/utilities/transfer";
@@ -59,7 +59,7 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
     const [showModal, setShowModal] = useState(false)
     const [transferStatus, setTransferStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
     const [transferMessage, setTransferMessage] = useState('')
-
+    const [selectedGame, setSelectedGame] = useState<Game | null>(null)
     useEffect(() => {
         if (selectedPlatform === 'all') {
             setFilteredGames(games)
@@ -97,8 +97,9 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
             );
 
             setTransferStatus('success')
-            setTransferMessage('Earned $1000 MTL !')
+            setTransferMessage('Successfully earned 1000 $MTL!')
             console.log("MTL Token Transaction Signature:", splSignature);
+            fetchTokenBalance();
 
         } catch (error) {
             console.error("Transfer Error:", error);
@@ -107,15 +108,22 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
         }
     }
 
-    const onGameLaunch = async (link: string) => {
-        setShowModal(true)
-        await transferMTL();
+    const onGameLaunch = async (game: Game) => {
+        setSelectedGame(game);
+        setShowModal(true);
+        setTransferStatus('idle');
+        setTransferMessage('🎮 Launch to earn 1,000 $MTL bonus tokens! 🚀');
+    }
+    const redirect = async (link: string) => {
+        window.open(link, '_blank')
+    }
+    const onGetRewards = async () => {
+        // do a check here to see if the user has already claimed the rewards
+        await transferMTL()
         setTimeout(() => {
-            window.open(link, '_blank')
             setShowModal(false)
             setTransferStatus('idle')
             setTransferMessage('')
-            fetchTokenBalance();
         }, 2000)
     }
 
@@ -174,7 +182,7 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
                                             animate={{ opacity: 1 }}
                                             whileHover={{ scale: 1.05 }}
                                             whileTap={{ scale: 0.95 }}
-                                            onClick={() => onGameLaunch(game.link)}
+                                            onClick={() => onGameLaunch(game)}
                                             className="w-full bg-[#0CC0DF] hover:bg-[#0AA0BF] text-white 
                                font-bold py-4 px-6 rounded-xl flex items-center justify-center gap-3
                                shadow-lg shadow-[#0CC0DF]/30 text-lg"
@@ -201,7 +209,7 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
             <input type="checkbox" id="transfer-modal" className="modal-toggle" checked={showModal} onChange={() => setShowModal(!showModal)} />
             <div className="modal backdrop-blur-sm">
                 {transferStatus === 'loading' ? (
-                    <motion.div 
+                    <motion.div
                         className="flex flex-col items-center justify-center p-6"
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
@@ -256,27 +264,63 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
                     </motion.div>
                 ) : (
                     <div className="modal-box relative bg-gradient-to-br from-gray-900 to-gray-800 border-2 border-[#0CC0DF] shadow-xl shadow-[#0CC0DF]/20 rounded-2xl">
-                        <h3 className="font-bold text-2xl text-center mb-6 text-transparent bg-clip-text bg-gradient-to-r from-[#0CC0DF] to-[#0AA0BF]">MTL Transfer Status</h3>
+                        <motion.button
+                            onClick={() => setShowModal(false)}
+                            className="absolute right-4 top-4 text-gray-400 hover:text-white transition-colors"
+                            whileHover={{ rotate: 90 }}
+                            transition={{ duration: 0.2 }}
+                        >
+                            <FaTimes size={24} />
+                        </motion.button>
+                        <h3 className="font-bold text-2xl text-center mb-6 text-transparent bg-clip-text bg-gradient-to-r from-[#0CC0DF] to-[#0AA0BF]">
+                            Claim Your Rewards!
+                        </h3>
                         <div className="flex flex-col items-center justify-center p-6">
-                            {transferStatus === 'success' && (
-                                <div className="relative">
-                                    <div className="w-16 h-16 rounded-full bg-gradient-to-r from-green-400 to-green-600 animate-pulse flex items-center justify-center">
-                                        <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                                        </svg>
+                            <>
+                                {transferStatus === 'success' && (
+                                    <div className="relative">
+                                        <div className="w-16 h-16 rounded-full bg-gradient-to-r from-green-400 to-green-600 animate-pulse flex items-center justify-center">
+                                            <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                                            </svg>
+                                        </div>
+                                        <p className="mt-6 text-center text-lg font-medium text-gray-200">{transferMessage}</p>
                                     </div>
-                                </div>
-                            )}
-                            {transferStatus === 'error' && (
-                                <div className="relative">
-                                    <div className="w-16 h-16 rounded-full bg-gradient-to-r from-red-400 to-red-600 animate-pulse flex items-center justify-center">
-                                        <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
-                                        </svg>
+                                )}
+                                {transferStatus === 'error' && (
+                                    <div className="relative">
+                                        <div className="w-16 h-16 rounded-full bg-gradient-to-r from-red-400 to-red-600 animate-pulse flex items-center justify-center">
+                                            <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                                            </svg>
+                                        </div>
+                                        <p className="mt-6 text-center text-lg font-medium text-gray-200">{transferMessage}</p>
                                     </div>
-                                </div>
-                            )}
-                            <p className="mt-6 text-center text-lg font-medium text-gray-200">{transferMessage}</p>
+                                )}
+                                {transferStatus === 'idle' && (
+                                    <>
+                                        <p className="text-center text-lg font-medium text-gray-200 mb-6">{transferMessage}</p>
+                                        <div className="flex gap-4">
+                                            <motion.button
+                                                whileHover={{ scale: 1.05 }}
+                                                whileTap={{ scale: 0.95 }}
+                                                onClick={() => redirect(selectedGame?.link || '')}
+                                                className="bg-[#0CC0DF] hover:bg-[#0AA0BF] text-white font-bold py-4 px-8 rounded-xl"
+                                            >
+                                                Launch
+                                            </motion.button>
+                                            <motion.button
+                                                whileHover={{ scale: 1.05 }}
+                                                whileTap={{ scale: 0.95 }}
+                                                onClick={onGetRewards}
+                                                className="bg-[#0CC0DF] hover:bg-[#0AA0BF] text-white font-bold py-4 px-8 rounded-xl"
+                                            >
+                                                Get Rewards
+                                            </motion.button>
+                                        </div>
+                                    </>
+                                )}
+                            </>
                         </div>
                     </div>
                 )}
