@@ -61,8 +61,17 @@ interface MTLContextType {
     marketplaceNFTs: NFT[]
     marketplaceVouchers: Voucher[]
     exchangeRates: CryptoRate[]
-    games: Game[]
+    games: Game[],
+    historyTransactions: Transaction[],
     fetchTokenBalance: () => Promise<void>
+    fetchHistoryTransactions: () => Promise<void>
+}
+interface Transaction {
+    gameTitle: string
+    gameId: string
+    timestamp: number
+    status: string
+    message: string
 }
 
 const MTLContext = createContext<MTLContextType>({
@@ -72,7 +81,9 @@ const MTLContext = createContext<MTLContextType>({
     marketplaceVouchers: [],
     exchangeRates: [],
     games: [],
-    fetchTokenBalance: async () => {}
+    historyTransactions: [],
+    fetchTokenBalance: async () => { },
+    fetchHistoryTransactions: async () => { }
 })
 
 const TOKEN_MINT_ADDRESS = "813b3AwivU6uxBicnXdZsCNrfzJy4U3Cr4ejwvH4V1Fz";
@@ -80,6 +91,7 @@ const TOKEN_MINT_ADDRESS = "813b3AwivU6uxBicnXdZsCNrfzJy4U3Cr4ejwvH4V1Fz";
 export function MTLProvider({ children }: { children: ReactNode }) {
     const { publicKey, connected, signMessage, sendTransaction } = useWallet();
     const [balance, setBalance] = useState("")
+    const [historyTransactions, setHistoryTransactions] = useState<Transaction[]>([])
     const [ownedNFTs, setOwnedNFTs] = useState<NFT[]>([])
     const [marketplaceNFTs, setMarketplaceNFTs] = useState<NFT[]>([])
     const [marketplaceVouchers, setMarketplaceVouchers] = useState<Voucher[]>([])
@@ -90,6 +102,17 @@ export function MTLProvider({ children }: { children: ReactNode }) {
         const token = await TokenBalance();
         console.log("mtl is ", token);
         setBalance(token);
+    }
+
+    const fetchHistoryTransactions = async () => {
+        if (!publicKey) {
+            localStorage.removeItem('transactions');
+            setHistoryTransactions([]);
+            return;
+        }
+        const transactions = localStorage.getItem('transactions');
+        const parsedTransactions = transactions ? JSON.parse(transactions) : [];
+        setHistoryTransactions(parsedTransactions);
     }
 
     const TokenBalance = async () => {
@@ -201,13 +224,15 @@ export function MTLProvider({ children }: { children: ReactNode }) {
 
     return (
         <MTLContext.Provider value={{
+            fetchHistoryTransactions,
             fetchTokenBalance,
             balance,
             ownedNFTs,
             marketplaceNFTs,
             marketplaceVouchers,
             exchangeRates,
-            games
+            games,
+            historyTransactions
         }}>
             {children}
         </MTLContext.Provider>

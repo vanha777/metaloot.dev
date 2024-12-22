@@ -162,7 +162,9 @@ export default function Dashboard() {
     marketplaceNFTs,
     marketplaceVouchers,
     exchangeRates,
-    fetchTokenBalance
+    historyTransactions,
+    fetchTokenBalance,
+    fetchHistoryTransactions
   } = useMTL()
   const { publicKey, connected, signMessage, sendTransaction } = useWallet();
   const [mtl, setMtl] = useState<string>("~");
@@ -187,11 +189,12 @@ export default function Dashboard() {
 
   useEffect(() => {
     getProvider();
+    fetchHistoryTransactions();
   }, []);
 
   // useEffect(() => {
   //   console.log("publicKey is ", publicKey);
-  
+
   //   if (publicKey) {
   //     // Define an async function to fetch the token balance
   //     const fetchTokenBalance = async () => {
@@ -200,12 +203,12 @@ export default function Dashboard() {
   //         const connection = new Connection(clusterApiUrl("testnet"), "confirmed");
   //         const ownerPublicKey = new PublicKey(publicKey.toBase58());
   //         const mintPublicKey = new PublicKey(TOKEN_MINT_ADDRESS);
-  
+
   //         // Fetch all token accounts owned by the wallet
   //         const tokenAccounts = await connection.getParsedTokenAccountsByOwner(ownerPublicKey, {
   //           mint: mintPublicKey,
   //         });
-  
+
   //         // Sum up balances from all accounts holding the specified token
   //         const tokenBalance = tokenAccounts.value.reduce((sum, accountInfo) => {
   //           const amount = accountInfo.account.data.parsed.info.tokenAmount.uiAmount;
@@ -227,7 +230,7 @@ export default function Dashboard() {
   //         const decimals = formatDecimals(tokenBalance);
 
   //         let formattedBalance = '';
-          
+
   //         if (millions > 0) {
   //           formattedBalance += `${millions} Million `;
   //         }
@@ -237,7 +240,7 @@ export default function Dashboard() {
   //         if (ones > 0) {
   //           formattedBalance += ones;
   //         }
-          
+
   //         // Add decimals if they exist
   //         if (decimals) {
   //           formattedBalance += decimals;
@@ -254,7 +257,7 @@ export default function Dashboard() {
   //         return "0";
   //       }
   //     };
-  
+
   //     // Call the async function
   //     fetchTokenBalance().then((mtl) => {
   //       console.log("mtl is ", mtl);
@@ -316,8 +319,8 @@ export default function Dashboard() {
                   endIcon={<FaGamepad className="text-white w-48 h-48" />}
                   style={{
                     background: "#0CC0DF",
-                    color: "white", 
-                    padding: "16px 32px", 
+                    color: "white",
+                    padding: "16px 32px",
                     borderRadius: "16px",
                     border: "3px solid rgba(255,255,255,0.5)",
                     fontSize: "20px",
@@ -340,7 +343,7 @@ export default function Dashboard() {
                     backgroundColor: "rgba(12, 192, 223, 0.1)",
                     color: "white",
                     padding: "16px 32px",
-                    borderRadius: "16px", 
+                    borderRadius: "16px",
                     border: "none",
                     fontSize: "20px",
                     fontWeight: "600",
@@ -357,10 +360,34 @@ export default function Dashboard() {
             <div>
               <p className="text-sm text-white/60">Testnet</p>
             </div>
-            <div className="w-16 h-16 rounded-full bg-[#0CC0DF]/10 flex items-center justify-center relative">
-              <FaAffiliatetheme className="text-[#0CC0DF] w-12 h-12" />
-              <div className="absolute -top-2 -right-2 w-8 h-8 bg-[#0CC0DF] rounded-full flex items-center justify-center text-sm font-bold">
-                +5
+            <div className="dropdown dropdown-end">
+              <div tabIndex={0} role="button" className="w-16 h-16 rounded-full bg-[#0CC0DF]/10 flex items-center justify-center relative">
+                <FaAffiliatetheme className="text-[#0CC0DF] w-12 h-12" />
+                {historyTransactions.length > 0 && (
+                  <div className="absolute -top-2 -right-2 w-8 h-8 bg-[#0CC0DF] rounded-full flex items-center justify-center text-sm font-bold">
+                    +{historyTransactions.length}
+                  </div>
+                )}
+              </div>
+              <div tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-[#0A1628] border-2 border-[#0CC0DF]/30 rounded-xl w-80 max-h-96 overflow-y-auto">
+                {historyTransactions.map((transaction, index) => (
+                  <div
+                    key={index}
+                    className="p-4 border-b border-[#0CC0DF]/20 hover:bg-[#0CC0DF]/10 transition-colors"
+                  >
+                    <div className="flex justify-between items-center">
+                      <span className="text-white font-medium">{transaction.gameTitle}</span>
+                      <span className="text-sm text-white/60">
+                        {new Date(transaction.timestamp).toLocaleDateString()}
+                      </span>
+                    </div>
+                    <p className="text-sm text-white/80 mt-1">{transaction.message}</p>
+                    <span className={`text-xs ${transaction.status === 'completed' ? 'text-green-400' : 'text-yellow-400'
+                      }`}>
+                      {transaction.status}
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

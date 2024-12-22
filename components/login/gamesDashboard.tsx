@@ -6,7 +6,7 @@ import { FaDesktop, FaMobile, FaGamepad, FaGlobe, FaTimes } from 'react-icons/fa
 import { useState, useEffect } from 'react'
 import Details from './details'
 import { transferSplToken } from "../../app/utilities/transfer";
-import { clusterApiUrl, Connection, Keypair } from "@solana/web3.js";
+import { clusterApiUrl, Connection, Keypair, PublicKey } from "@solana/web3.js";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useMTL } from '../../app/context/MtlContext'
 interface Game {
@@ -49,7 +49,8 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
         marketplaceNFTs,
         marketplaceVouchers,
         exchangeRates,
-        fetchTokenBalance
+        fetchTokenBalance,
+        fetchHistoryTransactions
     } = useMTL()
     const TOKEN_MINT_ADDRESS = "813b3AwivU6uxBicnXdZsCNrfzJy4U3Cr4ejwvH4V1Fz";
     const { publicKey, connected, signMessage, sendTransaction } = useWallet();
@@ -59,7 +60,6 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
     const [showModal, setShowModal] = useState(false)
     const [transferStatus, setTransferStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
     const [transferMessage, setTransferMessage] = useState('')
-    const [selectedGame, setSelectedGame] = useState<Game | null>(null)
     useEffect(() => {
         if (selectedPlatform === 'all') {
             setFilteredGames(games)
@@ -73,7 +73,22 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
         setFocusedGame(focusedGame?.id === game.id ? null : game)
     }
 
+    const saveLocalStorage = async (game: Game, status: string, message: string) => {
+        const transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
+        transactions.push({
+            gameTitle: game.title,
+            gameId: game.id,
+            timestamp: Date.now(),
+            status: status,
+            message: message
+        });
+        localStorage.setItem('transactions', JSON.stringify(transactions));
+        // refersh read from local storage
+        fetchHistoryTransactions();
+    }
+
     const transferMTL = async () => {
+        setShowModal(true);
         if (!publicKey) {
             setTransferStatus('error')
             setTransferMessage('Wallet not connected')
@@ -83,6 +98,44 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
         try {
             setTransferStatus('loading')
             setTransferMessage('Authorizing MTL tokens...')
+
+            // Check token transfer history in last 24 hours
+            const connection = new Connection(clusterApiUrl("testnet"), "confirmed");
+            const tokenMint = new PublicKey(TOKEN_MINT_ADDRESS);
+            const destPublicKey = new PublicKey(publicKey);
+            console.log('debug 1')
+            // Get all token accounts for this wallet
+            const tokenAccounts = await connection.getParsedTokenAccountsByOwner(destPublicKey, {
+                mint: tokenMint
+            });
+            console.log('debug 2')
+            // Check if token accounts exist before accessing
+            if (tokenAccounts.value.length) {
+                const tokenAccountAddress = tokenAccounts.value[0].pubkey.toBase58();
+                let signatures = await connection.getSignaturesForAddress(
+                    new PublicKey(tokenAccountAddress),
+                    {
+                        limit: 10
+                    }
+                );
+                let receiveCount = 0;
+                for (let sig of signatures) {
+                    const tx = await connection.getParsedTransaction(sig.signature, {
+                        maxSupportedTransactionVersion: 0
+                    });
+                    if (tx?.blockTime &&
+                        (Date.now() / 1000 - tx.blockTime) < 24 * 60 * 60) {
+                        receiveCount++;
+                    }
+                }
+                if (receiveCount >= 10) {
+                    setTransferStatus('error')
+                    setTransferMessage('Daily claim limit reached (10 times per 24 hours)')
+                    saveLocalStorage(focusedGame!, 'error', 'Daily claim limit reached (10 times per 24 hours)');
+                    return;
+                }
+            }
+            //end. 
 
             const senderKeypair = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(process.env.NEXT_PUBLIC_METALOOT_KEY!)));
             console.log("Sender Keypair:", senderKeypair.publicKey.toBase58());
@@ -100,31 +153,22 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
             setTransferMessage(splSignature.toString())
             console.log("MTL Token Transaction Signature:", splSignature);
             fetchTokenBalance();
+            saveLocalStorage(focusedGame!, 'success', `${amount / 10**9} MTL tokens claimed successfully`);
 
         } catch (error) {
             console.error("Transfer Error:", error);
             setTransferStatus('error')
-            setTransferMessage('Failed to transfer tokens. Please try again.')
+            setTransferMessage(error instanceof Error ? error.message : 'An unknown error occurred')
+            saveLocalStorage(focusedGame!, 'error', 'An unknown error occurred');
         }
     }
 
-    const onGameLaunch = async (game: Game) => {
-        setSelectedGame(game);
-        setShowModal(true);
-        setTransferStatus('idle');
-        setTransferMessage('🎮 Launch to earn 1,000 $MTL bonus tokens! 🚀');
-    }
     const redirect = async (link: string) => {
         window.open(link, '_blank')
     }
-    const onGetRewards = async () => {
-        // do a check here to see if the user has already claimed the rewards
-        await transferMTL()
-        // setTimeout(() => {
-        //     setShowModal(false)
-        //     setTransferStatus('idle')
-        //     setTransferMessage('')
-        // }, 2000)
+    const onGetRewards = async (game: Game) => {
+        redirect(game.link || '');
+        await transferMTL();
     }
 
     return (
@@ -182,7 +226,8 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
                                             animate={{ opacity: 1 }}
                                             whileHover={{ scale: 1.05 }}
                                             whileTap={{ scale: 0.95 }}
-                                            onClick={() => onGameLaunch(game)}
+                                            // onClick={() => onGameLaunch(game)}
+                                            onClick={() => onGetRewards(game)}
                                             className="w-full bg-[#0CC0DF] hover:bg-[#0AA0BF] text-white 
                                font-bold py-4 px-6 rounded-xl flex items-center justify-center gap-3
                                shadow-lg shadow-[#0CC0DF]/30 text-lg"
@@ -190,7 +235,7 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
                                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
                                                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
                                             </svg>
-                                            Launch Game
+                                            Play to Earn
                                         </motion.button>
                                     )}
                                 </div>
@@ -350,13 +395,13 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
                                     </motion.div>
                                 )}
                                 {transferStatus === 'error' && (
-                                    <motion.div 
+                                    <motion.div
                                         className="p-8 relative overflow-hidden"
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: 1 }}
                                     >
                                         {/* Error Icon */}
-                                        <motion.div 
+                                        <motion.div
                                             className="flex justify-center mb-8"
                                             initial={{ scale: 0 }}
                                             animate={{ scale: 1 }}
@@ -365,10 +410,10 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
                                             <div className="relative">
                                                 <div className="w-20 h-20 rounded-full bg-red-500/20 flex items-center justify-center">
                                                     <svg className="w-12 h-12 text-red-500" viewBox="0 0 24 24" fill="none">
-                                                        <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+                                                        <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
                                                     </svg>
                                                 </div>
-                                                <motion.div 
+                                                <motion.div
                                                     className="absolute inset-0 rounded-full border-2 border-red-500"
                                                     animate={{
                                                         scale: [1, 1.5],
@@ -394,29 +439,6 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
                                             </div>
                                         </div>
                                     </motion.div>
-                                )}
-                                {transferStatus === 'idle' && (
-                                    <>
-                                        <p className="text-center text-lg font-medium text-gray-200 mb-6">{transferMessage}</p>
-                                        <div className="flex gap-4">
-                                            <motion.button
-                                                whileHover={{ scale: 1.05 }}
-                                                whileTap={{ scale: 0.95 }}
-                                                onClick={() => redirect(selectedGame?.link || '')}
-                                                className="bg-[#0CC0DF] hover:bg-[#0AA0BF] text-white font-bold py-4 px-8 rounded-xl"
-                                            >
-                                                Launch
-                                            </motion.button>
-                                            <motion.button
-                                                whileHover={{ scale: 1.05 }}
-                                                whileTap={{ scale: 0.95 }}
-                                                onClick={onGetRewards}
-                                                className="bg-[#0CC0DF] hover:bg-[#0AA0BF] text-white font-bold py-4 px-8 rounded-xl"
-                                            >
-                                                Get Rewards
-                                            </motion.button>
-                                        </div>
-                                    </>
                                 )}
                             </>
                         </div>
