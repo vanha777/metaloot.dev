@@ -235,25 +235,25 @@ export default function Dashboard() {
   } = useMTL()
   const { publicKey, connected, signMessage, sendTransaction } = useWallet();
   const [mtl, setMtl] = useState<string>("~");
-  const getProvider = () => {
-    console.log("Getting provider");
-    if ('phantom' in window) {
-      const phantom = (window as any).phantom;
-      const provider = phantom?.solana;
+  // const getProvider = () => {
+  //   console.log("Getting provider");
+  //   if ('phantom' in window) {
+  //     const phantom = (window as any).phantom;
+  //     const provider = phantom?.solana;
 
-      if (provider?.isPhantom) {
-        return provider;
-      }
-    }
+  //     if (provider?.isPhantom) {
+  //       return provider;
+  //     }
+  //   }
 
-    window.open('https://phantom.app/', '_blank');
-  };
+  //   window.open('https://phantom.app/', '_blank');
+  // };
 
   const [selectedPlatform, setSelectedPlatform] = useState<'games' | 'marketplace' | 'wallet'>('games')
   const TOKEN_MINT_ADDRESS = "813b3AwivU6uxBicnXdZsCNrfzJy4U3Cr4ejwvH4V1Fz";
 
   useEffect(() => {
-    getProvider();
+    // getProvider();
     fetchHistoryTransactions();
   }, []);
 
