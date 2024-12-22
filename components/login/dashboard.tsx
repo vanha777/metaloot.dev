@@ -74,7 +74,7 @@ const games: Game[] = [
     id: '2',
     title: 'Rainbow Six',
     image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%204.jpeg',
-    platform: 'mobile',
+    platform: 'desktop',
     rewards: 300,
     description: 'High-stakes racing in the metaverse',
     link: 'https://www.halowaypoint.com/en-gb',
@@ -145,6 +145,72 @@ const games: Game[] = [
       stakeToEarn: {
         enabled: true,
         price: "6%"
+      }
+    }
+  },
+  {
+    id: '5',
+    title: 'Speed Master',
+    image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Untitled%20design-9.png',
+    platform: 'mobile',
+    rewards: 400,
+    description: "Accelerate to Dominate in Speed Master - the Ultimate Car Racing Challenge! Speed Master is not just another car game; it's your ticket to an adrenaline-pumping journey on an endless track. Imagine this: the roar of engines, the thrill of speed, and a road that stretches into eternity. You're not just driving; you're competing. Collect cash, dodge obstacles, and smash through competitors to upgrade your ride. Every hit scores points, pushing you closer to the ultimate upgrade. It's fast, furious, and utterly addictive. Your mission? To outpace, outsmart, and outlast your rivals in a high-speed quest for glory. So, buckle up and get ready to unleash the Speed Master within!'",
+    link: 'https://play.famobi.com/speed-master/A1000-10',
+    developer: '©2014-2024 HTML5games.com',
+    publisher: 'Famobi',
+    releaseDate: 'N/A',
+    genre: 'Arcade',
+    intro: "Accelerate to Dominate in Speed Master",
+    trailer: 'https://www.youtube.com/embed/jQPYGCzCg9I?si=bFHwDpJQDWd0kkZv',
+    gameplay: 'https://www.youtube.com/embed/7pxSOGn9Wrk?si=IHhmDjKQZUM8rku-',
+    models: {
+      playToEarn: {
+        enabled: true,
+        price: "100"
+      }
+    }
+  },
+  {
+    id: '6',
+    title: 'Om Nom Run',
+    image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/onNomRun',
+    platform: 'mobile',
+    rewards: 400,
+    description: "Run alongside Om Nom in his famous adventure, now finally in immersive and full-responsive HTML5. Try to run as far as possible by avoiding the dangerous obstacles and enemies, collect all coins and transform Om Nom into the fastest runner possible. Use the power-ups as smart as possible to explore the beautiful world with all it's beautiful areas, but be aware of the dangers that lurk inside of them. Are you ready to explore the world of Om Nom Run and reach the highest of highscores?",
+    link: 'https://play.famobi.com/om-nom-run/A1000-10',
+    developer: '©2014-2024 HTML5games.com',
+    publisher: 'Famobi',
+    releaseDate: 'N/A',
+    genre: 'Arcade',
+    intro: "Run alongside Om Nom in his famous adventure",
+    trailer: 'https://www.youtube.com/embed/tX6PRa_is_Q?si=8v4mvcRLTC-6eORJ',
+    gameplay: 'https://www.youtube.com/embed/nDgI2ACB_mM?si=-5EvDBcoPewlNYpY',
+    models: {
+      playToEarn: {
+        enabled: true,
+        price: "100"
+      }
+    }
+  },
+  {
+    id: '7',
+    title: 'Pengu Slide',
+    image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/penguSlide',
+    platform: 'mobile',
+    rewards: 400,
+    description: "Slide to survive and fly to thrive in Pengu Slide - the ultimate penguin adventure game! Join our adorable penguin hero on a thrilling ride down the icy slopes, where danger lurks at every turn. With an avalanche hot on your tail, it's up to you to skillfully navigate the terrain by sliding, jumping and flying your way to safety. But beware, one wrong move could mean certain doom for our feathered friend! Experience heart-pumping excitement as you collect fish, and booster while trying to outrun the avalanche. With easy-to-learn controls and addictive gameplay, Pengu Slide is the perfect game for players of all ages and skill levels. So what are you waiting for? Strap on your snow boots and join the adventure in Pengu Slide - the coolest game on the block!",
+    link: 'https://play.famobi.com/pengu-slide/A1000-10',
+    developer: '©2014-2024 HTML5games.com',
+    publisher: 'Famobi',
+    releaseDate: 'N/A',
+    genre: 'Arcade',
+    intro: "Slide to survive and fly to thrive in Pengu Slide",
+    trailer: 'https://www.youtube.com/embed/tX6PRa_is_Q?si=8v4mvcRLTC-6eORJ',
+    gameplay: 'https://www.youtube.com/embed/IWI2zHJG6OQ?si=N062eRVYisUdQuhf',
+    models: {
+      playToEarn: {
+        enabled: true,
+        price: "100"
       }
     }
   }
