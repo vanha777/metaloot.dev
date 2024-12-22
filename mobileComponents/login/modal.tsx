@@ -127,13 +127,13 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                     >
                         {transferStatus === 'loading' ? (
                             <motion.div 
-                                className="flex flex-col items-center justify-center p-6"
+                                className="flex flex-col items-center justify-center p-4 sm:p-6"
                                 initial={{ scale: 0 }}
                                 animate={{ scale: 1 }}
                                 transition={{ type: "spring", stiffness: 200 }}
                             >
                                 <div className="relative">
-                                    <div className="w-24 h-24 relative">
+                                    <div className="w-20 h-20 sm:w-24 sm:h-24 relative">
                                         <motion.div
                                             className="absolute inset-0"
                                             animate={{
@@ -181,7 +181,7 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                             </motion.div>
                         ) : (
                             <motion.div 
-                                className="modal-box relative bg-gradient-to-br from-gray-900 to-gray-800 border-2 border-[#0CC0DF] shadow-xl shadow-[#0CC0DF]/20 rounded-2xl max-w-4xl"
+                                className="modal-box relative bg-gradient-to-br from-gray-900 to-gray-800 border-2 border-[#0CC0DF] shadow-xl shadow-[#0CC0DF]/20 rounded-2xl max-w-[95vw] sm:max-w-4xl mx-4"
                                 variants={modalVariants}
                                 initial="hidden"
                                 animate="visible"
@@ -189,29 +189,29 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                             >
                                 <motion.button
                                     onClick={() => resetSwapState()}
-                                    className="absolute right-4 top-4 text-gray-400 hover:text-white transition-colors"
+                                    className="absolute right-2 sm:right-4 top-2 sm:top-4 text-gray-400 hover:text-white transition-colors"
                                     whileHover={{ rotate: 90 }}
                                     transition={{ duration: 0.2 }}
                                 >
-                                    <FaTimes size={24} />
+                                    <FaTimes size={20} className="sm:text-2xl" />
                                 </motion.button>
 
                                 {isSwappingDone === "success" ? (
                                     <motion.div 
-                                        className="p-8 relative overflow-hidden"
+                                        className="p-4 sm:p-8 relative overflow-hidden"
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: 1 }}
                                     >
                                         {/* Success Icon */}
                                         <motion.div 
-                                            className="flex justify-center mb-8"
+                                            className="flex justify-center mb-6 sm:mb-8"
                                             initial={{ scale: 0 }}
                                             animate={{ scale: 1 }}
                                             transition={{ type: "spring" }}
                                         >
                                             <div className="relative">
-                                                <div className="w-20 h-20 rounded-full bg-green-500/20 flex items-center justify-center">
-                                                    <svg className="w-12 h-12 text-green-500" viewBox="0 0 24 24" fill="none">
+                                                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-green-500/20 flex items-center justify-center">
+                                                    <svg className="w-10 h-10 sm:w-12 sm:h-12 text-green-500" viewBox="0 0 24 24" fill="none">
                                                         <path d="M20 6L9 17L4 12" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
                                                     </svg>
                                                 </div>
@@ -230,17 +230,17 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                                         </motion.div>
 
                                         {/* Transaction Details */}
-                                        <div className="max-w-md mx-auto space-y-6">
+                                        <div className="max-w-md mx-auto space-y-4 sm:space-y-6">
                                             <div className="text-center">
-                                                <h2 className="text-2xl font-bold text-white mb-2">Transaction Successful!</h2>
-                                                <p className="text-gray-400">Your swap has been completed</p>
+                                                <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">Transaction Successful!</h2>
+                                                <p className="text-sm sm:text-base text-gray-400">Your swap has been completed</p>
                                             </div>
 
                                             {/* Transaction ID */}
-                                            <div className="bg-gray-800/50 rounded-lg p-4">
-                                                <p className="text-sm text-gray-400 mb-1">Transaction ID</p>
+                                            <div className="bg-gray-800/50 rounded-lg p-3 sm:p-4">
+                                                <p className="text-xs sm:text-sm text-gray-400 mb-1">Transaction ID</p>
                                                 <div className="flex items-center gap-2">
-                                                    <code className="text-[#0CC0DF] font-mono">
+                                                    <code className="text-[#0CC0DF] font-mono text-sm">
                                                         0x7d3c...f8a2
                                                     </code>
                                                     <button 
@@ -255,65 +255,65 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                                             </div>
 
                                             {/* Swap Details */}
-                                            <div className="bg-gray-800/50 rounded-lg p-4">
+                                            <div className="bg-gray-800/50 rounded-lg p-3 sm:p-4">
                                                 <div className="flex justify-between items-center">
-                                                    <div className="flex items-center gap-3">
+                                                    <div className="flex items-center gap-2 sm:gap-3">
                                                         <Image
                                                             src="https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/MTL.png"
-                                                            width={32}
-                                                            height={32}
+                                                            width={24}
+                                                            height={24}
                                                             alt="MTL"
-                                                            className="rounded-full"
+                                                            className="rounded-full sm:w-8 sm:h-8"
                                                         />
                                                         <div>
-                                                            <p className="text-sm text-gray-400">From</p>
-                                                            <p className="font-medium">MTL Token</p>
+                                                            <p className="text-xs sm:text-sm text-gray-400">From</p>
+                                                            <p className="text-sm sm:text-base font-medium">MTL Token</p>
                                                         </div>
                                                     </div>
                                                     <div className="text-right">
-                                                        <p className="text-sm text-gray-400">Amount</p>
-                                                        <p className="font-medium">{fromAmount} MTL</p>
+                                                        <p className="text-xs sm:text-sm text-gray-400">Amount</p>
+                                                        <p className="text-sm sm:text-base font-medium">{fromAmount} MTL</p>
                                                     </div>
                                                 </div>
 
                                                 <div className="my-3 border-t border-gray-700" />
 
                                                 <div className="flex justify-between items-center">
-                                                    <div className="flex items-center gap-3">
+                                                    <div className="flex items-center gap-2 sm:gap-3">
                                                         {selectedAsset === 'crypto' ? (
-                                                            <div className="w-8 h-8 flex items-center justify-center">
+                                                            <div className="w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center">
                                                                 {assets.crypto.icon}
                                                             </div>
                                                         ) : (
                                                             <Image
                                                                 src={assets[selectedAsset].image}
-                                                                width={32}
-                                                                height={32}
+                                                                width={24}
+                                                                height={24}
                                                                 alt={assets[selectedAsset].name}
-                                                                className="rounded-full"
+                                                                className="rounded-full sm:w-8 sm:h-8"
                                                             />
                                                         )}
                                                         <div>
-                                                            <p className="text-sm text-gray-400">To</p>
-                                                            <p className="font-medium">
+                                                            <p className="text-xs sm:text-sm text-gray-400">To</p>
+                                                            <p className="text-sm sm:text-base font-medium">
                                                                 {selectedAsset === 'crypto' ? assets.crypto.name : assets[selectedAsset].name}
                                                             </p>
                                                         </div>
                                                     </div>
                                                     <div className="text-right">
-                                                        <p className="text-sm text-gray-400">Amount</p>
-                                                        <p className="font-medium">{toAmount}</p>
+                                                        <p className="text-xs sm:text-sm text-gray-400">Amount</p>
+                                                        <p className="text-sm sm:text-base font-medium">{toAmount}</p>
                                                     </div>
                                                 </div>
                                             </div>
 
                                             {/* Wallet Notice */}
-                                            <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-4">
-                                                <div className="flex gap-3">
-                                                    <svg className="w-6 h-6 text-blue-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-3 sm:p-4">
+                                                <div className="flex gap-2 sm:gap-3">
+                                                    <svg className="w-5 h-5 sm:w-6 sm:h-6 text-blue-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                                     </svg>
-                                                    <p className="text-sm text-gray-300">
+                                                    <p className="text-xs sm:text-sm text-gray-300">
                                                         Please check your wallet to view your new assets. It may take a few minutes for the transaction to be confirmed on the blockchain.
                                                     </p>
                                                 </div>
@@ -322,20 +322,20 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                                     </motion.div>
                                 ) : isSwappingDone && isSwappingDone !== "success" ? (
                                     <motion.div 
-                                        className="p-8 relative overflow-hidden"
+                                        className="p-4 sm:p-8 relative overflow-hidden"
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: 1 }}
                                     >
                                         {/* Error Icon */}
                                         <motion.div 
-                                            className="flex justify-center mb-8"
+                                            className="flex justify-center mb-6 sm:mb-8"
                                             initial={{ scale: 0 }}
                                             animate={{ scale: 1 }}
                                             transition={{ type: "spring" }}
                                         >
                                             <div className="relative">
-                                                <div className="w-20 h-20 rounded-full bg-red-500/20 flex items-center justify-center">
-                                                    <svg className="w-12 h-12 text-red-500" viewBox="0 0 24 24" fill="none">
+                                                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-red-500/20 flex items-center justify-center">
+                                                    <svg className="w-10 h-10 sm:w-12 sm:h-12 text-red-500" viewBox="0 0 24 24" fill="none">
                                                         <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
                                                     </svg>
                                                 </div>
@@ -354,18 +354,18 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                                         </motion.div>
 
                                         {/* Error Details */}
-                                        <div className="max-w-md mx-auto space-y-6">
+                                        <div className="max-w-md mx-auto space-y-4 sm:space-y-6">
                                             <div className="text-center">
-                                                <h2 className="text-2xl font-bold text-white mb-2">Transaction Failed</h2>
-                                                <p className="text-gray-400">Error: {isSwappingDone}</p>
+                                                <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">Transaction Failed</h2>
+                                                <p className="text-sm sm:text-base text-gray-400">Error: {isSwappingDone}</p>
                                             </div>
                                         </div>
                                     </motion.div>
                                 ) : (
-                                    <div className="flex flex-col gap-8">
-                                        <div className="grid grid-cols-[1fr,auto,1fr] items-center gap-4">
+                                    <div className="flex flex-col gap-6 sm:gap-8 p-4">
+                                        <div className="grid grid-cols-1 sm:grid-cols-[1fr,auto,1fr] items-center gap-4">
                                             <motion.div
-                                                className={`bg-gray-800/50 p-6 rounded-xl transform transition-all duration-300 ${isHovered ? 'scale-105 shadow-lg shadow-[#0CC0DF]/30' : ''}`}
+                                                className={`bg-gray-800/50 p-4 sm:p-6 rounded-xl transform transition-all duration-300 ${isHovered ? 'scale-105 shadow-lg shadow-[#0CC0DF]/30' : ''}`}
                                                 onHoverStart={() => setIsHovered(true)}
                                                 onHoverEnd={() => setIsHovered(false)}
                                                 initial={{ x: -50, opacity: 0 }}
@@ -373,17 +373,17 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                                                 transition={{ type: "spring", stiffness: 100 }}
                                             >
                                                 <div className="flex justify-between mb-4">
-                                                    <span className="text-gray-400 text-lg">From</span>
-                                                    <div className="flex items-center gap-2 bg-[#0CC0DF]/20 px-4 py-2 rounded-lg transition-transform">
-                                                        <span>$MTL</span>
+                                                    <span className="text-gray-400 text-base sm:text-lg">From</span>
+                                                    <div className="flex items-center gap-2 bg-[#0CC0DF]/20 px-3 py-1 sm:px-4 sm:py-2 rounded-lg transition-transform">
+                                                        <span className="text-sm sm:text-base">$MTL</span>
                                                     </div>
                                                 </div>
 
-                                                <div className="relative h-48 mb-4 rounded-xl overflow-hidden">
+                                                <div className="relative h-32 sm:h-48 mb-4 rounded-xl overflow-hidden">
                                                     <Image
                                                         src="https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/MTL.png"
                                                         fill
-                                                        className="object-contain p-8"
+                                                        className="object-contain p-6 sm:p-8"
                                                         alt="MTL"
                                                     />
                                                 </div>
@@ -392,7 +392,7 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                                                     type="number"
                                                     value={selectedAsset !== 'crypto' ? assets[selectedAsset].price : fromAmount}
                                                     onChange={(e) => setFromAmount(e.target.value)}
-                                                    className="bg-transparent text-2xl w-full focus:outline-none text-center hover:bg-[#0CC0DF]/10 transition-colors rounded-lg p-2"
+                                                    className="bg-transparent text-xl sm:text-2xl w-full focus:outline-none text-center hover:bg-[#0CC0DF]/10 transition-colors rounded-lg p-2"
                                                     placeholder="0.0"
                                                     readOnly={selectedAsset !== 'crypto'}
                                                 />
@@ -400,7 +400,7 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
 
                                             <motion.button
                                                 onClick={handleSwap}
-                                                className={`bg-[#0CC0DF]/20 p-4 rounded-full cursor-pointer ${
+                                                className={`bg-[#0CC0DF]/20 p-3 sm:p-4 rounded-full cursor-pointer ${
                                                     isExchangeHovered || isSwapping ? 'shadow-lg shadow-[#0CC0DF]/30 ring-2 ring-[#0CC0DF]/50' : ''
                                                 }`}
                                                 animate={{ 
@@ -436,18 +436,18 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                                                             ease: "linear"
                                                         }}
                                                     >
-                                                        <svg className="w-8 h-8 text-[#0CC0DF]" viewBox="0 0 24 24">
+                                                        <svg className="w-6 h-6 sm:w-8 sm:h-8 text-[#0CC0DF]" viewBox="0 0 24 24">
                                                             <path fill="currentColor" d="M12 4V2A10 10 0 0 0 2 12h2a8 8 0 0 1 8-8Z"/>
                                                             <path fill="currentColor" d="M12 20v2a10 10 0 0 0 10-10h-2a8 8 0 0 1-8 8Z"/>
                                                         </svg>
                                                     </motion.div>
                                                 ) : (
-                                                    <FaExchangeAlt className="text-[#0CC0DF] text-3xl" />
+                                                    <FaExchangeAlt className="text-[#0CC0DF] text-2xl sm:text-3xl" />
                                                 )}
                                             </motion.button>
 
                                             <motion.div
-                                                className={`bg-gray-800/50 p-6 rounded-xl transform transition-all duration-300 ${isHovered ? 'scale-105 shadow-lg shadow-[#0CC0DF]/30' : ''}`}
+                                                className={`bg-gray-800/50 p-4 sm:p-6 rounded-xl transform transition-all duration-300 ${isHovered ? 'scale-105 shadow-lg shadow-[#0CC0DF]/30' : ''}`}
                                                 onHoverStart={() => setIsHovered(true)}
                                                 onHoverEnd={() => setIsHovered(false)}
                                                 initial={{ x: 50, opacity: 0 }}
@@ -455,16 +455,16 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                                                 transition={{ type: "spring", stiffness: 100 }}
                                             >
                                                 <div className="flex justify-between mb-4">
-                                                    <span className="text-gray-400 text-lg">To</span>
-                                                    <div className="flex items-center gap-2 bg-[#0CC0DF]/20 px-4 py-2 rounded-lg transition-transform">
-                                                        <span>{selectedAsset === 'crypto' ? assets.crypto.name : 'Asset'}</span>
+                                                    <span className="text-gray-400 text-base sm:text-lg">To</span>
+                                                    <div className="flex items-center gap-2 bg-[#0CC0DF]/20 px-3 py-1 sm:px-4 sm:py-2 rounded-lg transition-transform">
+                                                        <span className="text-sm sm:text-base">{selectedAsset === 'crypto' ? assets.crypto.name : 'Asset'}</span>
                                                     </div>
                                                 </div>
 
-                                                <div className="relative h-48 mb-4 rounded-xl overflow-hidden transition-transform">
+                                                <div className="relative h-32 sm:h-48 mb-4 rounded-xl overflow-hidden transition-transform">
                                                     {selectedAsset === 'crypto' ? (
                                                         <div className="h-full flex items-center justify-center bg-gradient-to-br from-[#00FFA3]/20 to-transparent">
-                                                            <div className="transition-transform">
+                                                            <div className="transition-transform scale-75 sm:scale-100">
                                                                 {assets.crypto.name === 'Bitcoin' && <FaBitcoin className="text-[#F7931A]" size={66} />}
                                                                 {assets.crypto.name === 'Ethereum' && <FaEthereum className="text-[#627EEA]" size={66} />}
                                                                 {assets.crypto.name === 'Solana' && <SiSolana className="text-[#00FFA3]" size={66} />}
@@ -481,7 +481,7 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                                                     )}
                                                 </div>
 
-                                                <div className="text-2xl text-center text-gray-400">
+                                                <div className="text-xl sm:text-2xl text-center text-gray-400">
                                                     {selectedAsset === 'crypto' ? toAmount : `1x ${assets[selectedAsset].name}`}
                                                 </div>
                                             </motion.div>
