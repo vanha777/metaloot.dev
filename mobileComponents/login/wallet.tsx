@@ -137,58 +137,56 @@ export default function Wallet() {
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="relative h-60 md:h-72 w-full max-w-3xl mx-auto rounded-2xl md:rounded-[3rem] overflow-hidden backdrop-blur-sm
-                          border-2 md:border-4 border-[#0CC0DF] text-white shadow-lg shadow-[#0CC0DF]/30"
+                className="relative w-full max-w-2xl mx-auto space-y-3"
             >
-                <div className="absolute inset-0">
-                    {/* Background gradient */}
-                    <div className="absolute w-full h-full bg-gradient-to-r from-gray-900 to-gray-800 opacity-90" />
-
-                    {/* Grid pattern */}
-                    <div className="grid grid-cols-12 gap-4 absolute inset-0 opacity-15">
-                        {[...Array(48)].map((_, i) => (
-                            <div
-                                key={i}
-                                className="h-1 bg-white/20 rounded-full"
-                            />
-                        ))}
-                    </div>
+                {/* Quick Actions */}
+                <div className="grid grid-cols-3 gap-2">
+                    <button className="flex flex-col items-center justify-center p-3 rounded-xl bg-gradient-to-b from-[#0CC0DF]/10 to-transparent backdrop-blur-sm border border-[#0CC0DF]/30">
+                        <FaWallet className="text-[#0CC0DF] text-xl mb-1" />
+                        <span className="text-xs text-white">Send</span>
+                    </button>
+                    <button className="flex flex-col items-center justify-center p-3 rounded-xl bg-gradient-to-b from-[#0CC0DF]/10 to-transparent backdrop-blur-sm border border-[#0CC0DF]/30">
+                        <FaCoins className="text-[#0CC0DF] text-xl mb-1" />
+                        <span className="text-xs text-white">Receive</span>
+                    </button>
+                    <button className="flex flex-col items-center justify-center p-3 rounded-xl bg-gradient-to-b from-[#0CC0DF]/10 to-transparent backdrop-blur-sm border border-[#0CC0DF]/30">
+                        <FaCreditCard className="text-[#0CC0DF] text-xl mb-1" />
+                        <span className="text-xs text-white">Buy</span>
+                    </button>
                 </div>
 
-                <div className="absolute inset-0 p-4 md:p-8 flex flex-col justify-between">
-                    {/* Card Header */}
-                    <div className="flex justify-between items-start">
-                        <div>
-                            <h3 className="text-white text-2xl md:text-3xl font-bold">$MTL</h3>
-                            <p className="text-white/70 text-base md:text-lg">MetaLoot Token</p>
-                        </div>
+                {/* Balance Card */}
+                <div className="p-4 rounded-xl bg-gradient-to-r from-gray-900 to-gray-800 border-2 border-[#0CC0DF] shadow-lg shadow-[#0CC0DF]/20">
+                    <div className="flex items-center justify-between mb-4">
                         <img
                             src="/coin.png"
-                            alt="MetaLoot Token"
-                            className="w-12 h-12 md:w-16 md:h-16 object-contain"
+                            alt="MTL"
+                            className="w-10 h-10 object-contain"
                             style={{
-                                filter: "drop-shadow(0 0 10px rgba(255,255,255,0.5))"
+                                filter: "drop-shadow(0 0 8px rgba(255,255,255,0.5))"
                             }}
                         />
+                        <div className="text-right">
+                            <p className="text-xl font-bold text-white">${balance}</p>
+                            <p className="text-white/70 text-xs">MTL Balance</p>
+                        </div>
                     </div>
 
-                    {/* Card Number */}
-                    <div className="space-y-4 md:space-y-6">
-                        <div className="flex items-center gap-2">
-                            <p className="font-mono text-white text-sm md:text-xl tracking-wider truncate">
+                    <div className="space-y-1">
+                        <p className="text-white/70 text-xs">Wallet Address</p>
+                        <div className="flex items-center gap-2 bg-gray-800/50 p-2 rounded-lg">
+                            <p className="font-mono text-white text-xs truncate flex-1">
                                 {publicKey?.toBase58()}
                             </p>
-                        </div>
-
-                        {/* Balance and Name */}
-                        <div className="flex justify-between items-end">
-                            <div>
-                                <p className="text-white/70 text-base md:text-lg">Balance</p>
-                                <p className="text-white text-xl md:text-2xl font-bold">${balance} MTL</p>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <span className="text-white text-lg md:text-xl font-bold">METALOOT</span>
-                            </div>
+                            <button 
+                                className="p-1.5 hover:bg-[#0CC0DF]/20 rounded-lg transition-colors"
+                                onClick={() => navigator.clipboard.writeText(publicKey?.toBase58() || '')}
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-[#0CC0DF]" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
+                                    <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
+                                </svg>
+                            </button>
                         </div>
                     </div>
                 </div>
