@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 import Image from 'next/image'
-import { FaDesktop, FaMobile, FaGamepad, FaGlobe, FaTimes } from 'react-icons/fa'
+import { FaDesktop, FaMobile, FaGamepad, FaGlobe, FaTimes, FaSearch } from 'react-icons/fa'
 import { useState, useEffect } from 'react'
 import Details from './details'
 import { transferSplToken } from "../../app/utilities/transfer";
@@ -58,6 +58,7 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
     const TOKEN_MINT_ADDRESS = "813b3AwivU6uxBicnXdZsCNrfzJy4U3Cr4ejwvH4V1Fz";
     const { publicKey, connected, signMessage, sendTransaction } = useWallet();
     const [selectedPlatform, setSelectedPlatform] = useState<'desktop' | 'mobile' | 'console' | 'all'>('all')
+    const [searchQuery, setSearchQuery] = useState('')
     const [focusedGame, setFocusedGame] = useState<Game | null>(null)
     const [filteredGames, setFilteredGames] = useState<Game[]>(games)
     const [showModal, setShowModal] = useState(false)
@@ -65,13 +66,18 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
     const [transferMessage, setTransferMessage] = useState('')
 
     useEffect(() => {
-        if (selectedPlatform === 'all') {
-            setFilteredGames(games)
-        } else {
-            setFilteredGames(games.filter(game => game.platform === selectedPlatform))
+        let filtered = games
+        if (selectedPlatform !== 'all') {
+            filtered = filtered.filter(game => game.platform === selectedPlatform)
         }
+        if (searchQuery) {
+            filtered = filtered.filter(game => 
+                game.title.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+        }
+        setFilteredGames(filtered)
         setFocusedGame(null)
-    }, [selectedPlatform, games])
+    }, [selectedPlatform, searchQuery, games])
 
     const onGameFocus = (game: Game) => {
         setFocusedGame(focusedGame?.id === game.id ? null : game)
@@ -168,25 +174,40 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
 
     return (
         <div className="px-4 md:px-8">
-            {/* Platform Filter */}
-            <div className={`flex ${isMobile ? 'gap-4 mb-8 p-4' : 'gap-24 mb-26 p-24'} overflow-x-auto`}>
-                {Object.entries(platformIcons).map(([platform, icon]) => (
-                    <motion.button
-                        key={platform}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() => setSelectedPlatform(platform as 'desktop' | 'mobile' | 'console' | 'all')}
-                        className={`${isMobile ? 'px-6 py-4' : 'px-24 py-16'} rounded-[3rem] backdrop-blur-sm relative flex-shrink-0
-                            ${selectedPlatform === platform
-                                ? 'border-4 border-[#0CC0DF] text-[#0CC0DF] shadow-lg shadow-[#0CC0DF]/30'
-                                : 'border-2 border-white/30 text-white'} 
-                            before:content-[""] before:absolute before:inset-0 before:rounded-[3rem] 
-                            before:bg-gradient-to-r before:from-gray-900 before:to-gray-800 before:z-[-1]
-                            hover:border-[#0CC0DF]/60 transition-colors duration-300`}
-                    >
-                        {icon}
-                    </motion.button>
-                ))}
+            {/* Platform Filter and Search */}
+            <div className={`flex flex-col gap-4 mb-8`}>
+                <div className={`flex ${isMobile ? 'gap-4 p-4' : 'gap-24 p-24'} overflow-x-auto`}>
+                    {Object.entries(platformIcons).map(([platform, icon]) => (
+                        <motion.button
+                            key={platform}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => setSelectedPlatform(platform as 'desktop' | 'mobile' | 'console' | 'all')}
+                            className={`${isMobile ? 'px-6 py-4' : 'px-24 py-16'} rounded-[3rem] backdrop-blur-sm relative flex-shrink-0
+                                ${selectedPlatform === platform
+                                    ? 'border-4 border-[#0CC0DF] text-[#0CC0DF] shadow-lg shadow-[#0CC0DF]/30'
+                                    : 'border-2 border-white/30 text-white'} 
+                                before:content-[""] before:absolute before:inset-0 before:rounded-[3rem] 
+                                before:bg-gradient-to-r before:from-gray-900 before:to-gray-800 before:z-[-1]
+                                hover:border-[#0CC0DF]/60 transition-colors duration-300`}
+                        >
+                            {icon}
+                        </motion.button>
+                    ))}
+                </div>
+                
+                <div className="relative">
+                    <input
+                        type="text"
+                        placeholder="Search games..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full px-4 py-2 bg-gray-800/50 border-2 border-[#0CC0DF]/30 rounded-xl
+                            focus:outline-none focus:border-[#0CC0DF] text-white placeholder-gray-400
+                            transition-colors duration-300"
+                    />
+                    <FaSearch className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                </div>
             </div>
 
             {/* Game Grid/Carousel */}
