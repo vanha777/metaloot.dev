@@ -69,7 +69,7 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
             filtered = filtered.filter(game => game.platform === selectedPlatform)
         }
         if (searchQuery) {
-            filtered = filtered.filter(game => 
+            filtered = filtered.filter(game =>
                 game.title.toLowerCase().includes(searchQuery.toLowerCase())
             )
         }
@@ -151,7 +151,7 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
             setTransferStatus('success')
             setTransferMessage(splSignature.toString())
             fetchTokenBalance();
-            saveLocalStorage(focusedGame!, 'success', `${amount / 10**9} MTL tokens claimed successfully`);
+            saveLocalStorage(focusedGame!, 'success', `${amount / 10 ** 9} MTL tokens claimed successfully`);
 
         } catch (error) {
             console.error("Transfer Error:", error);
@@ -193,7 +193,7 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
                         </motion.button>
                     ))}
                 </div>
-                
+
                 <div className="relative">
                     <input
                         type="text"
@@ -216,57 +216,144 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
                     {filteredGames.map((game) => (
                         <motion.div
                             key={game.id}
-                            className={`relative flex-shrink-0 cursor-pointer transition-all duration-300
-                                ${focusedGame?.id === game.id ? 'w-full h-[350px]' : 'w-full h-[300px]'}`}
+                            className="relative flex-shrink-0 cursor-pointer transition-all duration-300"
                             onClick={() => onGameFocus(game)}
                             layout
                         >
-                            <div className="relative h-full rounded-2xl overflow-hidden 
-                                bg-gradient-to-b from-[#0CC0DF]/10 to-transparent backdrop-blur-sm
-                                border border-[#0CC0DF]/20">
-                                <Image
-                                    src={game.image}
-                                    alt={game.title}
-                                    fill
-                                    className="object-cover opacity-80"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                                <div className="absolute bottom-0 w-full p-4">
-                                    {focusedGame?.id === game.id && (
-                                        <motion.button
-                                            initial={{ opacity: 0 }}
-                                            animate={{ opacity: 1 }}
-                                            whileHover={{ scale: 1.05 }}
-                                            whileTap={{ scale: 0.95 }}
-                                            onClick={() => onGetRewards(game)}
-                                            className="w-full bg-[#0CC0DF] hover:bg-[#0AA0BF] text-white 
-                                                font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-3
-                                                shadow-lg shadow-[#0CC0DF]/30 text-base"
-                                        >
-                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
-                                            </svg>
-                                            Play to Earn
-                                        </motion.button>
-                                    )}
+                            {focusedGame?.id === game.id ? (
+                                <div className="w-full overflow-x-auto scrollbar-hide h-[400px]">
+                                    <div className="flex snap-x snap-mandatory">
+                                        {/* Main Game Card */}
+                                        <div className="snap-center flex-shrink-0 w-full">
+                                            <div className="relative h-[350px] rounded-2xl overflow-hidden 
+                                                bg-gradient-to-b from-[#0CC0DF]/10 to-transparent backdrop-blur-sm
+                                                border border-[#0CC0DF]/20">
+                                                <Image
+                                                    src={game.image}
+                                                    alt={game.title}
+                                                    fill
+                                                    className="object-cover opacity-80"
+                                                />
+                                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                                                <div className="absolute bottom-0 w-full p-4">
+                                                    <motion.button
+                                                        initial={{ opacity: 0 }}
+                                                        animate={{ opacity: 1 }}
+                                                        whileHover={{ scale: 1.05 }}
+                                                        whileTap={{ scale: 0.95 }}
+                                                        onClick={() => onGetRewards(game)}
+                                                        className="w-full bg-[#0CC0DF] hover:bg-[#0AA0BF] text-white 
+                                                            font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-3
+                                                            shadow-lg shadow-[#0CC0DF]/30 text-base"
+                                                    >
+                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
+                                                        </svg>
+                                                        Play to Earn
+                                                    </motion.button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Trailer Card */}
+                                        <div className="snap-center flex-shrink-0 w-full">
+                                            <div className="relative h-[350px] rounded-2xl overflow-hidden bg-gradient-to-r from-gray-900 to-gray-800 backdrop-blur-md border-2 border-[#0CC0DF]/20 p-6">
+                                                <div className="flex items-center gap-2 mb-4">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-[#0CC0DF]" viewBox="0 0 20 20" fill="currentColor">
+                                                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
+                                                    </svg>
+                                                    <h3 className="text-white text-xl font-bold">Official Trailer</h3>
+                                                </div>
+                                                <div className="aspect-video w-full">
+                                                    <iframe
+                                                        className="w-full h-full rounded-xl"
+                                                        src={game.trailer}
+                                                        title={`${game.title} Trailer`}
+                                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                        allowFullScreen
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Gameplay Preview Card */}
+                                        <div className="snap-center flex-shrink-0 w-full">
+                                            <div className="relative h-[350px] rounded-2xl overflow-hidden bg-gradient-to-r from-gray-900 to-gray-800 backdrop-blur-md border-2 border-[#0CC0DF]/20 p-6">
+                                                <div className="flex items-center gap-2 mb-4">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-[#0CC0DF]" viewBox="0 0 20 20" fill="currentColor">
+                                                        <path d="M13 6H7v6h6V6z" />
+                                                        <path fillRule="evenodd" d="M7 4a1 1 0 00-1 1v10a1 1 0 001 1h6a1 1 0 001-1V5a1 1 0 00-1-1H7zm8 12V4h3a1 1 0 011 1v10a1 1 0 01-1 1h-3zM2 5a1 1 0 011-1h3v12H3a1 1 0 01-1-1V5z" clipRule="evenodd" />
+                                                    </svg>
+                                                    <h3 className="text-white text-xl font-bold">Gameplay Preview</h3>
+                                                </div>
+                                                <div className="aspect-video w-full">
+                                                    <iframe
+                                                        className="w-full h-full rounded-xl"
+                                                        src={game.gameplay}
+                                                        title={`${game.title} Gameplay`}
+                                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                        allowFullScreen
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Game Info Card */}
+                                        <div className="snap-center flex-shrink-0 w-full">
+                                            <div className="relative h-[350px] rounded-2xl overflow-hidden bg-gradient-to-r from-gray-900 to-gray-800 backdrop-blur-md border-2 border-[#0CC0DF]/20 p-6">
+                                                <div className="flex items-center gap-2 mb-4">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-[#0CC0DF]" viewBox="0 0 20 20" fill="currentColor">
+                                                        <path d="M11 17a1 1 0 001.447.894l4-2A1 1 0 0017 15V9.236a1 1 0 00-1.447-.894l-4 2a1 1 0 00-.553.894V17zM15.211 6.276a1 1 0 000-1.788l-4.764-2.382a1 1 0 00-.894 0L4.789 4.488a1 1 0 000 1.788l4.764 2.382a1 1 0 00.894 0l4.764-2.382zM4.447 8.342A1 1 0 003 9.236V15a1 1 0 00.553.894l4 2A1 1 0 009 17v-5.764a1 1 0 00-.553-.894l-4-2z" />
+                                                    </svg>
+                                                    <h3 className="text-white text-xl font-bold">Game Info</h3>
+                                                </div>
+                                                <div className="grid grid-cols-2 gap-6">
+                                                    <div>
+                                                        <p className="text-[#0CC0DF] text-sm font-medium mb-1">Developer</p>
+                                                        <p className="text-white">{game.developer}</p>
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-[#0CC0DF] text-sm font-medium mb-1">Publisher</p>
+                                                        <p className="text-white">{game.publisher}</p>
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-[#0CC0DF] text-sm font-medium mb-1">Release Date</p>
+                                                        <p className="text-white">{game.releaseDate}</p>
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-[#0CC0DF] text-sm font-medium mb-1">Genre</p>
+                                                        <p className="text-white">{game.genre}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
                                 </div>
-                            </div>
+                            ) : (
+                                <div className="relative h-[300px] rounded-2xl overflow-hidden 
+                                    bg-gradient-to-b from-[#0CC0DF]/10 to-transparent backdrop-blur-sm
+                                    border border-[#0CC0DF]/20">
+                                    <Image
+                                        src={game.image}
+                                        alt={game.title}
+                                        fill
+                                        className="object-cover opacity-80"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                                </div>
+                            )}
                         </motion.div>
                     ))}
                 </motion.div>
             </div>
-
-            {/* Game Details Section */}
-            {/* {focusedGame && (
-                <Details focusedGame={focusedGame} />
-            )} */}
 
             {/* Transfer Modal */}
             <input type="checkbox" id="transfer-modal" className="modal-toggle" checked={showModal} onChange={() => setShowModal(!showModal)} />
             <div className="modal backdrop-blur-sm">
                 {transferStatus === 'loading' ? (
                     <motion.div
-                        className="flex flex-col items-center justify-center p-4" 
+                        className="flex flex-col items-center justify-center p-4"
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
                         transition={{ type: "spring", stiffness: 200 }}
