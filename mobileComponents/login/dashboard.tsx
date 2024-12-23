@@ -275,7 +275,7 @@ export default function Dashboard() {
 
       <div className="relative z-10">
         {/* Sticky Navbar */}
-        <div className="sticky top-0 bg-[#0A1628]/90 backdrop-blur-md border-b border-[#0CC0DF]/20 px-4 py-2">
+        <div className="fixed top-0 left-0 right-0 z-50 bg-[#0A1628]/90 backdrop-blur-md border-b border-[#0CC0DF]/20 px-4 py-2">
           <div className="max-w-7xl mx-auto flex justify-between items-center">
             {/* Left - Wallet Button */}
             <div>
@@ -331,7 +331,7 @@ export default function Dashboard() {
         </div>
 
         {/* Main Content */}
-        <div className="p-4">
+        <div className="pt-24 pb-16 px-4">
           {selectedPlatform === 'games' && <GamesDashboard games={games} />}
           {selectedPlatform === 'marketplace' && <Marketplace />}
           {selectedPlatform === 'wallet' && <Wallet />}
