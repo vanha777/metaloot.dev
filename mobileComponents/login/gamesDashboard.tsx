@@ -17,6 +17,7 @@ interface Game {
     platform: 'desktop' | 'mobile' | 'console'
     description: string
     link: string
+    rank: number
     developer?: string
     publisher?: string
     releaseDate?: string
@@ -225,9 +226,13 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
                                     <div className="flex snap-x snap-mandatory">
                                         {/* Main Game Card */}
                                         <div className="snap-center flex-shrink-0 w-full">
-                                            <div className="relative h-[350px] rounded-2xl overflow-hidden 
+                                            <div className={`relative h-[350px] rounded-2xl overflow-hidden 
                                                 bg-gradient-to-b from-[#0CC0DF]/10 to-transparent backdrop-blur-sm
-                                                border border-[#0CC0DF]/20">
+                                                border ${game.rank <= 3 ?
+                                                    game.rank === 1 ? 'border-yellow-400' :
+                                                    game.rank === 2 ? 'border-gray-400' :
+                                                    'border-amber-700' :
+                                                    'border-[#0CC0DF]/20'}`}>
                                                 <Image
                                                     src={game.image}
                                                     alt={game.title}
@@ -235,6 +240,25 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
                                                     className="object-cover opacity-80"
                                                 />
                                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                                                
+                                                {game.rank <= 3 && (
+                                                    <div className="absolute top-4 right-4">
+                                                        <div className={`w-12 h-12 rounded-full flex items-center justify-center
+                                                            ${game.rank === 1 ? 'bg-yellow-400' :
+                                                            game.rank === 2 ? 'bg-gray-400' :
+                                                            'bg-amber-700'}`}>
+                                                            <div className="absolute w-full h-full animate-spin-slow">
+                                                                <div className="w-full h-full rounded-full bg-white opacity-20 blur-sm" />
+                                                            </div>
+                                                            <span className="text-white text-xl font-bold relative z-10">
+                                                                {game.rank === 1 ? '🏆' : 
+                                                                 game.rank === 2 ? '🥈' : 
+                                                                 '🥉'}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                )}
+
                                                 <div className="absolute bottom-0 w-full p-4">
                                                     <motion.button
                                                         initial={{ opacity: 0 }}
@@ -255,9 +279,136 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
                                             </div>
                                         </div>
 
+                                        {/* Game Analytics Card */}
+                                        <div className="snap-center flex-shrink-0 w-full">
+                                            <div className={`relative h-[350px] rounded-2xl overflow-hidden bg-gradient-to-r from-gray-900 to-gray-800 backdrop-blur-md border-2 ${game.rank <= 3 ?
+                                                game.rank === 1 ? 'border-yellow-400' :
+                                                game.rank === 2 ? 'border-gray-400' :
+                                                'border-amber-700' :
+                                                'border-[#0CC0DF]/20'} p-6`}>
+                                                <div className="flex items-center gap-2 mb-2">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-[#0CC0DF]" viewBox="0 0 20 20" fill="currentColor">
+                                                        <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
+                                                    </svg>
+                                                    <h3 className="text-white text-lg font-bold">Game Stats</h3>
+                                                </div>
+                                                <div className="border-b border-[#0CC0DF]/30 mb-2"></div>
+                                                <div className="grid grid-cols-2 gap-2">
+                                                    {game.models?.playToEarn?.enabled && (
+                                                        <motion.div
+                                                            whileHover={{ scale: 1.02 }}
+                                                            className="relative overflow-hidden bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 p-3 rounded-xl shadow-lg"
+                                                        >
+                                                            <motion.div
+                                                                className="absolute inset-0 h-full bg-gradient-to-r from-transparent via-white/30 to-transparent"
+                                                                animate={{
+                                                                    x: [-200, 400],
+                                                                }}
+                                                                transition={{
+                                                                    duration: 2,
+                                                                    ease: "linear",
+                                                                    repeat: Infinity,
+                                                                }}
+                                                            />
+                                                            <div className="flex flex-col gap-1">
+                                                                <div className="flex items-center space-x-1">
+                                                                    <span className="text-white font-bold text-sm">Play to Earn</span>
+                                                                    <span className="text-yellow-200">🔥</span>
+                                                                </div>
+                                                                <div className="text-white font-bold text-lg">
+                                                                    {game.models.playToEarn.price} MTL
+                                                                </div>
+                                                            </div>
+                                                        </motion.div>
+                                                    )}
+                                                    {game.models?.stakeToEarn?.enabled && (
+                                                        <motion.div
+                                                            whileHover={{ scale: 1.02 }}
+                                                            className="relative overflow-hidden bg-gradient-to-r from-purple-600 via-violet-600 to-indigo-600 p-3 rounded-xl shadow-lg"
+                                                        >
+                                                            <motion.div
+                                                                className="absolute inset-0 h-full bg-gradient-to-r from-transparent via-white/30 to-transparent"
+                                                                animate={{
+                                                                    x: [-200, 400],
+                                                                }}
+                                                                transition={{
+                                                                    duration: 2,
+                                                                    ease: "linear",
+                                                                    repeat: Infinity,
+                                                                }}
+                                                            />
+                                                            <div className="flex flex-col gap-1">
+                                                                <div className="flex items-center space-x-1">
+                                                                    <span className="text-white font-bold text-sm">Stake to Earn</span>
+                                                                    <span className="text-purple-200">💎</span>
+                                                                </div>
+                                                                <div className="text-white font-bold text-lg">
+                                                                    {game.models.stakeToEarn.price} APR
+                                                                </div>
+                                                            </div>
+                                                        </motion.div>
+                                                    )}
+                                                    <motion.div
+                                                        whileHover={{ scale: 1.02 }}
+                                                        className="relative overflow-hidden bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 p-3 rounded-xl shadow-lg"
+                                                    >
+                                                        <motion.div
+                                                            className="absolute inset-0 h-full bg-gradient-to-r from-transparent via-white/30 to-transparent"
+                                                            animate={{
+                                                                x: [-200, 400],
+                                                            }}
+                                                            transition={{
+                                                                duration: 2,
+                                                                ease: "linear",
+                                                                repeat: Infinity,
+                                                            }}
+                                                        />
+                                                        <div className="flex flex-col gap-1">
+                                                            <div className="flex items-center space-x-1">
+                                                                <span className="text-white font-bold text-sm">Times Played</span>
+                                                                <span className="text-blue-200">🎮</span>
+                                                            </div>
+                                                            <div className="text-white font-bold text-lg">
+                                                                1,234
+                                                            </div>
+                                                        </div>
+                                                    </motion.div>
+                                                    <motion.div
+                                                        whileHover={{ scale: 1.02 }}
+                                                        className="relative overflow-hidden bg-gradient-to-r from-green-600 via-emerald-600 to-teal-600 p-3 rounded-xl shadow-lg"
+                                                    >
+                                                        <motion.div
+                                                            className="absolute inset-0 h-full bg-gradient-to-r from-transparent via-white/30 to-transparent"
+                                                            animate={{
+                                                                x: [-200, 400],
+                                                            }}
+                                                            transition={{
+                                                                duration: 2,
+                                                                ease: "linear",
+                                                                repeat: Infinity,
+                                                            }}
+                                                        />
+                                                        <div className="flex flex-col gap-1">
+                                                            <div className="flex items-center space-x-1">
+                                                                <span className="text-white font-bold text-sm">Total Rewards</span>
+                                                                <span className="text-green-200">💰</span>
+                                                            </div>
+                                                            <div className="text-white font-bold text-lg">
+                                                                50,000 MTL
+                                                            </div>
+                                                        </div>
+                                                    </motion.div>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                         {/* Trailer Card */}
                                         <div className="snap-center flex-shrink-0 w-full">
-                                            <div className="relative h-[350px] rounded-2xl overflow-hidden bg-gradient-to-r from-gray-900 to-gray-800 backdrop-blur-md border-2 border-[#0CC0DF]/20 p-6">
+                                            <div className={`relative h-[350px] rounded-2xl overflow-hidden bg-gradient-to-r from-gray-900 to-gray-800 backdrop-blur-md border-2 ${game.rank <= 3 ?
+                                                game.rank === 1 ? 'border-yellow-400' :
+                                                game.rank === 2 ? 'border-gray-400' :
+                                                'border-amber-700' :
+                                                'border-[#0CC0DF]/20'} p-6`}>
                                                 <div className="flex items-center gap-2 mb-4">
                                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-[#0CC0DF]" viewBox="0 0 20 20" fill="currentColor">
                                                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
@@ -278,7 +429,11 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
 
                                         {/* Gameplay Preview Card */}
                                         <div className="snap-center flex-shrink-0 w-full">
-                                            <div className="relative h-[350px] rounded-2xl overflow-hidden bg-gradient-to-r from-gray-900 to-gray-800 backdrop-blur-md border-2 border-[#0CC0DF]/20 p-6">
+                                            <div className={`relative h-[350px] rounded-2xl overflow-hidden bg-gradient-to-r from-gray-900 to-gray-800 backdrop-blur-md border-2 ${game.rank <= 3 ?
+                                                game.rank === 1 ? 'border-yellow-400' :
+                                                game.rank === 2 ? 'border-gray-400' :
+                                                'border-amber-700' :
+                                                'border-[#0CC0DF]/20'} p-6`}>
                                                 <div className="flex items-center gap-2 mb-4">
                                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-[#0CC0DF]" viewBox="0 0 20 20" fill="currentColor">
                                                         <path d="M13 6H7v6h6V6z" />
@@ -300,7 +455,11 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
 
                                         {/* Game Info Card */}
                                         <div className="snap-center flex-shrink-0 w-full">
-                                            <div className="relative h-[350px] rounded-2xl overflow-hidden bg-gradient-to-r from-gray-900 to-gray-800 backdrop-blur-md border-2 border-[#0CC0DF]/20 p-6">
+                                            <div className={`relative h-[350px] rounded-2xl overflow-hidden bg-gradient-to-r from-gray-900 to-gray-800 backdrop-blur-md border-2 ${game.rank <= 3 ?
+                                                game.rank === 1 ? 'border-yellow-400' :
+                                                game.rank === 2 ? 'border-gray-400' :
+                                                'border-amber-700' :
+                                                'border-[#0CC0DF]/20'} p-6`}>
                                                 <div className="flex items-center gap-2 mb-4">
                                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-[#0CC0DF]" viewBox="0 0 20 20" fill="currentColor">
                                                         <path d="M11 17a1 1 0 001.447.894l4-2A1 1 0 0017 15V9.236a1 1 0 00-1.447-.894l-4 2a1 1 0 00-.553.894V17zM15.211 6.276a1 1 0 000-1.788l-4.764-2.382a1 1 0 00-.894 0L4.789 4.488a1 1 0 000 1.788l4.764 2.382a1 1 0 00.894 0l4.764-2.382zM4.447 8.342A1 1 0 003 9.236V15a1 1 0 00.553.894l4 2A1 1 0 009 17v-5.764a1 1 0 00-.553-.894l-4-2z" />
@@ -331,9 +490,13 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
                                     </div>
                                 </div>
                             ) : (
-                                <div className="relative h-[300px] rounded-2xl overflow-hidden 
+                                <div className={`relative h-[300px] rounded-2xl overflow-hidden 
                                     bg-gradient-to-b from-[#0CC0DF]/10 to-transparent backdrop-blur-sm
-                                    border border-[#0CC0DF]/20">
+                                    border-2 ${game.rank <= 3 ?
+                                        game.rank === 1 ? 'border-yellow-400' :
+                                            game.rank === 2 ? 'border-gray-400' :
+                                                'border-amber-700' :
+                                        'border-[#0CC0DF]/20'}`}>
                                     <Image
                                         src={game.image}
                                         alt={game.title}
@@ -341,6 +504,24 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
                                         className="object-cover opacity-80"
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+
+                                    {game.rank <= 3 && (
+                                        <div className="absolute top-4 right-4">
+                                            <div className={`w-12 h-12 rounded-full flex items-center justify-center
+                                          ${game.rank === 1 ? 'bg-yellow-400' :
+                                                    game.rank === 2 ? 'bg-gray-400' :
+                                                        'bg-amber-700'}`}>
+                                                <div className="absolute w-full h-full animate-spin-slow">
+                                                    <div className="w-full h-full rounded-full bg-white opacity-20 blur-sm" />
+                                                </div>
+                                                <span className="text-white text-xl font-bold relative z-10">
+                                                    {game.rank === 1 ? '🏆' : 
+                                                     game.rank === 2 ? '🥈' : 
+                                                     '🥉'}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             )}
                         </motion.div>
