@@ -9,6 +9,10 @@ import { Environment, Float, PerspectiveCamera } from '@react-three/drei'
 import { FaBitcoin, FaEthereum, FaWallet, FaShoppingCart, FaTicketAlt, FaStore, FaCoins, FaTicketAlt as FaTicket } from 'react-icons/fa'
 import { SiSolana, SiTether } from 'react-icons/si'
 import Modal from './modal'
+import { useMTL } from '../../app/context/MtlContext'
+import { transferSplToken } from "../../app/utilities/transfer";
+import { clusterApiUrl, Connection, Keypair, PublicKey } from "@solana/web3.js";
+import { useWallet } from "@solana/wallet-adapter-react";
 
 interface NFT {
     id: string
@@ -94,40 +98,40 @@ const cryptoAssets: CryptoAsset[] = [
     }
 ]
 
-const vouchers: Voucher[] = [
-    {
-        id: '1',
-        title: '50% Off Jetstar',
-        discount: '50%',
-        validUntil: '2024-12-31',
-        image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%2010.jpeg',
-        price: 100
-    },
-    {
-        id: '2',
-        title: '30% Off Bunnings',
-        discount: '30%',
-        validUntil: '2024-12-31',
-        image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%2012.jpeg',
-        price: 100
-    },
-    {
-        id: '3',
-        title: '10% Off Coles',
-        discount: '10%',
-        validUntil: '2024-12-31',
-        image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%2013.jpeg',
-        price: 100
-    },
-    {
-        id: '4',
-        title: '10% Off Woolworths',
-        discount: '10%',
-        validUntil: '2024-12-31',
-        image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%2015.jpeg',
-        price: 100
-    },
-]
+// const vouchers: Voucher[] = [
+//     {
+//         id: '1',
+//         title: '50% Off Jetstar',
+//         discount: '50%',
+//         validUntil: '2024-12-31',
+//         image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%2010.jpeg',
+//         price: 100
+//     },
+//     {
+//         id: '2',
+//         title: '30% Off Bunnings',
+//         discount: '30%',
+//         validUntil: '2024-12-31',
+//         image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%2012.jpeg',
+//         price: 100
+//     },
+//     {
+//         id: '3',
+//         title: '10% Off Coles',
+//         discount: '10%',
+//         validUntil: '2024-12-31',
+//         image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%2013.jpeg',
+//         price: 100
+//     },
+//     {
+//         id: '4',
+//         title: '10% Off Woolworths',
+//         discount: '10%',
+//         validUntil: '2024-12-31',
+//         image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%2015.jpeg',
+//         price: 100
+//     },
+// ]
 
 const tabIcons = {
     nfts: <FaStore size={32} />,
@@ -135,7 +139,8 @@ const tabIcons = {
 }
 
 export default function Marketplace() {
-    const [walletAddress, setWalletAddress] = useState<string>('')
+    const { balance, ownedNFTs, marketplaceNFTs, marketplaceVouchers, exchangeRates, fetchTokenBalance ,fetchGiftCards} = useMTL();
+    const { publicKey, connected, signMessage, sendTransaction } = useWallet();
     const [selectedTab, setSelectedTab] = useState<'nfts' | 'deals'>('nfts')
     const [showModal, setShowModal] = useState(false)
     const [transferStatus, setTransferStatus] = useState<'loading' | 'success' | 'error'>('loading')
@@ -147,14 +152,8 @@ export default function Marketplace() {
     }>({})
 
     useEffect(() => {
-        const getWalletDetails = async () => {
-            const supabase = await Auth
-            const { data: { user } } = await supabase.auth.getUser()
-            if (user) {
-                setWalletAddress(user.email || '')
-            }
-        }
-        getWalletDetails()
+        console.log("this is vouchers", marketplaceVouchers);
+        fetchGiftCards();
     }, [])
 
     const handleClaim = async (voucher: Voucher) => {
@@ -290,7 +289,7 @@ export default function Marketplace() {
 
                         {/* Vouchers Section */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                            {vouchers.map((voucher) => (
+                            {marketplaceVouchers.map((voucher) => (
                                 <motion.div
                                     key={voucher.id}
                                     whileHover={{ scale: 1.02 }}

@@ -65,6 +65,7 @@ interface MTLContextType {
     historyTransactions: Transaction[],
     fetchTokenBalance: () => Promise<void>
     fetchHistoryTransactions: () => Promise<void>
+    fetchGiftCards: () => Promise<void>
 }
 interface Transaction {
     gameTitle: string
@@ -83,7 +84,8 @@ const MTLContext = createContext<MTLContextType>({
     games: [],
     historyTransactions: [],
     fetchTokenBalance: async () => { },
-    fetchHistoryTransactions: async () => { }
+    fetchHistoryTransactions: async () => { },
+    fetchGiftCards: async () => { }
 })
 
 const TOKEN_MINT_ADDRESS = "813b3AwivU6uxBicnXdZsCNrfzJy4U3Cr4ejwvH4V1Fz";
@@ -113,6 +115,16 @@ export function MTLProvider({ children }: { children: ReactNode }) {
         const transactions = localStorage.getItem('transactions');
         const parsedTransactions = transactions ? JSON.parse(transactions) : [];
         setHistoryTransactions(parsedTransactions);
+    }
+
+    const fetchGiftCards = async () => {
+        const supabase = await Auth;
+        const { data, error } = await supabase
+            .from('gift_card')
+            .select('*');
+        if (data) {
+            setMarketplaceVouchers(data)
+        }
     }
 
     const TokenBalance = async () => {
@@ -190,8 +202,7 @@ export function MTLProvider({ children }: { children: ReactNode }) {
                 console.log("mtl is ", token);
                 setBalance(token);
 
-                // const supabase = Auth
-                // const { data: { user } } = await supabase.auth.getUser()
+                await fetchGiftCards();
 
                 // if (user) {
                 //     // Fetch user's NFTs
@@ -199,10 +210,7 @@ export function MTLProvider({ children }: { children: ReactNode }) {
                 //     const nftData = await nftResponse.json()
                 //     setOwnedNFTs(nftData)
 
-                //     // Fetch marketplace NFTs
-                //     const marketNFTResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/marketplace/nfts`)
-                //     const marketNFTData = await marketNFTResponse.json()
-                //     setMarketplaceNFTs(marketNFTData)
+
 
                 //     // Fetch marketplace vouchers
                 //     const voucherResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/marketplace/vouchers`)
@@ -224,6 +232,7 @@ export function MTLProvider({ children }: { children: ReactNode }) {
 
     return (
         <MTLContext.Provider value={{
+            fetchGiftCards,
             fetchHistoryTransactions,
             fetchTokenBalance,
             balance,
