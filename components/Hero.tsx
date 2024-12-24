@@ -34,7 +34,7 @@ export default function Hero() {
   // };
 
   const connectWallet = async () => {
-    // window.location.href = '/login'; // Redirect to login page
+    window.location.href = '/mobile'; // Redirect to login page
   };
 
   return (
@@ -110,7 +110,7 @@ export default function Hero() {
               onClick={connectWallet}
               className="btn btn-md lg:btn-lg bg-[#0CC0DF] hover:bg-[#0AA0BF] text-white font-bold text-lg lg:text-xl px-8 lg:px-12 rounded-full"
             >
-              Try MetaLian Dawn Now
+              Mobile Beta Version Live
             </motion.button>
           </motion.div>
         </div>
