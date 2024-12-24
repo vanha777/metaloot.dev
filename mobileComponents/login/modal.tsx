@@ -524,7 +524,7 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
 
                                             <motion.button
                                                 onClick={handleSwap}
-                                                className={`bg-[#0CC0DF]/20 p-3 sm:p-4 rounded-full cursor-pointer ${isExchangeHovered || isSwapping ? 'shadow-lg shadow-[#0CC0DF]/30 ring-2 ring-[#0CC0DF]/50' : ''
+                                                className={`mx-auto inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-[#0CC0DF]/20 rounded-full cursor-pointer ${isExchangeHovered || isSwapping ? 'shadow-lg shadow-[#0CC0DF]/30 ring-2 ring-[#0CC0DF]/50' : ''
                                                     }`}
                                                 animate={{
                                                     rotate: isSwapping ? [0, 360, 0] : (isExchangeHovered ? 360 : 0),
