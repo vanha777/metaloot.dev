@@ -314,14 +314,16 @@ export default function Marketplace() {
                         price: selectedAssets.voucher.price,
                         id: selectedAssets.voucher.id,
                         discount: selectedAssets.voucher.discount,
-                        validUntil: selectedAssets.voucher.validUntil
+                        validUntil: selectedAssets.voucher.validUntil,
+                        e_gift: selectedAssets.voucher.e_gift
                     } : {
                         name: '',
                         image: '',
                         price: 0,
                         id: '',
                         discount: '',
-                        validUntil: ''
+                        validUntil: '',
+                        e_gift: ''
                     },
                     crypto: selectedAssets.crypto ? {
                         name: selectedAssets.crypto.name,

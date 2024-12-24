@@ -135,6 +135,8 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                 const transactions = await transferOut();
                 console.log("this is transsaction signatures ", transactions);
                 setSignatureTransaction(transactions);
+                console.log("this is e_gift", assets[selectedAsset].e_gift);
+                return "success";
             } else if (selectedAsset === 'crypto') {
                 // if (Number(assets[selectedAsset].price) > 0) {
                 //     throw new Error("Not enough funds");
@@ -386,6 +388,27 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                                                     </div>
                                                 </div>
                                             </div>
+
+                                            {/* E-Gift Section */}
+                                            {selectedAsset === 'voucher' && assets[selectedAsset].e_gift && (
+                                                <div className="mt-4 p-4 bg-gray-800/50 rounded-lg">
+                                                    <div className="flex items-center justify-between">
+                                                        <div className="flex items-center gap-2">
+                                                            <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                            </svg>
+                                                            <span className="text-sm text-gray-300">E-Gift Card Available</span>
+                                                        </div>
+                                                        <a 
+                                                            href={assets[selectedAsset].e_gift}
+                                                            download
+                                                            className="px-3 py-1.5 text-sm bg-blue-500 hover:bg-blue-600 text-white rounded-md transition-colors"
+                                                        >
+                                                            Download
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            )}
 
                                             {/* Wallet Notice */}
                                             <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-3 sm:p-4">

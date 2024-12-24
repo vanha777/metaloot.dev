@@ -29,6 +29,7 @@ export interface Voucher {
     validUntil: string
     image: string
     price: number
+    e_gift: string
 }
 
 export interface CryptoRate {
