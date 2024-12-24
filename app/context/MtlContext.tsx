@@ -47,8 +47,11 @@ export interface Game {
     rewards: number
     description: string
     link: string
+    rank: number
     developer?: string
     publisher?: string
+    played?: number
+    rewarded?: number
     releaseDate?: string
     genre?: string
     intro?: string
@@ -77,6 +80,7 @@ interface MTLContextType {
     fetchTokenBalance: () => Promise<void>
     fetchHistoryTransactions: () => Promise<void>
     fetchGiftCards: () => Promise<void>
+    fetchGames: () => Promise<void>
 }
 interface Transaction {
     gameTitle: string
@@ -96,7 +100,8 @@ const MTLContext = createContext<MTLContextType>({
     historyTransactions: [],
     fetchTokenBalance: async () => { },
     fetchHistoryTransactions: async () => { },
-    fetchGiftCards: async () => { }
+    fetchGiftCards: async () => { },
+    fetchGames: async () => { }
 })
 
 const TOKEN_MINT_ADDRESS = "813b3AwivU6uxBicnXdZsCNrfzJy4U3Cr4ejwvH4V1Fz";
@@ -136,6 +141,16 @@ export function MTLProvider({ children }: { children: ReactNode }) {
             .is('claimed_by', null);
         if (data) {
             setMarketplaceVouchers(data)
+        }
+    }
+
+    const fetchGames = async () => {
+        const supabase = await Auth;
+        const { data, error } = await supabase
+            .from('games')
+            .select('*');
+        if (data) {
+            setGames(data)
         }
     }
 
@@ -215,6 +230,7 @@ export function MTLProvider({ children }: { children: ReactNode }) {
                 setBalance(token);
 
                 await fetchGiftCards();
+                await fetchGames();
 
                 // if (user) {
                 //     // Fetch user's NFTs
@@ -245,6 +261,7 @@ export function MTLProvider({ children }: { children: ReactNode }) {
             fetchGiftCards,
             fetchHistoryTransactions,
             fetchTokenBalance,
+            fetchGames,
             balance,
             ownedNFTs,
             marketplaceNFTs,

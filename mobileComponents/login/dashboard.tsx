@@ -340,7 +340,7 @@ export default function Dashboard() {
 
         {/* Main Content */}
         <div className="pt-24 pb-16 px-4">
-          {selectedPlatform === 'games' && <GamesDashboard games={games} />}
+          {selectedPlatform === 'games' && <GamesDashboard />}
           {selectedPlatform === 'marketplace' && <Marketplace />}
           {selectedPlatform === 'wallet' && <Wallet />}
         </div>

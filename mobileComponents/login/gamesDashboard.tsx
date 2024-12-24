@@ -8,34 +8,7 @@ import Details from './details'
 import { transferSplToken } from "../../app/utilities/transfer";
 import { clusterApiUrl, Connection, Keypair, PublicKey } from "@solana/web3.js";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { useMTL } from '../../app/context/MtlContext'
-
-interface Game {
-    id: string
-    title: string
-    image: string
-    platform: 'desktop' | 'mobile' | 'console'
-    description: string
-    link: string
-    rank: number
-    developer?: string
-    publisher?: string
-    releaseDate?: string
-    genre?: string
-    intro?: string
-    trailer?: string
-    gameplay?: string
-    models?: {
-        playToEarn?: {
-            enabled: boolean
-            price?: string
-        }
-        stakeToEarn?: {
-            enabled: boolean
-            price?: string
-        }
-    }
-}
+import { Game, useMTL } from '../../app/context/MtlContext'
 
 const platformIcons = {
     all: <FaGlobe size={32} />,
@@ -44,17 +17,19 @@ const platformIcons = {
     console: <FaGamepad size={32} />
 }
 
-export default function GamesDashboard({ games }: { games: Game[] }) {
+export default function GamesDashboard() {
     const {
         balance,
         ownedNFTs,
         marketplaceNFTs,
         marketplaceVouchers,
         exchangeRates,
+        games,
         fetchTokenBalance,
-        fetchHistoryTransactions
+        fetchHistoryTransactions,
+        fetchGames,
     } = useMTL()
-    const TOKEN_MINT_ADDRESS = "813b3AwivU6uxBicnXdZsCNrfzJy4U3Cr4ejwvH4V1Fz";
+    const TOKEN_MINT_ADDRESS = process.env.NEXT_PUBLIC_TOKEN_MINT_ADDRESS || "813b3AwivU6uxBicnXdZsCNrfzJy4U3Cr4ejwvH4V1Fz";
     const { publicKey, connected, signMessage, sendTransaction } = useWallet();
     const [selectedPlatform, setSelectedPlatform] = useState<'desktop' | 'mobile' | 'console' | 'all'>('all')
     const [searchQuery, setSearchQuery] = useState('')
@@ -63,6 +38,10 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
     const [showModal, setShowModal] = useState(false)
     const [transferStatus, setTransferStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
     const [transferMessage, setTransferMessage] = useState('')
+
+    useEffect(() => {
+        fetchGames();
+    }, [])
 
     useEffect(() => {
         let filtered = games
@@ -226,7 +205,7 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
                                     <div className="flex snap-x snap-mandatory">
                                         {/* Main Game Card */}
                                         <div className="snap-center flex-shrink-0 w-full">
-                                            <div className={`relative h-[350px] rounded-2xl overflow-hidden 
+                                            <div className={`relative h-[400px] rounded-2xl overflow-hidden 
                                                 bg-gradient-to-b from-[#0CC0DF]/10 to-transparent backdrop-blur-sm
                                                 border ${game.rank <= 3 ?
                                                     game.rank === 1 ? 'border-yellow-400' :
@@ -281,7 +260,7 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
 
                                         {/* Game Analytics Card */}
                                         <div className="snap-center flex-shrink-0 w-full">
-                                            <div className={`relative h-[350px] rounded-2xl overflow-hidden bg-gradient-to-r from-gray-900 to-gray-800 backdrop-blur-md border-2 ${game.rank <= 3 ?
+                                            <div className={`relative h-[400px] rounded-2xl overflow-hidden bg-gradient-to-r from-gray-900 to-gray-800 backdrop-blur-md border-2 ${game.rank <= 3 ?
                                                 game.rank === 1 ? 'border-yellow-400' :
                                                 game.rank === 2 ? 'border-gray-400' :
                                                 'border-amber-700' :
@@ -369,7 +348,7 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
                                                                 <span className="text-blue-200">🎮</span>
                                                             </div>
                                                             <div className="text-white font-bold text-lg">
-                                                                1,234
+                                                                {game.played}
                                                             </div>
                                                         </div>
                                                     </motion.div>
@@ -394,7 +373,7 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
                                                                 <span className="text-green-200">💰</span>
                                                             </div>
                                                             <div className="text-white font-bold text-lg">
-                                                                50,000 MTL
+                                                            {game.rewarded} MTL
                                                             </div>
                                                         </div>
                                                     </motion.div>
@@ -404,7 +383,7 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
 
                                         {/* Trailer Card */}
                                         <div className="snap-center flex-shrink-0 w-full">
-                                            <div className={`relative h-[350px] rounded-2xl overflow-hidden bg-gradient-to-r from-gray-900 to-gray-800 backdrop-blur-md border-2 ${game.rank <= 3 ?
+                                            <div className={`relative h-[400px] rounded-2xl overflow-hidden bg-gradient-to-r from-gray-900 to-gray-800 backdrop-blur-md border-2 ${game.rank <= 3 ?
                                                 game.rank === 1 ? 'border-yellow-400' :
                                                 game.rank === 2 ? 'border-gray-400' :
                                                 'border-amber-700' :
@@ -429,7 +408,7 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
 
                                         {/* Gameplay Preview Card */}
                                         <div className="snap-center flex-shrink-0 w-full">
-                                            <div className={`relative h-[350px] rounded-2xl overflow-hidden bg-gradient-to-r from-gray-900 to-gray-800 backdrop-blur-md border-2 ${game.rank <= 3 ?
+                                            <div className={`relative h-[400px] rounded-2xl overflow-hidden bg-gradient-to-r from-gray-900 to-gray-800 backdrop-blur-md border-2 ${game.rank <= 3 ?
                                                 game.rank === 1 ? 'border-yellow-400' :
                                                 game.rank === 2 ? 'border-gray-400' :
                                                 'border-amber-700' :
@@ -455,7 +434,7 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
 
                                         {/* Game Info Card */}
                                         <div className="snap-center flex-shrink-0 w-full">
-                                            <div className={`relative h-[350px] rounded-2xl overflow-hidden bg-gradient-to-r from-gray-900 to-gray-800 backdrop-blur-md border-2 ${game.rank <= 3 ?
+                                            <div className={`relative h-[400px] rounded-2xl overflow-hidden bg-gradient-to-r from-gray-900 to-gray-800 backdrop-blur-md border-2 ${game.rank <= 3 ?
                                                 game.rank === 1 ? 'border-yellow-400' :
                                                 game.rank === 2 ? 'border-gray-400' :
                                                 'border-amber-700' :
