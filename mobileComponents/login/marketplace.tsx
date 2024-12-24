@@ -134,6 +134,7 @@ export default function Marketplace() {
     useEffect(() => {
         console.log("this is vouchers", marketplaceVouchers);
         fetchGiftCards();
+        fetchHistoryTransactions();
     }, [])
 
     const handleClaim = async (voucher: Voucher) => {

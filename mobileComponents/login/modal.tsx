@@ -8,6 +8,7 @@ import { clusterApiUrl, Connection, Keypair, PublicKey, Transaction } from '@sol
 import { createTransferInstruction, getAssociatedTokenAddress } from '@solana/spl-token';
 import { CryptoAsset, NFT, Voucher } from '@/app/context/MtlContext';
 import { useMTL } from '../../app/context/MtlContext'
+import { Auth } from '@/app/auth';
 
 interface Assets {
     voucher: Voucher;
@@ -126,6 +127,24 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
         }
     }
 
+    const removeEGift = async () => {
+        try {
+            const supabase = await Auth;
+            const { data, error } = await supabase.from('gift_card').update({
+                claimed_by: publicKey?.toString()
+            }).eq('id', assets[selectedAsset].id);
+
+            if (error) {
+                throw error;
+            }
+
+            console.log("E-gift removed successfully");
+        } catch (error) {
+            console.error("Error removing e-gift:", error);
+            throw error;
+        }
+    }
+
     const swap = async (): Promise<string> => {
         console.log("swapping now !");
         console.log("selected asset is ", assets[selectedAsset]);
@@ -136,6 +155,8 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                 console.log("this is transsaction signatures ", transactions);
                 setSignatureTransaction(transactions);
                 console.log("this is e_gift", assets[selectedAsset].e_gift);
+                // remove the e_gift from the server
+                removeEGift();
                 return "success";
             } else if (selectedAsset === 'crypto') {
                 // if (Number(assets[selectedAsset].price) > 0) {
@@ -399,7 +420,7 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                                                             </svg>
                                                             <span className="text-sm text-gray-300">E-Gift Card Available</span>
                                                         </div>
-                                                        <a 
+                                                        <a
                                                             href={assets[selectedAsset].e_gift}
                                                             download
                                                             className="px-3 py-1.5 text-sm bg-blue-500 hover:bg-blue-600 text-white rounded-md transition-colors"

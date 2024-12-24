@@ -45,121 +45,121 @@ interface Game {
 }
 
 const games: Game[] = [
-  {
-    id: '1',
-    title: 'GTA V',
-    image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%205.jpeg',
-    platform: 'desktop',
-    rewards: 500,
-    description: 'Battle royale in a neon cyberpunk world',
-    rank: 1,
-    link: 'https://www.halowaypoint.com/en-gb',
-    developer: 'Rockstar North',
-    publisher: 'Rockstar Games',
-    releaseDate: '2013',
-    genre: 'Action-Adventure',
-    intro: 'Welcome to Los Santos, a vast sun-soaked metropolis full of self-help gurus, starlets, and fading celebrities...',
-    trailer: 'https://www.youtube.com/embed/QkkoHAzjnUs',
-    gameplay: 'https://www.youtube.com/embed/3DBrG2YjqQA',
-    models: {
-      playToEarn: {
-        enabled: true,
-        price: "60"
-      },
-      stakeToEarn: {
-        enabled: true,
-        price: "6%"
-      }
-    }
-  },
-  {
-    id: '2',
-    title: 'Rainbow Six',
-    image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%204.jpeg',
-    platform: 'desktop',
-    rewards: 300,
-    rank: 2,
-    description: 'High-stakes racing in the metaverse',
-    link: 'https://www.halowaypoint.com/en-gb',
-    developer: 'Ubisoft Montreal',
-    publisher: 'Ubisoft',
-    releaseDate: '2015',
-    genre: 'Tactical Shooter',
-    intro: 'Rainbow Six Siege is an intense, new approach to the first-person shooter experience...',
-    trailer: 'https://www.youtube.com/embed/6wlvYh0h63k',
-    gameplay: 'https://www.youtube.com/embed/kqDwcjF5gW8',
-    models: {
-      playToEarn: {
-        enabled: true,
-        price: "60"
-      },
-      stakeToEarn: {
-        enabled: true,
-        price: "6%"
-      }
-    }
-  },
-  {
-    id: '3',
-    title: 'Moba War',
-    image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%206.jpeg',
-    platform: 'console',
-    rewards: 400,
-    rank: 3,
-    description: 'Trading card battles with NFT rewards',
-    link: 'https://www.halowaypoint.com/en-gb',
-    developer: 'MetaGames Studio',
-    publisher: 'MetaLoot Games',
-    releaseDate: '2023',
-    genre: 'MOBA',
-    intro: 'Enter a world where strategy meets blockchain in this revolutionary mobile MOBA...',
-    trailer: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-    gameplay: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-    models: {
-      playToEarn: {
-        enabled: true,
-        price: "60"
-      },
-      stakeToEarn: {
-        enabled: true,
-        price: "6%"
-      }
-    }
-  },
-  {
-    id: '4',
-    title: 'Day Gone',
-    image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%207.jpeg',
-    platform: 'console',
-    rewards: 400,
-    rank: 4,
-    description: 'Trading card battles with NFT rewards',
-    link: 'https://www.halowaypoint.com/en-gb',
-    developer: 'Bend Studio',
-    publisher: 'Sony Interactive',
-    releaseDate: '2019',
-    genre: 'Action-Adventure',
-    intro: 'Ride and fight into a deadly, post pandemic America. Play as Deacon St. John, a drifter and bounty hunter...',
-    trailer: 'https://www.youtube.com/embed/FKtaOY9lMvM',
-    gameplay: 'https://www.youtube.com/embed/qh8yJMN9Wts',
-    models: {
-      playToEarn: {
-        enabled: true,
-        price: "60"
-      },
-      stakeToEarn: {
-        enabled: true,
-        price: "6%"
-      }
-    }
-  },
+  // {
+  //   id: '1',
+  //   title: 'GTA V',
+  //   image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%205.jpeg',
+  //   platform: 'desktop',
+  //   rewards: 500,
+  //   description: 'Battle royale in a neon cyberpunk world',
+  //   rank: 1,
+  //   link: 'https://www.halowaypoint.com/en-gb',
+  //   developer: 'Rockstar North',
+  //   publisher: 'Rockstar Games',
+  //   releaseDate: '2013',
+  //   genre: 'Action-Adventure',
+  //   intro: 'Welcome to Los Santos, a vast sun-soaked metropolis full of self-help gurus, starlets, and fading celebrities...',
+  //   trailer: 'https://www.youtube.com/embed/QkkoHAzjnUs',
+  //   gameplay: 'https://www.youtube.com/embed/3DBrG2YjqQA',
+  //   models: {
+  //     playToEarn: {
+  //       enabled: true,
+  //       price: "60"
+  //     },
+  //     stakeToEarn: {
+  //       enabled: true,
+  //       price: "6%"
+  //     }
+  //   }
+  // },
+  // {
+  //   id: '2',
+  //   title: 'Rainbow Six',
+  //   image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%204.jpeg',
+  //   platform: 'desktop',
+  //   rewards: 300,
+  //   rank: 2,
+  //   description: 'High-stakes racing in the metaverse',
+  //   link: 'https://www.halowaypoint.com/en-gb',
+  //   developer: 'Ubisoft Montreal',
+  //   publisher: 'Ubisoft',
+  //   releaseDate: '2015',
+  //   genre: 'Tactical Shooter',
+  //   intro: 'Rainbow Six Siege is an intense, new approach to the first-person shooter experience...',
+  //   trailer: 'https://www.youtube.com/embed/6wlvYh0h63k',
+  //   gameplay: 'https://www.youtube.com/embed/kqDwcjF5gW8',
+  //   models: {
+  //     playToEarn: {
+  //       enabled: true,
+  //       price: "60"
+  //     },
+  //     stakeToEarn: {
+  //       enabled: true,
+  //       price: "6%"
+  //     }
+  //   }
+  // },
+  // {
+  //   id: '3',
+  //   title: 'Moba War',
+  //   image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%206.jpeg',
+  //   platform: 'console',
+  //   rewards: 400,
+  //   rank: 3,
+  //   description: 'Trading card battles with NFT rewards',
+  //   link: 'https://www.halowaypoint.com/en-gb',
+  //   developer: 'MetaGames Studio',
+  //   publisher: 'MetaLoot Games',
+  //   releaseDate: '2023',
+  //   genre: 'MOBA',
+  //   intro: 'Enter a world where strategy meets blockchain in this revolutionary mobile MOBA...',
+  //   trailer: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+  //   gameplay: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+  //   models: {
+  //     playToEarn: {
+  //       enabled: true,
+  //       price: "60"
+  //     },
+  //     stakeToEarn: {
+  //       enabled: true,
+  //       price: "6%"
+  //     }
+  //   }
+  // },
+  // {
+  //   id: '4',
+  //   title: 'Day Gone',
+  //   image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%207.jpeg',
+  //   platform: 'console',
+  //   rewards: 400,
+  //   rank: 4,
+  //   description: 'Trading card battles with NFT rewards',
+  //   link: 'https://www.halowaypoint.com/en-gb',
+  //   developer: 'Bend Studio',
+  //   publisher: 'Sony Interactive',
+  //   releaseDate: '2019',
+  //   genre: 'Action-Adventure',
+  //   intro: 'Ride and fight into a deadly, post pandemic America. Play as Deacon St. John, a drifter and bounty hunter...',
+  //   trailer: 'https://www.youtube.com/embed/FKtaOY9lMvM',
+  //   gameplay: 'https://www.youtube.com/embed/qh8yJMN9Wts',
+  //   models: {
+  //     playToEarn: {
+  //       enabled: true,
+  //       price: "60"
+  //     },
+  //     stakeToEarn: {
+  //       enabled: true,
+  //       price: "6%"
+  //     }
+  //   }
+  // },
   {
     id: '5',
     title: 'Speed Master',
     image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Untitled%20design-9.png',
     platform: 'mobile',
     rewards: 400,
-    rank: 5,
+    rank: 1,
     description: "Accelerate to Dominate in Speed Master - the Ultimate Car Racing Challenge! Speed Master is not just another car game; it's your ticket to an adrenaline-pumping journey on an endless track. Imagine this: the roar of engines, the thrill of speed, and a road that stretches into eternity. You're not just driving; you're competing. Collect cash, dodge obstacles, and smash through competitors to upgrade your ride. Every hit scores points, pushing you closer to the ultimate upgrade. It's fast, furious, and utterly addictive. Your mission? To outpace, outsmart, and outlast your rivals in a high-speed quest for glory. So, buckle up and get ready to unleash the Speed Master within!'",
     link: 'https://play.famobi.com/speed-master/A1000-10',
     developer: '©2014-2024 HTML5games.com',
@@ -186,7 +186,7 @@ const games: Game[] = [
     link: 'https://play.famobi.com/om-nom-run/A1000-10',
     developer: '©2014-2024 HTML5games.com',
     publisher: 'Famobi',
-    rank: 6,
+    rank: 2,
     releaseDate: 'N/A',
     genre: 'Arcade',
     intro: "Run alongside Om Nom in his famous adventure",
@@ -210,7 +210,7 @@ const games: Game[] = [
     developer: '©2014-2024 HTML5games.com',
     publisher: 'Famobi',
     releaseDate: 'N/A',
-    rank: 7,
+    rank: 3,
     genre: 'Arcade',
     intro: "Slide to survive and fly to thrive in Pengu Slide",
     trailer: 'https://www.youtube.com/embed/tX6PRa_is_Q?si=8v4mvcRLTC-6eORJ',

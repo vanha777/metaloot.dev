@@ -132,7 +132,8 @@ export function MTLProvider({ children }: { children: ReactNode }) {
         const supabase = await Auth;
         const { data, error } = await supabase
             .from('gift_card')
-            .select('*');
+            .select('*')
+            .is('claimed_by', null);
         if (data) {
             setMarketplaceVouchers(data)
         }
@@ -220,8 +221,6 @@ export function MTLProvider({ children }: { children: ReactNode }) {
                 //     const nftResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/nfts/${user.id}`)
                 //     const nftData = await nftResponse.json()
                 //     setOwnedNFTs(nftData)
-
-
 
                 //     // Fetch marketplace vouchers
                 //     const voucherResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/marketplace/vouchers`)
