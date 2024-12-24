@@ -134,7 +134,7 @@ export default function Marketplace() {
     useEffect(() => {
         console.log("this is vouchers", marketplaceVouchers);
         fetchGiftCards();
-        fetchHistoryTransactions();
+        // fetchHistoryTransactions();
     }, [])
 
     const handleClaim = async (voucher: Voucher) => {
@@ -203,7 +203,9 @@ export default function Marketplace() {
                 before:bg-gradient-to-r before:from-gray-900 before:to-gray-800 before:z-[-1]
                 hover:border-[#0CC0DF]/60 transition-colors duration-300`}
                     >
-                        {tabIcons[tab]}
+                        <div className="flex justify-center">
+                            {tabIcons[tab]}
+                        </div>
                     </motion.button>
                 ))}
             </div>
