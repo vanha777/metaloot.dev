@@ -29,6 +29,7 @@ export default function GamesDashboard() {
         fetchTokenBalance,
         fetchHistoryTransactions,
         fetchGames,
+        updateGameStats
     } = useMTL()
     const TOKEN_MINT_ADDRESS = process.env.NEXT_PUBLIC_TOKEN_MINT_ADDRESS || "813b3AwivU6uxBicnXdZsCNrfzJy4U3Cr4ejwvH4V1Fz";
     const { publicKey, connected, signMessage, sendTransaction } = useWallet();
@@ -97,33 +98,34 @@ export default function GamesDashboard() {
             const tokenMint = new PublicKey(TOKEN_MINT_ADDRESS);
             const destPublicKey = new PublicKey(publicKey);
 
-            const tokenAccounts = await connection.getParsedTokenAccountsByOwner(destPublicKey, {
-                mint: tokenMint
-            });
-
-            if (tokenAccounts.value.length) {
-                const tokenAccountAddress = tokenAccounts.value[0].pubkey.toBase58();
-                let signatures = await connection.getSignaturesForAddress(
-                    new PublicKey(tokenAccountAddress),
-                    { limit: 10 }
-                );
-                let receiveCount = 0;
-                for (let sig of signatures) {
-                    const tx = await connection.getParsedTransaction(sig.signature, {
-                        maxSupportedTransactionVersion: 0
-                    });
-                    if (tx?.blockTime &&
-                        (Date.now() / 1000 - tx.blockTime) < 24 * 60 * 60) {
-                        receiveCount++;
-                    }
-                }
-                if (receiveCount >= 10) {
-                    setTransferStatus('error')
-                    setTransferMessage('Daily claim limit reached (10 times per 24 hours)')
-                    saveLocalStorage(focusedGame!, 'error', 'Daily claim limit reached (10 times per 24 hours)');
-                    return;
-                }
-            }
+            // Limit claims to 10 per 24 hours
+            // const tokenAccounts = await connection.getParsedTokenAccountsByOwner(destPublicKey, {
+            //     mint: tokenMint
+            // });
+            // if (tokenAccounts.value.length) {
+            //     const tokenAccountAddress = tokenAccounts.value[0].pubkey.toBase58();
+            //     let signatures = await connection.getSignaturesForAddress(
+            //         new PublicKey(tokenAccountAddress),
+            //         { limit: 10 }
+            //     );
+            //     let receiveCount = 0;
+            //     for (let sig of signatures) {
+            //         const tx = await connection.getParsedTransaction(sig.signature, {
+            //             maxSupportedTransactionVersion: 0
+            //         });
+            //         if (tx?.blockTime &&
+            //             (Date.now() / 1000 - tx.blockTime) < 24 * 60 * 60) {
+            //             receiveCount++;
+            //         }
+            //     }
+            //     if (receiveCount >= 10) {
+            //         setTransferStatus('error')
+            //         setTransferMessage('Daily claim limit reached (10 times per 24 hours)')
+            //         saveLocalStorage(focusedGame!, 'error', 'Daily claim limit reached (10 times per 24 hours)');
+            //         return;
+            //     }
+            // }
+            // end.
 
             const senderKeypair = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(process.env.NEXT_PUBLIC_METALOOT_KEY!)));
             const amount = Math.round(rewarding * 10 ** 9);
@@ -139,7 +141,6 @@ export default function GamesDashboard() {
             setTransferMessage(splSignature.toString())
             fetchTokenBalance();
             saveLocalStorage(focusedGame!, 'success', `${amount / 10 ** 9} MTL tokens claimed successfully`);
-
         } catch (error) {
             console.error("Transfer Error:", error);
             setTransferStatus('error')
@@ -155,6 +156,11 @@ export default function GamesDashboard() {
     const onGetRewards = async (game: Game) => {
         redirect(game.link || '');
         await transferMTL();
+        updateGameStats(
+            focusedGame!.id,
+            (focusedGame!.played || 0) + 1,
+            (focusedGame!.rewarded || 0) + (focusedGame?.models?.playToEarn?.price || 0)
+        );
     }
 
     return (
@@ -707,3 +713,4 @@ export default function GamesDashboard() {
         </div>
     )
 }
+

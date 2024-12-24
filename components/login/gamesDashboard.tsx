@@ -8,32 +8,7 @@ import Details from './details'
 import { transferSplToken } from "../../app/utilities/transfer";
 import { clusterApiUrl, Connection, Keypair, PublicKey } from "@solana/web3.js";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { useMTL } from '../../app/context/MtlContext'
-interface Game {
-    id: string
-    title: string
-    image: string
-    platform: 'desktop' | 'mobile' | 'console'
-    description: string
-    link: string
-    developer?: string
-    publisher?: string
-    releaseDate?: string
-    genre?: string
-    intro?: string
-    trailer?: string
-    gameplay?: string
-    models?: {
-        playToEarn?: {
-            enabled: boolean
-            price?: string
-        }
-        stakeToEarn?: {
-            enabled: boolean
-            price?: string
-        }
-    }
-}
+import { Game, useMTL } from '../../app/context/MtlContext'
 
 const platformIcons = {
     all: <FaGlobe size={64} />,
@@ -50,7 +25,7 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
         marketplaceVouchers,
         exchangeRates,
         fetchTokenBalance,
-        fetchHistoryTransactions
+        fetchHistoryTransactions,
     } = useMTL()
     const TOKEN_MINT_ADDRESS = "813b3AwivU6uxBicnXdZsCNrfzJy4U3Cr4ejwvH4V1Fz";
     const { publicKey, connected, signMessage, sendTransaction } = useWallet();
@@ -153,8 +128,7 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
             setTransferMessage(splSignature.toString())
             console.log("MTL Token Transaction Signature:", splSignature);
             fetchTokenBalance();
-            saveLocalStorage(focusedGame!.title, focusedGame!.id, 'success', `${amount / 10**9} MTL tokens claimed successfully`);
-
+            saveLocalStorage(focusedGame!.title, focusedGame!.id, 'success', `${amount / 10 ** 9} MTL tokens claimed successfully`);
         } catch (error) {
             console.error("Transfer Error:", error);
             setTransferStatus('error')
@@ -247,7 +221,7 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
 
             {/* Game Details Section */}
             {focusedGame && (
-                <Details focusedGame={focusedGame} />
+                <Details game={focusedGame} />
             )}
 
             {/* Transfer Modal */}

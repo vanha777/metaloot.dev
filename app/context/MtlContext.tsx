@@ -81,6 +81,7 @@ interface MTLContextType {
     fetchHistoryTransactions: () => Promise<void>
     fetchGiftCards: () => Promise<void>
     fetchGames: (platform?: 'desktop' | 'mobile' | 'console') => Promise<void>
+    updateGameStats: (gameId: string, played?: number, rewarded?: number) => Promise<void>
 }
 interface Transaction {
     gameTitle: string
@@ -101,7 +102,8 @@ const MTLContext = createContext<MTLContextType>({
     fetchTokenBalance: async () => { },
     fetchHistoryTransactions: async () => { },
     fetchGiftCards: async () => { },
-    fetchGames: async () => { }
+    fetchGames: async () => { },
+    updateGameStats: async () => { }
 })
 
 const TOKEN_MINT_ADDRESS = "813b3AwivU6uxBicnXdZsCNrfzJy4U3Cr4ejwvH4V1Fz";
@@ -147,15 +149,48 @@ export function MTLProvider({ children }: { children: ReactNode }) {
     const fetchGames = async (platform?: 'desktop' | 'mobile' | 'console') => {
         const supabase = await Auth;
         let query = supabase.from('games').select('*');
-        
+
         if (platform) {
             query = query.eq('platform', platform);
         }
-        
+
+        // Add ordering by rank in ascending order
+        query = query.order('rank', { ascending: true });
+
         const { data, error } = await query;
         if (data) {
             setGames(data)
         }
+    }
+
+    const updateGameStats = async (gameId: string, played?: number, rewarded?: number) => {
+        console.log("updating game stats ", gameId, played, rewarded);
+        const supabase = await Auth;
+        const updates: any = {};
+
+        if (played !== undefined) {
+            updates.played = played;
+        }
+        if (rewarded !== undefined) {
+            updates.rewarded = rewarded;
+        }
+
+        const { data, error } = await supabase
+            .from('games')
+            .update(updates)
+            .eq('id', gameId);
+
+        if (data) {
+            console.error('Success updated game stats:', gameId);
+        }
+
+        if (error) {
+            console.error('Error updating game stats:', error);
+            throw error;
+        }
+
+        // Refresh games data after update
+        await fetchGames();
     }
 
     const TokenBalance = async () => {
@@ -266,6 +301,7 @@ export function MTLProvider({ children }: { children: ReactNode }) {
             fetchHistoryTransactions,
             fetchTokenBalance,
             fetchGames,
+            updateGameStats,
             balance,
             ownedNFTs,
             marketplaceNFTs,

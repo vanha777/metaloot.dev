@@ -1,32 +1,14 @@
 'use client'
 
+import { Game } from '@/app/context/MtlContext'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 
 interface DetailsProps {
-  focusedGame: {
-    intro?: string
-    developer?: string
-    publisher?: string
-    releaseDate?: string
-    genre?: string
-    models?: {
-      playToEarn?: {
-        enabled: boolean
-        price?: string
-      }
-      stakeToEarn?: {
-        enabled: boolean
-        price?: string
-      }
-    }
-    trailer?: string
-    gameplay?: string
-    title?: string
-  }
+  game: Game
 }
 
-export default function Details({ focusedGame }: DetailsProps) {
+export default function Details({ game }: DetailsProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -38,7 +20,7 @@ export default function Details({ focusedGame }: DetailsProps) {
         className="bg-gradient-to-r from-gray-900 to-gray-800
                    backdrop-blur-md rounded-xl p-6 border-2 border-gray-700 transition-colors duration-300"
       >
-        {focusedGame.models && (
+        {game.models && (
           <div className="mb-8">
             <div className="flex items-center gap-2 mb-4">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-[#0CC0DF]" viewBox="0 0 20 20" fill="currentColor">
@@ -49,7 +31,7 @@ export default function Details({ focusedGame }: DetailsProps) {
             </div>
             <div className="border-b border-[#0CC0DF]/30 mb-4"></div>
             <div className="grid grid-cols-2 gap-4">
-              {focusedGame.models.playToEarn?.enabled && (
+              {game.models.playToEarn?.enabled && (
                 <motion.div
                   whileHover={{ scale: 1.03 }}
                   className="relative overflow-hidden bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-500 p-4 rounded-xl shadow-lg"
@@ -73,12 +55,12 @@ export default function Details({ focusedGame }: DetailsProps) {
                       </div>
                     </div>
                     <div className="text-white font-bold text-2xl">
-                      ${focusedGame.models.playToEarn.price || 0}
+                      ${game.models.playToEarn.price || 0}
                     </div>
                   </div>
                 </motion.div>
               )}
-              {focusedGame.models.stakeToEarn?.enabled && (
+              {game.models.stakeToEarn?.enabled && (
                 <motion.div
                   whileHover={{ scale: 1.03 }}
                   className="relative overflow-hidden bg-gradient-to-r from-purple-600 via-violet-600 to-indigo-600 p-4 rounded-xl shadow-lg"
@@ -102,7 +84,7 @@ export default function Details({ focusedGame }: DetailsProps) {
                       </div>
                     </div>
                     <div className="text-white font-bold text-2xl">
-                      ${focusedGame.models.stakeToEarn.price || 0}
+                      ${game.models.stakeToEarn.price || 0}
                     </div>
                   </div>
                 </motion.div>
@@ -121,19 +103,19 @@ export default function Details({ focusedGame }: DetailsProps) {
         <div className="grid grid-cols-2 gap-6">
           <div>
             <p className="text-[#0CC0DF] text-sm font-medium mb-1">Developer</p>
-            <p className="text-white">{focusedGame.developer}</p>
+            <p className="text-white">{game.developer}</p>
           </div>
           <div>
             <p className="text-[#0CC0DF] text-sm font-medium mb-1">Publisher</p>
-            <p className="text-white">{focusedGame.publisher}</p>
+            <p className="text-white">{game.publisher}</p>
           </div>
           <div>
             <p className="text-[#0CC0DF] text-sm font-medium mb-1">Release Date</p>
-            <p className="text-white">{focusedGame.releaseDate}</p>
+            <p className="text-white">{game.releaseDate}</p>
           </div>
           <div>
             <p className="text-[#0CC0DF] text-sm font-medium mb-1">Genre</p>
-            <p className="text-white">{focusedGame.genre}</p>
+            <p className="text-white">{game.genre}</p>
           </div>
         </div>
       </motion.div>
@@ -153,8 +135,8 @@ export default function Details({ focusedGame }: DetailsProps) {
         <div className="aspect-video w-full">
           <iframe
             className="w-full h-full rounded-xl"
-            src={focusedGame.trailer}
-            title={`${focusedGame.title} Trailer`}
+            src={game.trailer}
+            title={`${game.title} Trailer`}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
           />
@@ -177,8 +159,8 @@ export default function Details({ focusedGame }: DetailsProps) {
         <div className="aspect-video w-full">
           <iframe
             className="w-full h-full rounded-xl"
-            src={focusedGame.gameplay}
-            title={`${focusedGame.title} Gameplay`}
+            src={game.gameplay}
+            title={`${game.title} Gameplay`}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
           />
