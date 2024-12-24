@@ -8,6 +8,7 @@ import { Canvas } from '@react-three/fiber'
 import { Environment, Float, PerspectiveCamera } from '@react-three/drei'
 import { FaBitcoin, FaEthereum, FaWallet, FaShoppingCart, FaTicketAlt, FaStore, FaCoins, FaTicketAlt as FaTicket } from 'react-icons/fa'
 import { SiSolana, SiTether } from 'react-icons/si'
+import { GiSpinningSword,GiToken } from "react-icons/gi";
 import Modal from './modal'
 import { CryptoAsset, NFT, useMTL, Voucher } from '../../app/context/MtlContext'
 import { transferSplToken } from "../../app/utilities/transfer";
@@ -77,44 +78,9 @@ const cryptoAssets: CryptoAsset[] = [
     }
 ]
 
-// const vouchers: Voucher[] = [
-//     {
-//         id: '1',
-//         title: '50% Off Jetstar',
-//         discount: '50%',
-//         validUntil: '2024-12-31',
-//         image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%2010.jpeg',
-//         price: 100
-//     },
-//     {
-//         id: '2',
-//         title: '30% Off Bunnings',
-//         discount: '30%',
-//         validUntil: '2024-12-31',
-//         image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%2012.jpeg',
-//         price: 100
-//     },
-//     {
-//         id: '3',
-//         title: '10% Off Coles',
-//         discount: '10%',
-//         validUntil: '2024-12-31',
-//         image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%2013.jpeg',
-//         price: 100
-//     },
-//     {
-//         id: '4',
-//         title: '10% Off Woolworths',
-//         discount: '10%',
-//         validUntil: '2024-12-31',
-//         image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%2015.jpeg',
-//         price: 100
-//     },
-// ]
-
 const tabIcons = {
-    nfts: <FaStore size={32} />,
-    deals: <FaCoins size={32} />
+    nfts: <GiSpinningSword size={32} />,
+    deals: <GiToken size={32} />
 }
 
 export default function Marketplace() {

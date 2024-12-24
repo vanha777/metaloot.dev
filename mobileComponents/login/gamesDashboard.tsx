@@ -2,7 +2,11 @@
 
 import { motion } from 'framer-motion'
 import Image from 'next/image'
-import { FaDesktop, FaMobile, FaGamepad, FaGlobe, FaTimes, FaSearch } from 'react-icons/fa'
+import { FaDesktop, FaMobile, FaGamepad, FaGlobe, FaTimes, FaSearch, } from 'react-icons/fa'
+import { SiApplearcade, SiTindie, SiRockstargames } from "react-icons/si";
+import { PiPlanetFill } from "react-icons/pi";
+import { GiCardAceHearts } from "react-icons/gi";
+import { MdSportsFootball } from "react-icons/md";
 import { useState, useEffect } from 'react'
 import Details from './details'
 import { transferSplToken } from "../../app/utilities/transfer";
@@ -11,11 +15,11 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { Game, useMTL } from '../../app/context/MtlContext'
 
 const platformIcons = {
-    all: <FaGlobe size={32} />,
-    arcade: <FaDesktop size={32} />,
-    rpg: <FaMobile size={32} />,
-    indie: <FaMobile size={32} />,
-    card: <FaGamepad size={32} />
+    all: <PiPlanetFill  size={32} />,
+    arcade: <SiApplearcade size={32} />,
+    rpg: <SiRockstargames size={32} />,
+    indie: <MdSportsFootball size={32} />,
+    card: <GiCardAceHearts size={32} />
 }
 
 export default function GamesDashboard() {

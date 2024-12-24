@@ -14,34 +14,7 @@ import Wallet from './wallet'
 import { Connection, PublicKey, clusterApiUrl } from "@solana/web3.js";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
-import { useMTL } from '../../app/context/MtlContext'
-
-interface Game {
-  id: string
-  title: string
-  image: string
-  platform: 'desktop' | 'mobile' | 'console'
-  rewards: number
-  description: string
-  link: string
-  developer?: string
-  publisher?: string
-  releaseDate?: string
-  genre?: string
-  intro?: string
-  trailer?: string
-  gameplay?: string
-  models?: {
-    playToEarn?: {
-      enabled: boolean
-      price?: string
-    }
-    stakeToEarn?: {
-      enabled: boolean
-      price?: string
-    }
-  }
-}
+import { Game, useMTL } from '../../app/context/MtlContext'
 
 const games: Game[] = [
   {
@@ -54,6 +27,7 @@ const games: Game[] = [
     link: 'https://www.halowaypoint.com/en-gb',
     developer: 'Rockstar North',
     publisher: 'Rockstar Games',
+    rank: 1,
     releaseDate: '2013',
     genre: 'Action-Adventure',
     intro: 'Welcome to Los Santos, a vast sun-soaked metropolis full of self-help gurus, starlets, and fading celebrities...',
@@ -62,7 +36,7 @@ const games: Game[] = [
     models: {
       playToEarn: {
         enabled: true,
-        price: "60"
+        price: 60
       },
       stakeToEarn: {
         enabled: true,
@@ -81,6 +55,7 @@ const games: Game[] = [
     developer: 'Ubisoft Montreal',
     publisher: 'Ubisoft',
     releaseDate: '2015',
+    rank:2,
     genre: 'Tactical Shooter',
     intro: 'Rainbow Six Siege is an intense, new approach to the first-person shooter experience...',
     trailer: 'https://www.youtube.com/embed/6wlvYh0h63k',
@@ -88,7 +63,7 @@ const games: Game[] = [
     models: {
       playToEarn: {
         enabled: true,
-        price: "60"
+        price: 60
       },
       stakeToEarn: {
         enabled: true,
@@ -106,6 +81,7 @@ const games: Game[] = [
     link: 'https://www.halowaypoint.com/en-gb',
     developer: 'MetaGames Studio',
     publisher: 'MetaLoot Games',
+    rank:3,
     releaseDate: '2023',
     genre: 'MOBA',
     intro: 'Enter a world where strategy meets blockchain in this revolutionary mobile MOBA...',
@@ -114,7 +90,7 @@ const games: Game[] = [
     models: {
       playToEarn: {
         enabled: true,
-        price: "60"
+        price: 60
       },
       stakeToEarn: {
         enabled: true,
@@ -133,6 +109,7 @@ const games: Game[] = [
     developer: 'Bend Studio',
     publisher: 'Sony Interactive',
     releaseDate: '2019',
+    rank:4,
     genre: 'Action-Adventure',
     intro: 'Ride and fight into a deadly, post pandemic America. Play as Deacon St. John, a drifter and bounty hunter...',
     trailer: 'https://www.youtube.com/embed/FKtaOY9lMvM',
@@ -140,7 +117,7 @@ const games: Game[] = [
     models: {
       playToEarn: {
         enabled: true,
-        price: "60"
+        price: 60
       },
       stakeToEarn: {
         enabled: true,
@@ -159,6 +136,7 @@ const games: Game[] = [
     developer: '©2014-2024 HTML5games.com',
     publisher: 'Famobi',
     releaseDate: 'N/A',
+    rank:5,
     genre: 'Arcade',
     intro: "Accelerate to Dominate in Speed Master",
     trailer: 'https://www.youtube.com/embed/jQPYGCzCg9I?si=bFHwDpJQDWd0kkZv',
@@ -166,7 +144,7 @@ const games: Game[] = [
     models: {
       playToEarn: {
         enabled: true,
-        price: "100"
+        price: 100
       }
     }
   },
@@ -181,6 +159,7 @@ const games: Game[] = [
     developer: '©2014-2024 HTML5games.com',
     publisher: 'Famobi',
     releaseDate: 'N/A',
+    rank:6,
     genre: 'Arcade',
     intro: "Run alongside Om Nom in his famous adventure",
     trailer: 'https://www.youtube.com/embed/tX6PRa_is_Q?si=8v4mvcRLTC-6eORJ',
@@ -188,7 +167,7 @@ const games: Game[] = [
     models: {
       playToEarn: {
         enabled: true,
-        price: "100"
+        price: 100
       }
     }
   },
@@ -202,6 +181,7 @@ const games: Game[] = [
     link: 'https://play.famobi.com/pengu-slide/A1000-10',
     developer: '©2014-2024 HTML5games.com',
     publisher: 'Famobi',
+    rank:7,
     releaseDate: 'N/A',
     genre: 'Arcade',
     intro: "Slide to survive and fly to thrive in Pengu Slide",
@@ -210,7 +190,7 @@ const games: Game[] = [
     models: {
       playToEarn: {
         enabled: true,
-        price: "100"
+        price: 100
       }
     }
   }

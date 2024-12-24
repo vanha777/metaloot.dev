@@ -31,7 +31,7 @@ interface CryptoAsset {
 const nfts: NFT[] = [
     {
         id: '1',
-        name: 'Bravery Medal #1347',
+        name: 'Pilot Wave Medal #1347',
         image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/rb_27087.png',
         description: 'Bravery Medal NFT',
         price: 0.5,

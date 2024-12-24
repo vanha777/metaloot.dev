@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { FaBitcoin, FaEthereum, FaExchangeAlt, FaTimes } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SiSolana, SiTether } from 'react-icons/si';
+import { GiSwitchWeapon } from "react-icons/gi";
 import { useWallet } from '@solana/wallet-adapter-react';
 import { clusterApiUrl, Connection, Keypair, PublicKey, Transaction } from '@solana/web3.js';
 import { createTransferInstruction, getAssociatedTokenAddress } from '@solana/spl-token';
@@ -565,7 +566,7 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                                                         </svg>
                                                     </motion.div>
                                                 ) : (
-                                                    <FaExchangeAlt className="text-[#0CC0DF] text-2xl sm:text-3xl" />
+                                                    <GiSwitchWeapon className="text-[#0CC0DF] text-2xl sm:text-3xl" />
                                                 )}
                                             </motion.button>
 
