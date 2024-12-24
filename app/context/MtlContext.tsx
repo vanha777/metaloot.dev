@@ -60,11 +60,11 @@ export interface Game {
     models?: {
         playToEarn?: {
             enabled: boolean
-            price?: string
+            price: number
         }
         stakeToEarn?: {
             enabled: boolean
-            price?: string
+            price: string
         }
     }
 }
@@ -80,7 +80,7 @@ interface MTLContextType {
     fetchTokenBalance: () => Promise<void>
     fetchHistoryTransactions: () => Promise<void>
     fetchGiftCards: () => Promise<void>
-    fetchGames: () => Promise<void>
+    fetchGames: (platform?: 'desktop' | 'mobile' | 'console') => Promise<void>
 }
 interface Transaction {
     gameTitle: string
@@ -144,11 +144,15 @@ export function MTLProvider({ children }: { children: ReactNode }) {
         }
     }
 
-    const fetchGames = async () => {
+    const fetchGames = async (platform?: 'desktop' | 'mobile' | 'console') => {
         const supabase = await Auth;
-        const { data, error } = await supabase
-            .from('games')
-            .select('*');
+        let query = supabase.from('games').select('*');
+        
+        if (platform) {
+            query = query.eq('platform', platform);
+        }
+        
+        const { data, error } = await query;
         if (data) {
             setGames(data)
         }

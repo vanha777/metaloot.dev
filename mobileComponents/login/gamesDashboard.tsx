@@ -12,9 +12,10 @@ import { Game, useMTL } from '../../app/context/MtlContext'
 
 const platformIcons = {
     all: <FaGlobe size={32} />,
-    desktop: <FaDesktop size={32} />,
-    mobile: <FaMobile size={32} />,
-    console: <FaGamepad size={32} />
+    arcade: <FaDesktop size={32} />,
+    rpg: <FaMobile size={32} />,
+    indie: <FaMobile size={32} />,
+    card: <FaGamepad size={32} />
 }
 
 export default function GamesDashboard() {
@@ -31,7 +32,7 @@ export default function GamesDashboard() {
     } = useMTL()
     const TOKEN_MINT_ADDRESS = process.env.NEXT_PUBLIC_TOKEN_MINT_ADDRESS || "813b3AwivU6uxBicnXdZsCNrfzJy4U3Cr4ejwvH4V1Fz";
     const { publicKey, connected, signMessage, sendTransaction } = useWallet();
-    const [selectedPlatform, setSelectedPlatform] = useState<'desktop' | 'mobile' | 'console' | 'all'>('all')
+    const [selectedGenre, setSelectedGenre] = useState<'arcade' | 'rpg' | 'indie' | 'card' | 'all'>('all')
     const [searchQuery, setSearchQuery] = useState('')
     const [focusedGame, setFocusedGame] = useState<Game | null>(null)
     const [filteredGames, setFilteredGames] = useState<Game[]>(games)
@@ -45,8 +46,8 @@ export default function GamesDashboard() {
 
     useEffect(() => {
         let filtered = games
-        if (selectedPlatform !== 'all') {
-            filtered = filtered.filter(game => game.platform === selectedPlatform)
+        if (selectedGenre !== 'all') {
+            filtered = filtered.filter(game => game.genre === selectedGenre)
         }
         if (searchQuery) {
             filtered = filtered.filter(game =>
@@ -55,7 +56,7 @@ export default function GamesDashboard() {
         }
         setFilteredGames(filtered)
         setFocusedGame(null)
-    }, [selectedPlatform, searchQuery, games])
+    }, [selectedGenre, searchQuery, games])
 
     const onGameFocus = (game: Game) => {
         setFocusedGame(focusedGame?.id === game.id ? null : game)
@@ -76,6 +77,12 @@ export default function GamesDashboard() {
 
     const transferMTL = async () => {
         setShowModal(true);
+        const rewarding = focusedGame?.models?.playToEarn?.price;
+        if (!rewarding) {
+            // setTransferStatus('error')
+            // setTransferMessage('No reward amount configured for this game')
+            return;
+        }
         if (!publicKey) {
             setTransferStatus('error')
             setTransferMessage('Wallet not connected')
@@ -119,7 +126,7 @@ export default function GamesDashboard() {
             }
 
             const senderKeypair = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(process.env.NEXT_PUBLIC_METALOOT_KEY!)));
-            const amount = Math.round(1000 * 10 ** 9);
+            const amount = Math.round(rewarding * 10 ** 9);
 
             const splSignature = await transferSplToken(
                 senderKeypair,
@@ -155,14 +162,14 @@ export default function GamesDashboard() {
             {/* Platform Filter and Search */}
             <div className="flex flex-col gap-4 mb-8">
                 <div className="flex gap-4 p-4 overflow-x-auto">
-                    {Object.entries(platformIcons).map(([platform, icon]) => (
+                    {Object.entries(platformIcons).map(([genre, icon]) => (
                         <motion.button
-                            key={platform}
+                            key={genre}
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            onClick={() => setSelectedPlatform(platform as 'desktop' | 'mobile' | 'console' | 'all')}
+                            onClick={() => setSelectedGenre(genre as 'arcade' | 'rpg' | 'indie' | 'card' | 'all')}
                             className={`px-6 py-4 rounded-[3rem] backdrop-blur-sm relative flex-shrink-0
-                                ${selectedPlatform === platform
+                                ${selectedGenre === genre
                                     ? 'border-4 border-[#0CC0DF] text-[#0CC0DF] shadow-lg shadow-[#0CC0DF]/30'
                                     : 'border-2 border-white/30 text-white'} 
                                 before:content-[""] before:absolute before:inset-0 before:rounded-[3rem] 
@@ -209,8 +216,8 @@ export default function GamesDashboard() {
                                                 bg-gradient-to-b from-[#0CC0DF]/10 to-transparent backdrop-blur-sm
                                                 border ${game.rank <= 3 ?
                                                     game.rank === 1 ? 'border-yellow-400' :
-                                                    game.rank === 2 ? 'border-gray-400' :
-                                                    'border-amber-700' :
+                                                        game.rank === 2 ? 'border-gray-400' :
+                                                            'border-amber-700' :
                                                     'border-[#0CC0DF]/20'}`}>
                                                 <Image
                                                     src={game.image}
@@ -219,20 +226,20 @@ export default function GamesDashboard() {
                                                     className="object-cover opacity-80"
                                                 />
                                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                                                
+
                                                 {game.rank <= 3 && (
                                                     <div className="absolute top-4 right-4">
                                                         <div className={`w-12 h-12 rounded-full flex items-center justify-center
                                                             ${game.rank === 1 ? 'bg-yellow-400' :
-                                                            game.rank === 2 ? 'bg-gray-400' :
-                                                            'bg-amber-700'}`}>
+                                                                game.rank === 2 ? 'bg-gray-400' :
+                                                                    'bg-amber-700'}`}>
                                                             <div className="absolute w-full h-full animate-spin-slow">
                                                                 <div className="w-full h-full rounded-full bg-white opacity-20 blur-sm" />
                                                             </div>
                                                             <span className="text-white text-xl font-bold relative z-10">
-                                                                {game.rank === 1 ? '🏆' : 
-                                                                 game.rank === 2 ? '🥈' : 
-                                                                 '🥉'}
+                                                                {game.rank === 1 ? '🏆' :
+                                                                    game.rank === 2 ? '🥈' :
+                                                                        '🥉'}
                                                             </span>
                                                         </div>
                                                     </div>
@@ -262,8 +269,8 @@ export default function GamesDashboard() {
                                         <div className="snap-center flex-shrink-0 w-full">
                                             <div className={`relative h-[400px] rounded-2xl overflow-hidden bg-gradient-to-r from-gray-900 to-gray-800 backdrop-blur-md border-2 ${game.rank <= 3 ?
                                                 game.rank === 1 ? 'border-yellow-400' :
-                                                game.rank === 2 ? 'border-gray-400' :
-                                                'border-amber-700' :
+                                                    game.rank === 2 ? 'border-gray-400' :
+                                                        'border-amber-700' :
                                                 'border-[#0CC0DF]/20'} p-6`}>
                                                 <div className="flex items-center gap-2 mb-2">
                                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-[#0CC0DF]" viewBox="0 0 20 20" fill="currentColor">
@@ -373,7 +380,7 @@ export default function GamesDashboard() {
                                                                 <span className="text-green-200">💰</span>
                                                             </div>
                                                             <div className="text-white font-bold text-lg">
-                                                            {game.rewarded} MTL
+                                                                {game.rewarded} MTL
                                                             </div>
                                                         </div>
                                                     </motion.div>
@@ -385,8 +392,8 @@ export default function GamesDashboard() {
                                         <div className="snap-center flex-shrink-0 w-full">
                                             <div className={`relative h-[400px] rounded-2xl overflow-hidden bg-gradient-to-r from-gray-900 to-gray-800 backdrop-blur-md border-2 ${game.rank <= 3 ?
                                                 game.rank === 1 ? 'border-yellow-400' :
-                                                game.rank === 2 ? 'border-gray-400' :
-                                                'border-amber-700' :
+                                                    game.rank === 2 ? 'border-gray-400' :
+                                                        'border-amber-700' :
                                                 'border-[#0CC0DF]/20'} p-6`}>
                                                 <div className="flex items-center gap-2 mb-4">
                                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-[#0CC0DF]" viewBox="0 0 20 20" fill="currentColor">
@@ -410,8 +417,8 @@ export default function GamesDashboard() {
                                         <div className="snap-center flex-shrink-0 w-full">
                                             <div className={`relative h-[400px] rounded-2xl overflow-hidden bg-gradient-to-r from-gray-900 to-gray-800 backdrop-blur-md border-2 ${game.rank <= 3 ?
                                                 game.rank === 1 ? 'border-yellow-400' :
-                                                game.rank === 2 ? 'border-gray-400' :
-                                                'border-amber-700' :
+                                                    game.rank === 2 ? 'border-gray-400' :
+                                                        'border-amber-700' :
                                                 'border-[#0CC0DF]/20'} p-6`}>
                                                 <div className="flex items-center gap-2 mb-4">
                                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-[#0CC0DF]" viewBox="0 0 20 20" fill="currentColor">
@@ -436,8 +443,8 @@ export default function GamesDashboard() {
                                         <div className="snap-center flex-shrink-0 w-full">
                                             <div className={`relative h-[400px] rounded-2xl overflow-hidden bg-gradient-to-r from-gray-900 to-gray-800 backdrop-blur-md border-2 ${game.rank <= 3 ?
                                                 game.rank === 1 ? 'border-yellow-400' :
-                                                game.rank === 2 ? 'border-gray-400' :
-                                                'border-amber-700' :
+                                                    game.rank === 2 ? 'border-gray-400' :
+                                                        'border-amber-700' :
                                                 'border-[#0CC0DF]/20'} p-6`}>
                                                 <div className="flex items-center gap-2 mb-4">
                                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-[#0CC0DF]" viewBox="0 0 20 20" fill="currentColor">
@@ -494,9 +501,9 @@ export default function GamesDashboard() {
                                                     <div className="w-full h-full rounded-full bg-white opacity-20 blur-sm" />
                                                 </div>
                                                 <span className="text-white text-xl font-bold relative z-10">
-                                                    {game.rank === 1 ? '🏆' : 
-                                                     game.rank === 2 ? '🥈' : 
-                                                     '🥉'}
+                                                    {game.rank === 1 ? '🏆' :
+                                                        game.rank === 2 ? '🥈' :
+                                                            '🥉'}
                                                 </span>
                                             </div>
                                         </div>
