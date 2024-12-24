@@ -9,36 +9,11 @@ import { Environment, Float, PerspectiveCamera } from '@react-three/drei'
 import { FaBitcoin, FaEthereum, FaWallet, FaShoppingCart, FaTicketAlt, FaStore, FaCoins, FaTicketAlt as FaTicket } from 'react-icons/fa'
 import { SiSolana, SiTether } from 'react-icons/si'
 import Modal from './modal'
-import { useMTL } from '../../app/context/MtlContext'
+import { CryptoAsset, NFT, useMTL, Voucher } from '../../app/context/MtlContext'
 import { transferSplToken } from "../../app/utilities/transfer";
-import { clusterApiUrl, Connection, Keypair, PublicKey } from "@solana/web3.js";
+import { clusterApiUrl, Connection, Keypair, PublicKey, Transaction } from "@solana/web3.js";
 import { useWallet } from "@solana/wallet-adapter-react";
-
-interface NFT {
-    id: string
-    name: string
-    image: string
-    description: string
-    price: number
-    currency: string
-}
-
-interface CryptoAsset {
-    symbol: string
-    name: string
-    balance: number
-    price: number
-    icon: JSX.Element
-}
-
-interface Voucher {
-    id: string
-    title: string
-    discount: string
-    validUntil: string
-    image: string
-    price: number
-}
+import { createTransferInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from '@solana/spl-token'
 
 const nfts: NFT[] = [
     {
@@ -70,6 +45,7 @@ const nfts: NFT[] = [
 const cryptoAssets: CryptoAsset[] = [
     {
         symbol: 'BTC',
+        id: "1",
         name: 'Bitcoin',
         balance: 0.25,
         price: 0.0000065,
@@ -78,6 +54,7 @@ const cryptoAssets: CryptoAsset[] = [
     {
         symbol: 'ETH',
         name: 'Ethereum',
+        id: "2",
         balance: 2.5,
         price: 0.000085,
         icon: <FaEthereum className="text-[#627EEA]" size={24} />
@@ -85,12 +62,14 @@ const cryptoAssets: CryptoAsset[] = [
     {
         symbol: 'SOL',
         name: 'Solana',
+        id: "3",
         balance: 15.0,
         price: 0.0025,
         icon: <SiSolana className="text-[#00FFA3]" size={24} />
     },
     {
         symbol: 'USDT',
+        id: "4",
         name: 'Tether',
         balance: 1000,
         price: 0.15,
@@ -139,7 +118,8 @@ const tabIcons = {
 }
 
 export default function Marketplace() {
-    const { balance, ownedNFTs, marketplaceNFTs, marketplaceVouchers, exchangeRates, fetchTokenBalance ,fetchGiftCards} = useMTL();
+    const { fetchHistoryTransactions } = useMTL();
+    const { balance, ownedNFTs, marketplaceNFTs, marketplaceVouchers, exchangeRates, fetchTokenBalance, fetchGiftCards } = useMTL();
     const { publicKey, connected, signMessage, sendTransaction } = useWallet();
     const [selectedTab, setSelectedTab] = useState<'nfts' | 'deals'>('nfts')
     const [showModal, setShowModal] = useState(false)
@@ -163,13 +143,13 @@ export default function Marketplace() {
         setTransferMessage('Processing your claim...')
 
         try {
-            await new Promise(resolve => setTimeout(resolve, 2000))
             setTransferStatus('success')
-            setTransferMessage(`Successfully claimed ${voucher.title}!`)
+            setTransferMessage(`Successfully claimed ${voucher.name}!`)
         } catch (error) {
             setTransferStatus('error')
             setTransferMessage('Failed to claim voucher. Please try again.')
         }
+        fetchGiftCards();
     }
 
     const handleCryptoClick = async (crypto: CryptoAsset) => {
@@ -297,12 +277,12 @@ export default function Marketplace() {
                                  rounded-xl p-4 border border-[#0CC0DF]/20"
                                 >
                                     <div className="relative h-48 sm:h-72 mb-4 rounded-lg overflow-hidden">
-                                        <Image src={voucher.image} alt={voucher.title} fill className="object-cover" />
+                                        <Image src={voucher.image} alt={voucher.name} fill className="object-cover" />
                                         <div className="absolute top-2 right-2 bg-[#0CC0DF] px-2 sm:px-3 py-1 rounded-full text-sm">
                                             {voucher.discount} OFF
                                         </div>
                                     </div>
-                                    <h3 className="text-lg sm:text-xl font-bold mb-2">{voucher.title}</h3>
+                                    <h3 className="text-lg sm:text-xl font-bold mb-2">{voucher.name}</h3>
                                     <p className="text-sm sm:text-base text-gray-300 mb-4">Valid until: {voucher.validUntil}</p>
                                     <div className="flex justify-between items-center">
                                         <span className="text-[#0CC0DF] text-sm sm:text-base">${voucher.price}</span>
@@ -329,35 +309,49 @@ export default function Marketplace() {
                 selectedAsset={selectedAssets.crypto ? 'crypto' : selectedAssets.voucher ? 'voucher' : 'nft'}
                 assets={{
                     voucher: selectedAssets.voucher ? {
-                        name: selectedAssets.voucher.title,
+                        name: selectedAssets.voucher.name,
                         image: selectedAssets.voucher.image,
-                        price: selectedAssets.voucher.price
+                        price: selectedAssets.voucher.price,
+                        id: selectedAssets.voucher.id,
+                        discount: selectedAssets.voucher.discount,
+                        validUntil: selectedAssets.voucher.validUntil
                     } : {
                         name: '',
                         image: '',
-                        price: 0
+                        price: 0,
+                        id: '',
+                        discount: '',
+                        validUntil: ''
                     },
                     crypto: selectedAssets.crypto ? {
                         name: selectedAssets.crypto.name,
                         symbol: selectedAssets.crypto.symbol,
                         balance: selectedAssets.crypto.balance,
                         price: selectedAssets.crypto.price,
-                        icon: selectedAssets.crypto.icon
+                        id: selectedAssets.crypto.id,
+                        icon: selectedAssets.crypto.icon,
                     } : {
                         name: '',
                         symbol: '',
                         balance: 0,
                         price: 0,
-                        icon: <></>
+                        icon: <></>,
+                        id: ''
                     },
                     nft: selectedAssets.nft ? {
                         name: selectedAssets.nft.name,
                         image: selectedAssets.nft.image,
-                        price: selectedAssets.nft.price
+                        price: selectedAssets.nft.price,
+                        id: selectedAssets.nft.id,
+                        description: selectedAssets.nft.description,
+                        currency: selectedAssets.nft.currency
                     } : {
                         name: '',
                         image: '',
-                        price: 0
+                        price: 0,
+                        id: '',
+                        description: '',
+                        currency: ''
                     }
                 }}
             />

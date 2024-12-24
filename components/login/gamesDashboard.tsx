@@ -73,11 +73,11 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
         setFocusedGame(focusedGame?.id === game.id ? null : game)
     }
 
-    const saveLocalStorage = async (game: Game, status: string, message: string) => {
+    const saveLocalStorage = async (title: string, id: string, status: string, message: string) => {
         const transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
         transactions.push({
-            gameTitle: game.title,
-            gameId: game.id,
+            title: title,
+            id: id,
             timestamp: Date.now(),
             status: status,
             message: message
@@ -131,7 +131,7 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
                 if (receiveCount >= 10) {
                     setTransferStatus('error')
                     setTransferMessage('Daily claim limit reached (10 times per 24 hours)')
-                    saveLocalStorage(focusedGame!, 'error', 'Daily claim limit reached (10 times per 24 hours)');
+                    saveLocalStorage(focusedGame!.title, focusedGame!.id, 'error', 'Daily claim limit reached (10 times per 24 hours)');
                     return;
                 }
             }
@@ -153,13 +153,13 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
             setTransferMessage(splSignature.toString())
             console.log("MTL Token Transaction Signature:", splSignature);
             fetchTokenBalance();
-            saveLocalStorage(focusedGame!, 'success', `${amount / 10**9} MTL tokens claimed successfully`);
+            saveLocalStorage(focusedGame!.title, focusedGame!.id, 'success', `${amount / 10**9} MTL tokens claimed successfully`);
 
         } catch (error) {
             console.error("Transfer Error:", error);
             setTransferStatus('error')
             setTransferMessage(error instanceof Error ? error.message : 'An unknown error occurred')
-            saveLocalStorage(focusedGame!, 'error', 'An unknown error occurred');
+            saveLocalStorage(focusedGame!.title, focusedGame!.id, 'error', 'An unknown error occurred');
         }
     }
 

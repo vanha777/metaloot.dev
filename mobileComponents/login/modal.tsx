@@ -3,31 +3,16 @@ import Image from 'next/image';
 import { FaBitcoin, FaEthereum, FaExchangeAlt, FaTimes } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SiSolana, SiTether } from 'react-icons/si';
-
-type VoucherAsset = {
-    name: string;
-    image: string;
-    price: number;
-}
-
-type CryptoAsset = {
-    name: string;
-    symbol: string;
-    balance: number;
-    price: number;
-    icon: JSX.Element;
-}
-
-type NFTAsset = {
-    name: string;
-    image: string;
-    price: number;
-}
+import { useWallet } from '@solana/wallet-adapter-react';
+import { clusterApiUrl, Connection, Keypair, PublicKey, Transaction } from '@solana/web3.js';
+import { createTransferInstruction, getAssociatedTokenAddress } from '@solana/spl-token';
+import { CryptoAsset, NFT, Voucher } from '@/app/context/MtlContext';
+import { useMTL } from '../../app/context/MtlContext'
 
 interface Assets {
-    voucher: VoucherAsset;
+    voucher: Voucher;
     crypto: CryptoAsset;
-    nft: NFTAsset;
+    nft: NFT;
 }
 
 interface ModalProps {
@@ -45,8 +30,18 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
     const [isHovered, setIsHovered] = useState(false);
     const [isExchangeHovered, setIsExchangeHovered] = useState(false);
     const [isSwapping, setIsSwapping] = useState(false);
-    const [isSwappingDone, setIsSwappingDone] = useState("");
-
+    const [isSwappingMessage, setIsSwappingMessage] = useState("");
+    const [signatureTransaction, setSignatureTransaction] = useState("");
+    const { publicKey, connected, signMessage, sendTransaction } = useWallet();
+    const {
+        balance,
+        ownedNFTs,
+        marketplaceNFTs,
+        marketplaceVouchers,
+        exchangeRates,
+        fetchTokenBalance,
+        fetchHistoryTransactions
+    } = useMTL()
     useEffect(() => {
         if (selectedAsset === 'crypto') {
             const fromValue = parseFloat(fromAmount) || 0;
@@ -57,33 +52,115 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
 
     const resetSwapState = () => {
         console.log("resetting swap state");
-            setIsSwapping(false);
-            setIsHovered(false);
-            setIsExchangeHovered(false);
-            setIsSwappingDone("");
-            setShowModal(false);
+        setIsSwapping(false);
+        setIsHovered(false);
+        setIsExchangeHovered(false);
+        setIsSwappingMessage("");
+        setShowModal(false);
     };
+
+    const saveLocalStorage = async (title: string, id: string, status: string, message: string) => {
+        const transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
+        transactions.push({
+            title: title,
+            id: id,
+            timestamp: Date.now(),
+            status: status,
+            message: message
+        });
+        localStorage.setItem('transactions', JSON.stringify(transactions));
+        // refersh read from local storage
+        fetchHistoryTransactions();
+    }
+
+    const transferOut = async () => {
+        const amount = (selectedAsset === 'voucher' ? assets.voucher.price :
+            selectedAsset === 'crypto' ? parseFloat(fromAmount) :
+                selectedAsset === 'nft' ? assets.nft.price : 0) * Math.pow(10, 9);
+        console.log("transferring out voucher ", amount);
+        if (!publicKey || !connected) {
+            throw new Error("Wallet not connected");
+        }
+        const receiverPublicKey = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(process.env.NEXT_PUBLIC_METALOOT_KEY!))).publicKey.toString();
+        const amount_lamports = Math.round(amount);
+        const tokenMintAddress = new PublicKey(process.env.NEXT_PUBLIC_TOKEN_MINT_ADDRESS!);
+
+        try {
+            const connection = new Connection(clusterApiUrl("testnet"), "confirmed");
+            // Get associated token accounts for both sender and receiver
+            const senderATA = await getAssociatedTokenAddress(
+                tokenMintAddress,
+                publicKey
+            );
+            const receiverATA = await getAssociatedTokenAddress(
+                tokenMintAddress,
+                new PublicKey(receiverPublicKey)
+            );
+            // Create transfer instruction with correct parameters
+            const transferInstruction = createTransferInstruction(
+                senderATA, // source
+                receiverATA, // destination
+                publicKey, // owner
+                amount_lamports // amount
+            );
+            // Create transaction
+            const latestBlockhash = await connection.getLatestBlockhash();
+            const transaction = new Transaction().add(transferInstruction);
+            transaction.feePayer = publicKey;
+            transaction.recentBlockhash = latestBlockhash.blockhash;
+            // Request signature from user's wallet
+            const signedTransaction = await sendTransaction(transaction, connection);
+            // Replace the deprecated confirmTransaction call with this:
+            await connection.confirmTransaction({
+                signature: signedTransaction,
+                blockhash: latestBlockhash.blockhash,
+                lastValidBlockHeight: latestBlockhash.lastValidBlockHeight
+            });
+            saveLocalStorage(assets[selectedAsset].name, assets[selectedAsset].id, 'success', 'Successfully claimed voucher');
+            return signedTransaction;
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            console.error("Transfer failed:", errorMessage);
+            saveLocalStorage(assets[selectedAsset].name, assets[selectedAsset].id, 'failed', errorMessage);
+            throw errorMessage;
+        }
+    }
 
     const swap = async (): Promise<string> => {
         console.log("swapping now !");
         console.log("selected asset is ", assets[selectedAsset]);
-        const amount = selectedAsset !== 'crypto' ? assets[selectedAsset].price : fromAmount;
-        console.log("amount MTL is ", amount);
-
         try {
-            const result = await new Promise<string>((resolve, reject) => {
-                setTimeout(() => {
-                    if (Number(amount) > 0) {
-                        resolve("success");
-                    } else {
-                        reject("Not enough funds");
-                    }
-                }, 3000);
-            });
-            return result;
+            if (selectedAsset === 'voucher') {
+                console.log("transferring out voucher");
+                const transactions = await transferOut();
+                console.log("this is transsaction signatures ", transactions);
+                setSignatureTransaction(transactions);
+            } else if (selectedAsset === 'crypto') {
+                // if (Number(assets[selectedAsset].price) > 0) {
+                //     throw new Error("Not enough funds");
+                // } else {
+                //     const transactions = await transferOut();
+                //     console.log("this is transsaction signatures ", transactions);
+                //     setSignatureTransaction(transactions);
+                // }
+            } else if (selectedAsset === 'nft') {
+
+            }
+            // const result = await new Promise<string>((resolve, reject) => {
+            //     setTimeout(() => {
+            //         if (Number(amount) > 0) {
+            //             resolve("success");
+            //         } else {
+            //             reject("Not enough funds");
+            //         }
+            //     }, 3000);
+            // });
+            return "success";
         } catch (error) {
+            console.log("error in handle swap", error);
             return error as string;
         }
+
     };
 
     const handleSwap = async () => {
@@ -93,9 +170,10 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
 
         try {
             const result = await swap();
-            setIsSwappingDone(result);
+            setIsSwappingMessage(result as string);
         } catch (error) {
-            setIsSwappingDone(error as string);
+            console.log("error in handle swap", error);
+            setIsSwappingMessage(error as string);
         } finally {
             setIsSwapping(false);
             setIsHovered(false);
@@ -119,14 +197,14 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                         checked={showModal}
                         onChange={() => setShowModal(!showModal)}
                     />
-                    <motion.div 
+                    <motion.div
                         className="modal backdrop-blur-sm"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                     >
                         {transferStatus === 'loading' ? (
-                            <motion.div 
+                            <motion.div
                                 className="flex flex-col items-center justify-center p-4 sm:p-6"
                                 initial={{ scale: 0 }}
                                 animate={{ scale: 1 }}
@@ -180,7 +258,7 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                                 </div>
                             </motion.div>
                         ) : (
-                            <motion.div 
+                            <motion.div
                                 className="modal-box relative bg-gradient-to-br from-gray-900 to-gray-800 border-2 border-[#0CC0DF] shadow-xl shadow-[#0CC0DF]/20 rounded-2xl max-w-[95vw] sm:max-w-4xl mx-4"
                                 variants={modalVariants}
                                 initial="hidden"
@@ -196,14 +274,14 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                                     <FaTimes size={20} className="sm:text-2xl" />
                                 </motion.button>
 
-                                {isSwappingDone === "success" ? (
-                                    <motion.div 
+                                {isSwappingMessage === "success" ? (
+                                    <motion.div
                                         className="p-4 sm:p-8 relative overflow-hidden"
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: 1 }}
                                     >
                                         {/* Success Icon */}
-                                        <motion.div 
+                                        <motion.div
                                             className="flex justify-center mb-6 sm:mb-8"
                                             initial={{ scale: 0 }}
                                             animate={{ scale: 1 }}
@@ -212,10 +290,10 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                                             <div className="relative">
                                                 <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-green-500/20 flex items-center justify-center">
                                                     <svg className="w-10 h-10 sm:w-12 sm:h-12 text-green-500" viewBox="0 0 24 24" fill="none">
-                                                        <path d="M20 6L9 17L4 12" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+                                                        <path d="M20 6L9 17L4 12" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
                                                     </svg>
                                                 </div>
-                                                <motion.div 
+                                                <motion.div
                                                     className="absolute inset-0 rounded-full border-2 border-green-500"
                                                     animate={{
                                                         scale: [1, 1.5],
@@ -241,11 +319,13 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                                                 <p className="text-xs sm:text-sm text-gray-400 mb-1">Transaction ID</p>
                                                 <div className="flex items-center gap-2">
                                                     <code className="text-[#0CC0DF] font-mono text-sm">
-                                                        0x7d3c...f8a2
+                                                        {signatureTransaction ?
+                                                            `${signatureTransaction.slice(0, 6)}...${signatureTransaction.slice(-6)}`
+                                                            : ''}
                                                     </code>
-                                                    <button 
+                                                    <button
                                                         className="text-gray-400 hover:text-[#0CC0DF]"
-                                                        onClick={() => navigator.clipboard.writeText('0x7d3c...f8a2')}
+                                                        onClick={() => navigator.clipboard.writeText(signatureTransaction)}
                                                     >
                                                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
@@ -296,13 +376,13 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                                                         <div>
                                                             <p className="text-xs sm:text-sm text-gray-400">To</p>
                                                             <p className="text-sm sm:text-base font-medium">
-                                                                {selectedAsset === 'crypto' ? assets.crypto.name : assets[selectedAsset].name}
+                                                                {assets[selectedAsset].name}
                                                             </p>
                                                         </div>
                                                     </div>
                                                     <div className="text-right">
                                                         <p className="text-xs sm:text-sm text-gray-400">Amount</p>
-                                                        <p className="text-sm sm:text-base font-medium">{toAmount}</p>
+                                                        <p className="text-sm sm:text-base font-medium">{selectedAsset === 'crypto' ? toAmount : `1x ${assets[selectedAsset].name}`}</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -320,14 +400,14 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                                             </div>
                                         </div>
                                     </motion.div>
-                                ) : isSwappingDone && isSwappingDone !== "success" ? (
-                                    <motion.div 
+                                ) : isSwappingMessage && isSwappingMessage !== "success" ? (
+                                    <motion.div
                                         className="p-4 sm:p-8 relative overflow-hidden"
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: 1 }}
                                     >
                                         {/* Error Icon */}
-                                        <motion.div 
+                                        <motion.div
                                             className="flex justify-center mb-6 sm:mb-8"
                                             initial={{ scale: 0 }}
                                             animate={{ scale: 1 }}
@@ -336,10 +416,10 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                                             <div className="relative">
                                                 <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-red-500/20 flex items-center justify-center">
                                                     <svg className="w-10 h-10 sm:w-12 sm:h-12 text-red-500" viewBox="0 0 24 24" fill="none">
-                                                        <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+                                                        <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
                                                     </svg>
                                                 </div>
-                                                <motion.div 
+                                                <motion.div
                                                     className="absolute inset-0 rounded-full border-2 border-red-500"
                                                     animate={{
                                                         scale: [1, 1.5],
@@ -357,7 +437,7 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                                         <div className="max-w-md mx-auto space-y-4 sm:space-y-6">
                                             <div className="text-center">
                                                 <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">Transaction Failed</h2>
-                                                <p className="text-sm sm:text-base text-gray-400">Error: {isSwappingDone}</p>
+                                                <p className="text-sm sm:text-base text-gray-400">Reason: {isSwappingMessage}</p>
                                             </div>
                                         </div>
                                     </motion.div>
@@ -400,10 +480,9 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
 
                                             <motion.button
                                                 onClick={handleSwap}
-                                                className={`bg-[#0CC0DF]/20 p-3 sm:p-4 rounded-full cursor-pointer ${
-                                                    isExchangeHovered || isSwapping ? 'shadow-lg shadow-[#0CC0DF]/30 ring-2 ring-[#0CC0DF]/50' : ''
-                                                }`}
-                                                animate={{ 
+                                                className={`bg-[#0CC0DF]/20 p-3 sm:p-4 rounded-full cursor-pointer ${isExchangeHovered || isSwapping ? 'shadow-lg shadow-[#0CC0DF]/30 ring-2 ring-[#0CC0DF]/50' : ''
+                                                    }`}
+                                                animate={{
                                                     rotate: isSwapping ? [0, 360, 0] : (isExchangeHovered ? 360 : 0),
                                                     scale: isSwapping ? [1, 1.1, 1] : 1,
                                                     boxShadow: isSwapping ? [
@@ -412,7 +491,7 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                                                         '0 0 0 rgba(12, 192, 223, 0.4)'
                                                     ] : ''
                                                 }}
-                                                transition={{ 
+                                                transition={{
                                                     duration: isSwapping ? 2 : 0.5,
                                                     repeat: isSwapping ? Infinity : 0,
                                                     ease: "linear"
@@ -437,8 +516,8 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                                                         }}
                                                     >
                                                         <svg className="w-6 h-6 sm:w-8 sm:h-8 text-[#0CC0DF]" viewBox="0 0 24 24">
-                                                            <path fill="currentColor" d="M12 4V2A10 10 0 0 0 2 12h2a8 8 0 0 1 8-8Z"/>
-                                                            <path fill="currentColor" d="M12 20v2a10 10 0 0 0 10-10h-2a8 8 0 0 1-8 8Z"/>
+                                                            <path fill="currentColor" d="M12 4V2A10 10 0 0 0 2 12h2a8 8 0 0 1 8-8Z" />
+                                                            <path fill="currentColor" d="M12 20v2a10 10 0 0 0 10-10h-2a8 8 0 0 1-8 8Z" />
                                                         </svg>
                                                     </motion.div>
                                                 ) : (
@@ -482,7 +561,7 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                                                 </div>
 
                                                 <div className="text-xl sm:text-2xl text-center text-gray-400">
-                                                    {selectedAsset === 'crypto' ? toAmount : `1x ${assets[selectedAsset].name}`}
+                                                    {selectedAsset === 'crypto' ? toAmount : '1x'}
                                                 </div>
                                             </motion.div>
                                         </div>

@@ -4,7 +4,7 @@ import { createContext, useContext, useState, useEffect, ReactNode } from 'react
 import { Auth } from '../auth'
 import { useWallet } from "@solana/wallet-adapter-react";
 import { clusterApiUrl, Connection, PublicKey } from '@solana/web3.js';
-interface NFT {
+export interface NFT {
     id: string
     name: string
     image: string
@@ -13,22 +13,32 @@ interface NFT {
     currency: string
 }
 
-interface CryptoRate {
+export interface CryptoAsset {
+    id: string
+    symbol: string
+    name: string
+    balance: number
+    price: number
+    icon: JSX.Element
+}
+
+export interface Voucher {
+    id: string
+    name: string
+    discount: string
+    validUntil: string
+    image: string
+    price: number
+}
+
+export interface CryptoRate {
     symbol: string
     name: string
     rate: number // Exchange rate to MTL
 }
 
-interface Voucher {
-    id: string
-    title: string
-    discount: string
-    validUntil: string
-    image: string
-    price: number // In MTL
-}
 
-interface Game {
+export interface Game {
     id: string
     title: string
     image: string
