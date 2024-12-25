@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 import Image from 'next/image'
-import { FaDesktop, FaMobile, FaGamepad, FaGlobe, FaTimes } from 'react-icons/fa'
+import { FaDesktop, FaMobile, FaGamepad, FaGlobe, FaTimes, FaSearchengin } from 'react-icons/fa'
 import { useState, useEffect } from 'react'
 import Details from './details'
 import { transferSplToken } from "../../app/utilities/transfer";
@@ -17,15 +17,18 @@ const platformIcons = {
     console: <FaGamepad size={64} />
 }
 
-export default function GamesDashboard({ games }: { games: Game[] }) {
+export default function GamesDashboard() {
+    const [searchQuery, setSearchQuery] = useState('');
     const {
         balance,
         ownedNFTs,
         marketplaceNFTs,
         marketplaceVouchers,
         exchangeRates,
+        games,
         fetchTokenBalance,
         fetchHistoryTransactions,
+        fetchGames
     } = useMTL()
     const TOKEN_MINT_ADDRESS = "813b3AwivU6uxBicnXdZsCNrfzJy4U3Cr4ejwvH4V1Fz";
     const { publicKey, connected, signMessage, sendTransaction } = useWallet();
@@ -35,14 +38,24 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
     const [showModal, setShowModal] = useState(false)
     const [transferStatus, setTransferStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
     const [transferMessage, setTransferMessage] = useState('')
+
     useEffect(() => {
-        if (selectedPlatform === 'all') {
-            setFilteredGames(games)
-        } else {
-            setFilteredGames(games.filter(game => game.platform === selectedPlatform))
+        let filtered = games
+        if (selectedPlatform !== 'all') {
+            filtered = filtered.filter(game => game.platform === selectedPlatform)
         }
+        if (searchQuery) {
+            filtered = filtered.filter(game =>
+                game.name.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+        }
+        setFilteredGames(filtered)
         setFocusedGame(null)
-    }, [selectedPlatform, games])
+    }, [selectedPlatform, searchQuery, games])
+
+    useEffect(() => {
+        fetchGames();
+    }, [])
 
     const onGameFocus = (game: Game) => {
         setFocusedGame(focusedGame?.id === game.id ? null : game)
@@ -64,6 +77,12 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
 
     const transferMTL = async () => {
         setShowModal(true);
+        const rewarding = focusedGame?.models?.playToEarn?.price;
+        if (!rewarding) {
+            // setTransferStatus('error')
+            // setTransferMessage('No reward amount configured for this game')
+            return;
+        }
         if (!publicKey) {
             setTransferStatus('error')
             setTransferMessage('Wallet not connected')
@@ -84,38 +103,39 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
                 mint: tokenMint
             });
             console.log('debug 2')
+
             // Check if token accounts exist before accessing
-            if (tokenAccounts.value.length) {
-                const tokenAccountAddress = tokenAccounts.value[0].pubkey.toBase58();
-                let signatures = await connection.getSignaturesForAddress(
-                    new PublicKey(tokenAccountAddress),
-                    {
-                        limit: 10
-                    }
-                );
-                let receiveCount = 0;
-                for (let sig of signatures) {
-                    const tx = await connection.getParsedTransaction(sig.signature, {
-                        maxSupportedTransactionVersion: 0
-                    });
-                    if (tx?.blockTime &&
-                        (Date.now() / 1000 - tx.blockTime) < 24 * 60 * 60) {
-                        receiveCount++;
-                    }
-                }
-                if (receiveCount >= 10) {
-                    setTransferStatus('error')
-                    setTransferMessage('Daily claim limit reached (10 times per 24 hours)')
-                    saveLocalStorage(focusedGame!.title, focusedGame!.id, 'error', 'Daily claim limit reached (10 times per 24 hours)');
-                    return;
-                }
-            }
+            // if (tokenAccounts.value.length) {
+            //     const tokenAccountAddress = tokenAccounts.value[0].pubkey.toBase58();
+            //     let signatures = await connection.getSignaturesForAddress(
+            //         new PublicKey(tokenAccountAddress),
+            //         {
+            //             limit: 10
+            //         }
+            //     );
+            //     let receiveCount = 0;
+            //     for (let sig of signatures) {
+            //         const tx = await connection.getParsedTransaction(sig.signature, {
+            //             maxSupportedTransactionVersion: 0
+            //         });
+            //         if (tx?.blockTime &&
+            //             (Date.now() / 1000 - tx.blockTime) < 24 * 60 * 60) {
+            //             receiveCount++;
+            //         }
+            //     }
+            //     if (receiveCount >= 10) {
+            //         setTransferStatus('error')
+            //         setTransferMessage('Daily claim limit reached (10 times per 24 hours)')
+            //         saveLocalStorage(focusedGame!.title, focusedGame!.id, 'error', 'Daily claim limit reached (10 times per 24 hours)');
+            //         return;
+            //     }
+            // }
             //end. 
 
             const senderKeypair = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(process.env.NEXT_PUBLIC_METALOOT_KEY!)));
             console.log("Sender Keypair:", senderKeypair.publicKey.toBase58());
 
-            const amount = Math.round(1000 * 10 ** 9);
+            const amount = Math.round(rewarding * 10 ** 9);
 
             const splSignature = await transferSplToken(
                 senderKeypair,
@@ -128,12 +148,12 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
             setTransferMessage(splSignature.toString())
             console.log("MTL Token Transaction Signature:", splSignature);
             fetchTokenBalance();
-            saveLocalStorage(focusedGame!.title, focusedGame!.id, 'success', `${amount / 10 ** 9} MTL tokens claimed successfully`);
+            saveLocalStorage(focusedGame!.name, focusedGame!.id, 'success', `${amount / 10 ** 9} MTL tokens claimed successfully`);
         } catch (error) {
             console.error("Transfer Error:", error);
             setTransferStatus('error')
             setTransferMessage(error instanceof Error ? error.message : 'An unknown error occurred')
-            saveLocalStorage(focusedGame!.title, focusedGame!.id, 'error', 'An unknown error occurred');
+            saveLocalStorage(focusedGame!.name, focusedGame!.id, 'error', 'An unknown error occurred');
         }
     }
 
@@ -147,25 +167,42 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
 
     return (
         <>
-            {/* Platform Filter */}
-            <div className="flex gap-24 mb-26 p-24">
-                {Object.entries(platformIcons).map(([platform, icon]) => (
-                    <motion.button
-                        key={platform}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() => setSelectedPlatform(platform as 'desktop' | 'mobile' | 'console' | 'all')}
-                        className={`px-24 py-16 rounded-[3rem] backdrop-blur-sm relative
-              ${selectedPlatform === platform
-                                ? 'border-4 border-[#0CC0DF] text-[#0CC0DF] shadow-lg shadow-[#0CC0DF]/30'
-                                : 'border-2 border-white/30 text-white'} 
-              before:content-[""] before:absolute before:inset-0 before:rounded-[3rem] 
-              before:bg-gradient-to-r before:from-gray-900 before:to-gray-800 before:z-[-1]
-              hover:border-[#0CC0DF]/60 transition-colors duration-300`}
-                    >
-                        {icon}
-                    </motion.button>
-                ))}
+            {/* Platform Filter and Search */}
+            <div className="flex flex-col gap-4 mb-8">
+                <div className="flex gap-4 p-4 overflow-x-auto">
+                    {Object.entries(platformIcons).map(([platform, icon]) => (
+                        <motion.button
+                            key={platform}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => setSelectedPlatform(platform as 'desktop' | 'mobile' | 'console' | 'all')}
+                            className={`px-24 py-16 rounded-[3rem] backdrop-blur-sm relative
+                            ${selectedPlatform === platform
+                                    ? 'border-4 border-[#0CC0DF] text-[#0CC0DF] shadow-lg shadow-[#0CC0DF]/50'
+                                    : 'border-2 border-white/50 text-white'} 
+                            before:content-[""] before:absolute before:inset-0 before:rounded-[3rem] 
+                            before:bg-gradient-to-r before:from-[#0A1628] before:to-[#162A44] before:z-[-1]
+                            hover:border-[#0CC0DF]/80 transition-colors duration-300`}
+                        >
+                            <div className="flex justify-center">
+                                {icon}
+                            </div>
+                        </motion.button>
+                    ))}
+                </div>
+
+                <div className="relative">
+                    <input
+                        type="text"
+                        placeholder="Search games..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full px-4 py-2 bg-gray-800/50 border-2 border-[#0CC0DF]/30 rounded-xl
+                            focus:outline-none focus:border-[#0CC0DF] text-white placeholder-gray-400
+                            transition-colors duration-300"
+                    />
+                    <FaSearchengin className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                </div>
             </div>
 
             {/* Horizontal Game Carousel */}
@@ -183,16 +220,39 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
                             onClick={() => onGameFocus(game)}
                             layout
                         >
-                            <div className="relative h-full rounded-2xl overflow-hidden 
+                            <div className={`relative h-full rounded-2xl overflow-hidden 
                              bg-gradient-to-b from-[#0CC0DF]/10 to-transparent backdrop-blur-sm
-                             border border-[#0CC0DF]/20">
+                             border ${game.rank <= 3 ?
+                                    game.rank === 1 ? 'border-yellow-400' :
+                                        game.rank === 2 ? 'border-gray-400' :
+                                            'border-amber-700' :
+                                    'border-[#0CC0DF]/20'}`}>
                                 <Image
                                     src={game.image}
-                                    alt={game.title}
+                                    alt={game.name}
                                     fill
                                     className="object-cover opacity-80"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+
+                                {game.rank <= 3 && (
+                                    <div className="absolute top-4 right-4">
+                                        <div className={`w-12 h-12 rounded-full flex items-center justify-center
+                                            ${game.rank === 1 ? 'bg-yellow-400' :
+                                                game.rank === 2 ? 'bg-gray-400' :
+                                                    'bg-amber-700'}`}>
+                                            <div className="absolute w-full h-full animate-spin-slow">
+                                                <div className="w-full h-full rounded-full bg-white opacity-20 blur-sm" />
+                                            </div>
+                                            <span className="text-white text-xl font-bold relative z-10">
+                                                {game.rank === 1 ? '🏆' :
+                                                    game.rank === 2 ? '🥈' :
+                                                        '🥉'}
+                                            </span>
+                                        </div>
+                                    </div>
+                                )}
+
                                 <div className="absolute bottom-0 w-full p-8">
                                     {focusedGame?.id === game.id && (
                                         <motion.button
@@ -200,7 +260,6 @@ export default function GamesDashboard({ games }: { games: Game[] }) {
                                             animate={{ opacity: 1 }}
                                             whileHover={{ scale: 1.05 }}
                                             whileTap={{ scale: 0.95 }}
-                                            // onClick={() => onGameLaunch(game)}
                                             onClick={() => onGetRewards(game)}
                                             className="w-full bg-[#0CC0DF] hover:bg-[#0AA0BF] text-white 
                                font-bold py-4 px-6 rounded-xl flex items-center justify-center gap-3

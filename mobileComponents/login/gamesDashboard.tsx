@@ -58,7 +58,7 @@ export default function GamesDashboard() {
         }
         if (searchQuery) {
             filtered = filtered.filter(game =>
-                game.title.toLowerCase().includes(searchQuery.toLowerCase())
+                game.name.toLowerCase().includes(searchQuery.toLowerCase())
             )
         }
         setFilteredGames(filtered)
@@ -72,7 +72,7 @@ export default function GamesDashboard() {
     const saveLocalStorage = async (game: Game, status: string, message: string) => {
         const transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
         transactions.push({
-            gameTitle: game.title,
+            gameTitle: game.name,
             gameId: game.id,
             timestamp: Date.now(),
             status: status,
@@ -257,7 +257,7 @@ export default function GamesDashboard() {
                                                     'border-[#0CC0DF]/20'}`}>
                                                 <Image
                                                     src={game.image}
-                                                    alt={game.title}
+                                                    alt={game.name}
                                                     fill
                                                     className="object-cover opacity-80"
                                                 />
@@ -441,7 +441,7 @@ export default function GamesDashboard() {
                                                     <iframe
                                                         className="w-full h-full rounded-xl"
                                                         src={game.trailer}
-                                                        title={`${game.title} Trailer`}
+                                                        title={`${game.name} Trailer`}
                                                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                                         allowFullScreen
                                                     />
@@ -467,7 +467,7 @@ export default function GamesDashboard() {
                                                     <iframe
                                                         className="w-full h-full rounded-xl"
                                                         src={game.gameplay}
-                                                        title={`${game.title} Gameplay`}
+                                                        title={`${game.name} Gameplay`}
                                                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                                         allowFullScreen
                                                     />
@@ -521,7 +521,7 @@ export default function GamesDashboard() {
                                         'border-[#0CC0DF]/20'}`}>
                                     <Image
                                         src={game.image}
-                                        alt={game.title}
+                                        alt={game.name}
                                         fill
                                         className="object-cover opacity-80"
                                     />

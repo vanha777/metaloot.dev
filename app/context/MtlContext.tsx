@@ -41,7 +41,7 @@ export interface CryptoRate {
 
 export interface Game {
     id: string
-    title: string
+    name: string
     image: string
     platform: 'desktop' | 'mobile' | 'console'
     rewards: number

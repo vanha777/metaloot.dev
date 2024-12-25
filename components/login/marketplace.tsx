@@ -9,32 +9,9 @@ import { Environment, Float, PerspectiveCamera } from '@react-three/drei'
 import { FaBitcoin, FaEthereum, FaWallet, FaShoppingCart, FaTicketAlt, FaStore, FaCoins, FaTicketAlt as FaTicket } from 'react-icons/fa'
 import { SiSolana, SiTether } from 'react-icons/si'
 import Modal from './modal'
+import { CryptoAsset, NFT, useMTL, Voucher } from '../../app/context/MtlContext'
+import { GiSpinningSword, GiToken } from 'react-icons/gi'
 
-interface NFT {
-    id: string
-    name: string
-    image: string
-    description: string
-    price: number
-    currency: string
-}
-
-interface CryptoAsset {
-    symbol: string
-    name: string
-    balance: number
-    price: number
-    icon: JSX.Element
-}
-
-interface Voucher {
-    id: string
-    title: string
-    discount: string
-    validUntil: string
-    image: string
-    price: number
-}
 
 const nfts: NFT[] = [
     {
@@ -66,82 +43,46 @@ const nfts: NFT[] = [
 const cryptoAssets: CryptoAsset[] = [
     {
         symbol: 'BTC',
+        id: "1",
         name: 'Bitcoin',
         balance: 0.25,
         price: 0.0000065,
-        icon: <FaBitcoin className="text-[#F7931A]" size={36} />
+        icon: <FaBitcoin className="text-[#F7931A]" size={24} />
     },
     {
         symbol: 'ETH',
         name: 'Ethereum',
+        id: "2",
         balance: 2.5,
         price: 0.000085,
-        icon: <FaEthereum className="text-[#627EEA]" size={36} />
+        icon: <FaEthereum className="text-[#627EEA]" size={24} />
     },
     {
         symbol: 'SOL',
         name: 'Solana',
+        id: "3",
         balance: 15.0,
         price: 0.0025,
-        icon: <SiSolana className="text-[#00FFA3]" size={36} />
+        icon: <SiSolana className="text-[#00FFA3]" size={24} />
     },
     {
         symbol: 'USDT',
+        id: "4",
         name: 'Tether',
         balance: 1000,
         price: 0.15,
-        icon: <SiTether className="text-[#26A17B]" size={24} />
+        icon: <SiTether className="text-[#26A17B]" size={20} />
     }
-    // {
-    //     symbol: 'MTL',
-    //     name: 'MetaLoot',
-    //     balance: 1250,
-    //     price: 1,
-    //     icon: <Image src="https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/MTL.png" width={36} height={36} alt="MTL" />
-    // }
-]
-
-const vouchers: Voucher[] = [
-    {
-        id: '1',
-        title: '50% Off Jetstar',
-        discount: '50%',
-        validUntil: '2024-12-31',
-        image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%2010.jpeg',
-        price: 100
-    },
-    {
-        id: '2',
-        title: '30% Off Bunnings',
-        discount: '30%',
-        validUntil: '2024-12-31',
-        image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%2012.jpeg',
-        price: 100
-    },
-    {
-        id: '3',
-        title: '10% Off Coles',
-        discount: '10%',
-        validUntil: '2024-12-31',
-        image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%2013.jpeg',
-        price: 100
-    },
-    {
-        id: '4',
-        title: '10% Off Woolworths',
-        discount: '10%',
-        validUntil: '2024-12-31',
-        image: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/Image%2015.jpeg',
-        price: 100
-    },
 ]
 
 const tabIcons = {
-    nfts: <FaStore size={64} />,
-    deals: <FaCoins size={64} />
+    nfts: <GiSpinningSword size={64} />,
+    deals: <GiToken size={64} />
 }
 
 export default function Marketplace() {
+    const { fetchHistoryTransactions } = useMTL();
+    const { balance, ownedNFTs, marketplaceNFTs, marketplaceVouchers, exchangeRates, fetchTokenBalance, fetchGiftCards } = useMTL();
     const [walletAddress, setWalletAddress] = useState<string>('')
     const [selectedTab, setSelectedTab] = useState<'nfts' | 'deals'>('nfts')
     const [showModal, setShowModal] = useState(false)
@@ -154,14 +95,9 @@ export default function Marketplace() {
     }>({})
 
     useEffect(() => {
-        const getWalletDetails = async () => {
-            const supabase = await Auth
-            const { data: { user } } = await supabase.auth.getUser()
-            if (user) {
-                setWalletAddress(user.email || '')
-            }
-        }
-        getWalletDetails()
+        console.log("this is vouchers", marketplaceVouchers);
+        fetchGiftCards();
+        // fetchHistoryTransactions();
     }, [])
 
     const handleClaim = async (voucher: Voucher) => {
@@ -171,15 +107,13 @@ export default function Marketplace() {
         setTransferMessage('Processing your claim...')
 
         try {
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 2000))
-
             setTransferStatus('success')
-            setTransferMessage(`Successfully claimed ${voucher.title}!`)
+            setTransferMessage(`Successfully claimed ${voucher.name}!`)
         } catch (error) {
             setTransferStatus('error')
             setTransferMessage('Failed to claim voucher. Please try again.')
         }
+        fetchGiftCards();
     }
 
     const handleCryptoClick = async (crypto: CryptoAsset) => {
@@ -189,9 +123,7 @@ export default function Marketplace() {
         setTransferMessage('Preparing to swap...')
 
         try {
-            // Simulate API call
             await new Promise(resolve => setTimeout(resolve, 2000))
-
             setTransferStatus('success')
             setTransferMessage(`Successfully claimed ${crypto.name}!`)
         } catch (error) {
@@ -207,9 +139,7 @@ export default function Marketplace() {
         setTransferMessage('Processing your purchase...')
 
         try {
-            // Simulate API call
             await new Promise(resolve => setTimeout(resolve, 2000))
-
             setTransferStatus('success')
             setTransferMessage(`Successfully purchased ${nft.name}!`)
         } catch (error) {
@@ -303,7 +233,7 @@ export default function Marketplace() {
 
                         {/* Vouchers Section */}
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {vouchers.map((voucher) => (
+                            {marketplaceVouchers.map((voucher) => (
                                 <motion.div
                                     key={voucher.id}
                                     whileHover={{ scale: 1.05 }}
@@ -311,12 +241,12 @@ export default function Marketplace() {
                                  rounded-xl p-4 border border-[#0CC0DF]/20"
                                 >
                                     <div className="relative h-72 mb-4 rounded-lg overflow-hidden">
-                                        <Image src={voucher.image} alt={voucher.title} fill className="object-cover" />
+                                        <Image src={voucher.image} alt={voucher.name} fill className="object-cover" />
                                         <div className="absolute top-2 right-2 bg-[#0CC0DF] px-3 py-1 rounded-full">
                                             {voucher.discount} OFF
                                         </div>
                                     </div>
-                                    <h3 className="text-xl font-bold mb-2">{voucher.title}</h3>
+                                    <h3 className="text-xl font-bold mb-2">{voucher.name}</h3>
                                     <p className="text-gray-300 mb-4">Valid until: {voucher.validUntil}</p>
                                     <div className="flex justify-between items-center">
                                         <span className="text-[#0CC0DF]">${voucher.price}</span>
@@ -343,35 +273,51 @@ export default function Marketplace() {
                 selectedAsset={selectedAssets.crypto ? 'crypto' : selectedAssets.voucher ? 'voucher' : 'nft'}
                 assets={{
                     voucher: selectedAssets.voucher ? {
-                        name: selectedAssets.voucher.title,
+                        name: selectedAssets.voucher.name,
                         image: selectedAssets.voucher.image,
-                        price: selectedAssets.voucher.price
+                        price: selectedAssets.voucher.price,
+                        id: selectedAssets.voucher.id,
+                        discount: selectedAssets.voucher.discount,
+                        validUntil: selectedAssets.voucher.validUntil,
+                        e_gift: selectedAssets.voucher.e_gift
                     } : {
                         name: '',
                         image: '',
-                        price: 0
+                        price: 0,
+                        id: '',
+                        discount: '',
+                        validUntil: '',
+                        e_gift: ''
                     },
                     crypto: selectedAssets.crypto ? {
                         name: selectedAssets.crypto.name,
                         symbol: selectedAssets.crypto.symbol,
                         balance: selectedAssets.crypto.balance,
                         price: selectedAssets.crypto.price,
+                        id: selectedAssets.crypto.id,
                         icon: selectedAssets.crypto.icon
                     } : {
                         name: '',
                         symbol: '',
                         balance: 0,
                         price: 0,
-                        icon: <></>
+                        icon: <></>,
+                        id: ''
                     },
                     nft: selectedAssets.nft ? {
                         name: selectedAssets.nft.name,
                         image: selectedAssets.nft.image,
-                        price: selectedAssets.nft.price
+                        price: selectedAssets.nft.price,
+                        id: selectedAssets.nft.id,
+                        description: selectedAssets.nft.description,
+                        currency: selectedAssets.nft.currency
                     } : {
                         name: '',
                         image: '',
-                        price: 0
+                        price: 0,
+                        id: '',
+                        description: '',
+                        currency: ''
                     }
                 }}
             />
