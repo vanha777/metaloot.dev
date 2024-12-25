@@ -88,33 +88,33 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
         const tokenMintAddress = new PublicKey(process.env.NEXT_PUBLIC_TOKEN_MINT_ADDRESS!);
 
         try {
-            const connection = new Connection(clusterApiUrl("testnet"), "confirmed");
-            console.log("connection ", connection);
-            // Get associated token accounts for both sender and receiver
-            const senderATA = await getAssociatedTokenAddress(
-                tokenMintAddress,
-                publicKey
-            );
-            const receiverATA = await getAssociatedTokenAddress(
-                tokenMintAddress,
-                new PublicKey(receiverPublicKey)
-            );
-            // Create transfer instruction with correct parameters
-            const transferInstruction = createTransferInstruction(
-                senderATA, // source
-                receiverATA, // destination
-                publicKey, // owner
-                amount_lamports // amount
-            );
-            console.log("transfer instruction ", transferInstruction);
-            // Create transaction
-            const latestBlockhash = await connection.getLatestBlockhash();
-            const transaction = new Transaction().add(transferInstruction);
-            transaction.feePayer = publicKey;
-            transaction.recentBlockhash = latestBlockhash.blockhash;
-            // Request signature from user's wallet
-            const signedTransaction = await sendTransaction(transaction, connection);
-            console.log("signed transaction ", signedTransaction);
+            // const connection = new Connection(clusterApiUrl("testnet"), "confirmed");
+            // console.log("connection ", connection);
+            // // Get associated token accounts for both sender and receiver
+            // const senderATA = await getAssociatedTokenAddress(
+            //     tokenMintAddress,
+            //     publicKey
+            // );
+            // const receiverATA = await getAssociatedTokenAddress(
+            //     tokenMintAddress,
+            //     new PublicKey(receiverPublicKey)
+            // );
+            // // Create transfer instruction with correct parameters
+            // const transferInstruction = createTransferInstruction(
+            //     senderATA, // source
+            //     receiverATA, // destination
+            //     publicKey, // owner
+            //     amount_lamports // amount
+            // );
+            // console.log("transfer instruction ", transferInstruction);
+            // // Create transaction
+            // const latestBlockhash = await connection.getLatestBlockhash();
+            // const transaction = new Transaction().add(transferInstruction);
+            // transaction.feePayer = publicKey;
+            // transaction.recentBlockhash = latestBlockhash.blockhash;
+            // // Request signature from user's wallet
+            // const signedTransaction = await sendTransaction(transaction, connection);
+            // console.log("signed transaction ", signedTransaction);
 
 
             // Replace the deprecated confirmTransaction call with this:
@@ -428,13 +428,20 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                                                             </svg>
                                                             <span className="text-sm text-gray-300">E-Gift Card Available</span>
                                                         </div>
-                                                        <a
-                                                            href={assets[selectedAsset].e_gift}
-                                                            download
-                                                            className="px-3 py-1.5 text-sm bg-blue-500 hover:bg-blue-600 text-white rounded-md transition-colors"
-                                                        >
-                                                            Download
-                                                        </a>
+                                                        <div className="flex items-center gap-2">
+                                                            {/* <input 
+                                                                type="text"
+                                                                value={assets[selectedAsset].e_gift}
+                                                                readOnly
+                                                                className="bg-gray-700 px-2 py-1 rounded text-sm text-gray-300 w-48"
+                                                            /> */}
+                                                            <button
+                                                                onClick={() => navigator.clipboard.writeText(assets[selectedAsset].e_gift)}
+                                                                className="px-3 py-1.5 text-sm bg-blue-500 hover:bg-blue-600 text-white rounded-md transition-colors"
+                                                            >
+                                                                Copy Link
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             )}
