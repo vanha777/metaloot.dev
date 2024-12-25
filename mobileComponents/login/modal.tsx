@@ -80,15 +80,9 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
             selectedAsset === 'crypto' ? parseFloat(fromAmount) :
                 selectedAsset === 'nft' ? assets.nft.price : 0) * Math.pow(10, 9);
         console.log("transferring out voucher ", amount);
-
-        // Check if running in mobile environment
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        if (!isMobile) {
-            if (!publicKey || !connected) {
-                throw new Error("Wallet not connected"); 
-            }
+        if (!publicKey || !connected) {
+            throw new Error("Wallet not connected");
         }
-
         const receiverPublicKey = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(process.env.NEXT_PUBLIC_METALOOT_KEY!))).publicKey.toString();
         const amount_lamports = Math.round(amount);
         const tokenMintAddress = new PublicKey(process.env.NEXT_PUBLIC_TOKEN_MINT_ADDRESS!);
@@ -98,7 +92,7 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
             // Get associated token accounts for both sender and receiver
             const senderATA = await getAssociatedTokenAddress(
                 tokenMintAddress,
-                publicKey!
+                publicKey
             );
             const receiverATA = await getAssociatedTokenAddress(
                 tokenMintAddress,
@@ -108,41 +102,22 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
             const transferInstruction = createTransferInstruction(
                 senderATA, // source
                 receiverATA, // destination
-                publicKey!, // owner - add non-null assertion since we checked earlier
+                publicKey, // owner
                 amount_lamports // amount
             );
             // Create transaction
             const latestBlockhash = await connection.getLatestBlockhash();
             const transaction = new Transaction().add(transferInstruction);
-            transaction.feePayer = publicKey!; // Add non-null assertion since we checked earlier
+            transaction.feePayer = publicKey;
             transaction.recentBlockhash = latestBlockhash.blockhash;
-
-            let signedTransaction;
-            if (isMobile) {
-                // Use Phantom mobile deep link for connecting
-                const phantomConnectUrl = `https://phantom.app/ul/v1/connect?app_url=${encodeURIComponent(window.location.origin)}`;
-                window.location.href = phantomConnectUrl;
-
-                // Use Phantom mobile deep link for signing and sending transaction
-                const serializedTransaction = transaction.serialize({requireAllSignatures: false}).toString('base64');
-                const phantomSignAndSendUrl = `https://phantom.app/ul/v1/signAndSendTransaction?app_url=${encodeURIComponent(window.location.origin)}&message=${encodeURIComponent(serializedTransaction)}`;
-                window.location.href = phantomSignAndSendUrl;
-
-                // Handle the response when user returns to app
-                // You'll need to implement logic to capture the transaction signature when the user returns
-                signedTransaction = "MOBILE_TRANSACTION"; // Placeholder
-            } else {
-                // Desktop flow
-                signedTransaction = await sendTransaction(transaction, connection);
-            }
-
-            // Confirm transaction
+            // Request signature from user's wallet
+            const signedTransaction = await sendTransaction(transaction, connection);
+            // Replace the deprecated confirmTransaction call with this:
             await connection.confirmTransaction({
                 signature: signedTransaction,
                 blockhash: latestBlockhash.blockhash,
                 lastValidBlockHeight: latestBlockhash.lastValidBlockHeight
             });
-
             saveLocalStorage(assets[selectedAsset].name, assets[selectedAsset].id, 'success', 'Successfully claimed voucher');
             return signedTransaction;
         } catch (error) {
@@ -177,9 +152,9 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
         try {
             if (selectedAsset === 'voucher') {
                 console.log("transferring out voucher");
-                const transactions = await transferOut();
-                console.log("this is transsaction signatures ", transactions);
-                setSignatureTransaction(transactions);
+                // const transactions = await transferOut();
+                // console.log("this is transsaction signatures ", transactions);
+                setSignatureTransaction("transactions");
                 console.log("this is e_gift", assets[selectedAsset].e_gift);
                 // remove the e_gift from the server
                 removeEGift();
