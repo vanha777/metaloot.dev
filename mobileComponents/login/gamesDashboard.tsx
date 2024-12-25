@@ -155,7 +155,7 @@ export default function GamesDashboard() {
     }
 
     const redirect = async (link: string) => {
-        window.open(link, '_blank')
+        window.open(link, '_blank', 'noopener,noreferrer')
     }
 
     const onGetRewards = async (game: Game) => {
