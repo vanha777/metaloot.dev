@@ -127,7 +127,7 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
 
             
             saveLocalStorage(assets[selectedAsset].name, assets[selectedAsset].id, 'success', 'Successfully claimed voucher');
-            return "signedTransaction";
+            return signedTransaction;
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : String(error);
             console.error("Transfer failed:", errorMessage);
