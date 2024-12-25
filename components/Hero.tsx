@@ -34,7 +34,15 @@ export default function Hero() {
   // };
 
   const connectWallet = async () => {
-    window.location.href = '/mobile'; // Redirect to login page
+    window.location.href = '/login'; // Redirect to login page
+  };
+
+  const connectMobileWallet = async () => {
+    if (isMobile) {
+      window.location.href = 'https://phantom.app/ul/browse/https%3A%2F%2Fwww.metaloot.app%2Fmobile?ref=https%3A%2F%2Fwww.metaloot.app%2F'; // Redirect to mobile login page
+    } else {
+      window.location.href = '/login'; // Redirect to desktop login page
+    }
   };
 
   return (
@@ -66,6 +74,7 @@ export default function Hero() {
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
+          onClick={connectMobileWallet}
           className="btn btn-sm md:btn-md btn-outline border-[#0CC0DF] text-[#0CC0DF] hover:bg-[#0CC0DF] hover:text-white"
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 md:h-6 md:w-6 mr-1 md:mr-2" viewBox="0 0 384 512">
@@ -76,6 +85,7 @@ export default function Hero() {
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
+          onClick={connectMobileWallet}
           className="btn btn-sm md:btn-md btn-outline border-[#0CC0DF] text-[#0CC0DF] hover:bg-[#0CC0DF] hover:text-white"
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 md:h-6 md:w-6 mr-1 md:mr-2" viewBox="0 0 512 512">
@@ -110,7 +120,7 @@ export default function Hero() {
               onClick={connectWallet}
               className="btn btn-md lg:btn-lg bg-[#0CC0DF] hover:bg-[#0AA0BF] text-white font-bold text-lg lg:text-xl px-8 lg:px-12 rounded-full"
             >
-              Mobile Beta Version Live
+             Beta Version Live
             </motion.button>
           </motion.div>
         </div>
