@@ -89,6 +89,7 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
 
         try {
             const connection = new Connection(clusterApiUrl("testnet"), "confirmed");
+            console.log("connection ", connection);
             // Get associated token accounts for both sender and receiver
             const senderATA = await getAssociatedTokenAddress(
                 tokenMintAddress,
@@ -105,6 +106,7 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
                 publicKey, // owner
                 amount_lamports // amount
             );
+            console.log("transfer instruction ", transferInstruction);
             // Create transaction
             const latestBlockhash = await connection.getLatestBlockhash();
             const transaction = new Transaction().add(transferInstruction);
@@ -112,14 +114,19 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
             transaction.recentBlockhash = latestBlockhash.blockhash;
             // Request signature from user's wallet
             const signedTransaction = await sendTransaction(transaction, connection);
+            console.log("signed transaction ", signedTransaction);
+
+
             // Replace the deprecated confirmTransaction call with this:
-            await connection.confirmTransaction({
-                signature: signedTransaction,
-                blockhash: latestBlockhash.blockhash,
-                lastValidBlockHeight: latestBlockhash.lastValidBlockHeight
-            });
+            // await connection.confirmTransaction({
+            //     signature: signedTransaction,
+            //     blockhash: latestBlockhash.blockhash,
+            //     lastValidBlockHeight: latestBlockhash.lastValidBlockHeight
+            // });
+
+            
             saveLocalStorage(assets[selectedAsset].name, assets[selectedAsset].id, 'success', 'Successfully claimed voucher');
-            return signedTransaction;
+            return "signedTransaction";
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : String(error);
             console.error("Transfer failed:", errorMessage);
@@ -152,9 +159,9 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
         try {
             if (selectedAsset === 'voucher') {
                 console.log("transferring out voucher");
-                // const transactions = await transferOut();
-                // console.log("this is transsaction signatures ", transactions);
-                setSignatureTransaction("transactions");
+                const transactions = await transferOut();
+                console.log("this is transsaction signatures ", transactions);
+                setSignatureTransaction(transactions);
                 console.log("this is e_gift", assets[selectedAsset].e_gift);
                 // remove the e_gift from the server
                 removeEGift();
