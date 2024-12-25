@@ -88,33 +88,33 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
         const tokenMintAddress = new PublicKey(process.env.NEXT_PUBLIC_TOKEN_MINT_ADDRESS!);
 
         try {
-            // const connection = new Connection(clusterApiUrl("testnet"), "confirmed");
-            // console.log("connection ", connection);
-            // // Get associated token accounts for both sender and receiver
-            // const senderATA = await getAssociatedTokenAddress(
-            //     tokenMintAddress,
-            //     publicKey
-            // );
-            // const receiverATA = await getAssociatedTokenAddress(
-            //     tokenMintAddress,
-            //     new PublicKey(receiverPublicKey)
-            // );
-            // // Create transfer instruction with correct parameters
-            // const transferInstruction = createTransferInstruction(
-            //     senderATA, // source
-            //     receiverATA, // destination
-            //     publicKey, // owner
-            //     amount_lamports // amount
-            // );
-            // console.log("transfer instruction ", transferInstruction);
-            // // Create transaction
-            // const latestBlockhash = await connection.getLatestBlockhash();
-            // const transaction = new Transaction().add(transferInstruction);
-            // transaction.feePayer = publicKey;
-            // transaction.recentBlockhash = latestBlockhash.blockhash;
-            // // Request signature from user's wallet
-            // const signedTransaction = await sendTransaction(transaction, connection);
-            // console.log("signed transaction ", signedTransaction);
+            const connection = new Connection(clusterApiUrl("testnet"), "confirmed");
+            console.log("connection ", connection);
+            // Get associated token accounts for both sender and receiver
+            const senderATA = await getAssociatedTokenAddress(
+                tokenMintAddress,
+                publicKey
+            );
+            const receiverATA = await getAssociatedTokenAddress(
+                tokenMintAddress,
+                new PublicKey(receiverPublicKey)
+            );
+            // Create transfer instruction with correct parameters
+            const transferInstruction = createTransferInstruction(
+                senderATA, // source
+                receiverATA, // destination
+                publicKey, // owner
+                amount_lamports // amount
+            );
+            console.log("transfer instruction ", transferInstruction);
+            // Create transaction
+            const latestBlockhash = await connection.getLatestBlockhash();
+            const transaction = new Transaction().add(transferInstruction);
+            transaction.feePayer = publicKey;
+            transaction.recentBlockhash = latestBlockhash.blockhash;
+            // Request signature from user's wallet
+            const signedTransaction = await sendTransaction(transaction, connection);
+            console.log("signed transaction ", signedTransaction);
 
 
             // Replace the deprecated confirmTransaction call with this:
