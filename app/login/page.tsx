@@ -33,14 +33,14 @@ export default function LoginPage() {
       const mobile = window.innerWidth < 768
       setIsMobile(mobile)
       if (mobile) {
-        router.push('/mobile')
+        window.location.href = 'https://phantom.app/ul/browse/https%3A%2F%2Fwww.metaloot.app%2Fmobile?ref=https%3A%2F%2Fwww.metaloot.app%2F'
       }
     }
 
     checkMobile()
     window.addEventListener('resize', checkMobile)
     return () => window.removeEventListener('resize', checkMobile)
-  }, [router])
+  }, [])
 
   if (isMobile) {
     return null
