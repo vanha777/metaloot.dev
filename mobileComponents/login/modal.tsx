@@ -76,65 +76,126 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
         fetchHistoryTransactions();
     }
 
+    // const transferOut = async () => {
+    //     const amount = (selectedAsset === 'voucher' ? assets.voucher.price :
+    //         selectedAsset === 'crypto' ? parseFloat(fromAmount) :
+    //             selectedAsset === 'nft' ? assets.nft.price : 0) * Math.pow(10, 9);
+    //     console.log("transferring out voucher ", amount);
+    //     if (!publicKey || !connected) {
+    //         throw new Error("Wallet not connected");
+    //     }
+    //     const receiverPublicKey = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(process.env.NEXT_PUBLIC_METALOOT_KEY!))).publicKey.toString();
+    //     const amount_lamports = Math.round(amount);
+    //     const tokenMintAddress = new PublicKey(process.env.NEXT_PUBLIC_TOKEN_MINT_ADDRESS!);
+
+    //     try {
+    //         const connection = new Connection(clusterApiUrl("testnet"), "confirmed");
+    //         console.log("connection ", connection);
+    //         // Get associated token accounts for both sender and receiver
+    //         const senderATA = await getAssociatedTokenAddress(
+    //             tokenMintAddress,
+    //             publicKey
+    //         );
+    //         const receiverATA = await getAssociatedTokenAddress(
+    //             tokenMintAddress,
+    //             new PublicKey(receiverPublicKey)
+    //         );
+    //         // Create transfer instruction with correct parameters
+    //         const transferInstruction = createTransferInstruction(
+    //             senderATA, // source
+    //             receiverATA, // destination
+    //             publicKey, // owner
+    //             amount_lamports // amount
+    //         );
+    //         console.log("transfer instruction ", transferInstruction);
+    //         // Create transaction
+    //         const latestBlockhash = await connection.getLatestBlockhash();
+    //         const transaction = new Transaction().add(transferInstruction);
+    //         transaction.feePayer = new PublicKey(receiverPublicKey); // Set receiver as fee payer
+    //         transaction.recentBlockhash = latestBlockhash.blockhash;
+    //         // Request signature from user's wallet
+    //         const signedTransaction = await sendTransaction(transaction, connection);
+    //         console.log("signed transaction ", signedTransaction);
+
+    //         // Replace the deprecated confirmTransaction call with this:
+    //         // await connection.confirmTransaction({
+    //         //     signature: signedTransaction,
+    //         //     blockhash: latestBlockhash.blockhash,
+    //         //     lastValidBlockHeight: latestBlockhash.lastValidBlockHeight
+    //         // });
+            
+    //         saveLocalStorage(assets[selectedAsset].name, assets[selectedAsset].id, 'success', 'Successfully claimed voucher');
+    //         return signedTransaction;
+    //     } catch (error) {
+    //         const errorMessage = error instanceof Error ? error.message : String(error);
+    //         console.error("Transfer failed:", errorMessage);
+    //         saveLocalStorage(assets[selectedAsset].name, assets[selectedAsset].id, 'failed', errorMessage);
+    //         throw errorMessage;
+    //     }
+    // }
+
     const transferOut = async () => {
         const amount = (selectedAsset === 'voucher' ? assets.voucher.price :
             selectedAsset === 'crypto' ? parseFloat(fromAmount) :
                 selectedAsset === 'nft' ? assets.nft.price : 0) * Math.pow(10, 9);
+    
         console.log("transferring out voucher ", amount);
+    
         if (!publicKey || !connected) {
             throw new Error("Wallet not connected");
         }
-        const receiverPublicKey = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(process.env.NEXT_PUBLIC_METALOOT_KEY!))).publicKey.toString();
+    
+        // Load receiver's keypair from private key
+        const receiverKeypair = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(process.env.NEXT_PUBLIC_METALOOT_KEY!)));
+        const receiverPublicKey = receiverKeypair.publicKey;
         const amount_lamports = Math.round(amount);
         const tokenMintAddress = new PublicKey(process.env.NEXT_PUBLIC_TOKEN_MINT_ADDRESS!);
-
+    
         try {
             const connection = new Connection(clusterApiUrl("testnet"), "confirmed");
-            console.log("connection ", connection);
+    
             // Get associated token accounts for both sender and receiver
             const senderATA = await getAssociatedTokenAddress(
                 tokenMintAddress,
-                publicKey
+                publicKey // Sender's public key
             );
             const receiverATA = await getAssociatedTokenAddress(
                 tokenMintAddress,
-                new PublicKey(receiverPublicKey)
+                receiverPublicKey
             );
-            // Create transfer instruction with correct parameters
+    
+            // Create transfer instruction
             const transferInstruction = createTransferInstruction(
                 senderATA, // source
                 receiverATA, // destination
-                publicKey, // owner
+                publicKey,  // owner (sender's public key)
                 amount_lamports // amount
             );
-            console.log("transfer instruction ", transferInstruction);
-            // Create transaction
+    
+            console.log("Transfer instruction created: ", transferInstruction);
+    
+            // Fetch the latest blockhash
             const latestBlockhash = await connection.getLatestBlockhash();
-            const transaction = new Transaction().add(transferInstruction);
-            transaction.feePayer = publicKey;
+            // Create the transaction
+            const transaction = new Transaction()
+                .add(transferInstruction);
+            transaction.feePayer = receiverPublicKey; // Receiver pays the fee
             transaction.recentBlockhash = latestBlockhash.blockhash;
-            // Request signature from user's wallet
+            // Sign the transaction with the receiver's private key
+            transaction.partialSign(receiverKeypair);
+            // Serialize the transaction and request the sender to sign it
             const signedTransaction = await sendTransaction(transaction, connection);
-            console.log("signed transaction ", signedTransaction);
-
-
-            // Replace the deprecated confirmTransaction call with this:
-            // await connection.confirmTransaction({
-            //     signature: signedTransaction,
-            //     blockhash: latestBlockhash.blockhash,
-            //     lastValidBlockHeight: latestBlockhash.lastValidBlockHeight
-            // });
-
-            
+            // Save success state to local storage
             saveLocalStorage(assets[selectedAsset].name, assets[selectedAsset].id, 'success', 'Successfully claimed voucher');
             return signedTransaction;
+    
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : String(error);
             console.error("Transfer failed:", errorMessage);
             saveLocalStorage(assets[selectedAsset].name, assets[selectedAsset].id, 'failed', errorMessage);
             throw errorMessage;
         }
-    }
+    };
 
     const removeEGift = async () => {
         try {
