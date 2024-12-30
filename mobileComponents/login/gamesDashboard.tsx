@@ -69,18 +69,20 @@ export default function GamesDashboard() {
         setFocusedGame(focusedGame?.id === game.id ? null : game)
     }
 
-    const saveLocalStorage = async (game: Game, status: string, message: string) => {
+    const saveLocalStorage = async (title: string, id: string, status: string, message: string) => {
         const transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
         transactions.push({
-            gameTitle: game.name,
-            gameId: game.id,
+            title: title,
+            id: id,
             timestamp: Date.now(),
             status: status,
             message: message
         });
         localStorage.setItem('transactions', JSON.stringify(transactions));
+        // refersh read from local storage
         fetchHistoryTransactions();
     }
+
 
     const transferMTL = async () => {
         setShowModal(true);
@@ -105,32 +107,32 @@ export default function GamesDashboard() {
             const destPublicKey = new PublicKey(publicKey);
 
             // Limit claims to 10 per 24 hours
-            // const tokenAccounts = await connection.getParsedTokenAccountsByOwner(destPublicKey, {
-            //     mint: tokenMint
-            // });
-            // if (tokenAccounts.value.length) {
-            //     const tokenAccountAddress = tokenAccounts.value[0].pubkey.toBase58();
-            //     let signatures = await connection.getSignaturesForAddress(
-            //         new PublicKey(tokenAccountAddress),
-            //         { limit: 10 }
-            //     );
-            //     let receiveCount = 0;
-            //     for (let sig of signatures) {
-            //         const tx = await connection.getParsedTransaction(sig.signature, {
-            //             maxSupportedTransactionVersion: 0
-            //         });
-            //         if (tx?.blockTime &&
-            //             (Date.now() / 1000 - tx.blockTime) < 24 * 60 * 60) {
-            //             receiveCount++;
-            //         }
-            //     }
-            //     if (receiveCount >= 10) {
-            //         setTransferStatus('error')
-            //         setTransferMessage('Daily claim limit reached (10 times per 24 hours)')
-            //         saveLocalStorage(focusedGame!, 'error', 'Daily claim limit reached (10 times per 24 hours)');
-            //         return;
-            //     }
-            // }
+            const tokenAccounts = await connection.getParsedTokenAccountsByOwner(destPublicKey, {
+                mint: tokenMint
+            });
+            if (tokenAccounts.value.length) {
+                const tokenAccountAddress = tokenAccounts.value[0].pubkey.toBase58();
+                let signatures = await connection.getSignaturesForAddress(
+                    new PublicKey(tokenAccountAddress),
+                    { limit: 10 }
+                );
+                let receiveCount = 0;
+                for (let sig of signatures) {
+                    const tx = await connection.getParsedTransaction(sig.signature, {
+                        maxSupportedTransactionVersion: 0
+                    });
+                    if (tx?.blockTime &&
+                        (Date.now() / 1000 - tx.blockTime) < 24 * 60 * 60) {
+                        receiveCount++;
+                    }
+                }
+                if (receiveCount >= 10) {
+                    setTransferStatus('error')
+                    setTransferMessage('Daily claim limit reached (10 times per 24 hours)')
+                    saveLocalStorage(focusedGame!.name, focusedGame!.id, 'error', 'Daily claim limit reached (10 times per 24 hours)')
+                    return;
+                }
+            }
             // end.
 
             const senderKeypair = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(process.env.NEXT_PUBLIC_METALOOT_KEY!)));
@@ -146,12 +148,12 @@ export default function GamesDashboard() {
             setTransferStatus('success')
             setTransferMessage(splSignature.toString())
             fetchTokenBalance();
-            saveLocalStorage(focusedGame!, 'success', `${amount / 10 ** 9} MTL tokens claimed successfully`);
+            saveLocalStorage(focusedGame!.name, focusedGame!.id, 'success', `${amount / 10 ** 9} MTL tokens claimed successfully`);
         } catch (error) {
             console.error("Transfer Error:", error);
             setTransferStatus('error')
             setTransferMessage(error instanceof Error ? error.message : 'An unknown error occurred')
-            saveLocalStorage(focusedGame!, 'error', 'An unknown error occurred');
+            saveLocalStorage(focusedGame!.name, focusedGame!.id, 'error', 'An unknown error occurred');
         }
     }
 

@@ -105,31 +105,31 @@ export default function GamesDashboard() {
             console.log('debug 2')
 
             // Check if token accounts exist before accessing
-            // if (tokenAccounts.value.length) {
-            //     const tokenAccountAddress = tokenAccounts.value[0].pubkey.toBase58();
-            //     let signatures = await connection.getSignaturesForAddress(
-            //         new PublicKey(tokenAccountAddress),
-            //         {
-            //             limit: 10
-            //         }
-            //     );
-            //     let receiveCount = 0;
-            //     for (let sig of signatures) {
-            //         const tx = await connection.getParsedTransaction(sig.signature, {
-            //             maxSupportedTransactionVersion: 0
-            //         });
-            //         if (tx?.blockTime &&
-            //             (Date.now() / 1000 - tx.blockTime) < 24 * 60 * 60) {
-            //             receiveCount++;
-            //         }
-            //     }
-            //     if (receiveCount >= 10) {
-            //         setTransferStatus('error')
-            //         setTransferMessage('Daily claim limit reached (10 times per 24 hours)')
-            //         saveLocalStorage(focusedGame!.title, focusedGame!.id, 'error', 'Daily claim limit reached (10 times per 24 hours)');
-            //         return;
-            //     }
-            // }
+            if (tokenAccounts.value.length) {
+                const tokenAccountAddress = tokenAccounts.value[0].pubkey.toBase58();
+                let signatures = await connection.getSignaturesForAddress(
+                    new PublicKey(tokenAccountAddress),
+                    {
+                        limit: 10
+                    }
+                );
+                let receiveCount = 0;
+                for (let sig of signatures) {
+                    const tx = await connection.getParsedTransaction(sig.signature, {
+                        maxSupportedTransactionVersion: 0
+                    });
+                    if (tx?.blockTime &&
+                        (Date.now() / 1000 - tx.blockTime) < 24 * 60 * 60) {
+                        receiveCount++;
+                    }
+                }
+                if (receiveCount >= 10) {
+                    setTransferStatus('error')
+                    setTransferMessage('Daily claim limit reached (10 times per 24 hours)')
+                    saveLocalStorage(focusedGame!.name, focusedGame!.id, 'error', 'Daily claim limit reached (10 times per 24 hours)');
+                    return;
+                }
+            }
             //end. 
 
             const senderKeypair = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(process.env.NEXT_PUBLIC_METALOOT_KEY!)));
