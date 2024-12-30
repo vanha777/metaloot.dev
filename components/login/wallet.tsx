@@ -121,6 +121,7 @@ export default function Wallet() {
     };
 
     useEffect(() => {
+        fetchTokenBalance();
         // const checkAndConnectWallet = async () => {
         //     const address = await connectWallet();
         //     if (address) {

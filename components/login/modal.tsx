@@ -189,6 +189,7 @@ export default function Modal({ showModal, setShowModal, transferStatus, transfe
             const signedTransaction = await sendTransaction(transaction, connection);
             // Save success state to local storage
             saveLocalStorage(assets[selectedAsset].name, assets[selectedAsset].id, 'success', 'Successfully claimed voucher');
+            fetchTokenBalance();
             return signedTransaction;
     
         } catch (error) {

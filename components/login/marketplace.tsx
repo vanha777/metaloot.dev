@@ -97,6 +97,7 @@ export default function Marketplace() {
     useEffect(() => {
         console.log("this is vouchers", marketplaceVouchers);
         fetchGiftCards();
+        fetchTokenBalance();
         // fetchHistoryTransactions();
     }, [])
 
