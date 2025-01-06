@@ -11,6 +11,8 @@ import Coin from '@/components/Coin'
 import Hero2 from '@/components/Hero2'
 import Demo from '@/components/Demo'
 import Features from '@/components/features'
+import NavBar from '@/components/NavBar'
+import Partner from '@/components/Partner'
 export default function Home() {
   const [isMobile, setIsMobile] = useState(false)
 
@@ -27,8 +29,10 @@ export default function Home() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <main className="bg-base-100 min-h-screen relative">
+        <NavBar />
         <div className="flex flex-col">
           <Hero2 />
+          <Partner />
           <Demo />
           {/* <Hero /> */}
           {/* <About /> */}
