@@ -8,6 +8,9 @@ import Contact from '@/components/Contact'
 import About from '@/components/about'
 import BigStatement from '@/components/BigStatement'
 import Coin from '@/components/Coin'
+import Hero2 from '@/components/Hero2'
+import Demo from '@/components/Demo'
+import Features from '@/components/features'
 export default function Home() {
   const [isMobile, setIsMobile] = useState(false)
 
@@ -25,13 +28,16 @@ export default function Home() {
     <Suspense fallback={<div>Loading...</div>}>
       <main className="bg-base-100 min-h-screen relative">
         <div className="flex flex-col">
-          <Hero />
-          <About />
+          <Hero2 />
+          <Demo />
+          {/* <Hero /> */}
+          {/* <About /> */}
           <Satements />
+          <Features />
           <BigStatement />
           <Coin />
           <Roadmap />
-          <Contact/>
+          <Contact />
         </div>
 
         {/* Solana Stamp */}

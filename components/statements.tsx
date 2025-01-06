@@ -1,11 +1,10 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import Image from 'next/image'
+import { FaRocket, FaPiggyBank, FaChartLine, FaShieldAlt, FaCode, FaBolt } from 'react-icons/fa'
 import { useState, useEffect } from 'react'
 
 export default function Statements() {
-  const [cardOrder, setCardOrder] = useState([0, 1, 2])
   const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
@@ -43,25 +42,36 @@ export default function Statements() {
     }
   }
 
-  const rotateCards = () => {
-    setCardOrder(prev => [(prev[1]), (prev[2]), (prev[0])])
-  }
-
   const cards = [
     {
-      title: "P-2-Earn",
-      description: "Ready to cash out? Convert your in-game currency to $MTL anytime. Our tokenomics system spans all games, allowing players to purchase $MTL with their in-game currency.",
-      image: "/statement_1.png"
+      title: "Accelerate Development",
+      description: "Cut months off your development cycle with our ready-to-use blockchain infrastructure. Focus on creating amazing gameplay while we handle the Web3 complexity.",
+      icon: FaRocket
     },
     {
-      title: "X-Game Exchanges", 
-      description: "Join our gaming network where your items are real assets - tradeable and usable across multiple games, all securely synced to your blockchain wallet.",
-      image: "/statement_2.png"
+      title: "Reduce Operational Costs", 
+      description: "Save on infrastructure and maintenance costs. Our managed blockchain services eliminate the need for specialized blockchain DevOps teams.",
+      icon: FaPiggyBank
     },
     {
-      title: "No-Fuss Items Marketplace",
-      description: "Freely trade valuable game assets, discover rare items, or cash out your gaming inventory - powered by secure NFT trading.",
-      image: "/statement_3.png"
+      title: "Scale With Confidence",
+      description: "Our battle-tested infrastructure handles millions of transactions daily. Scale your game without worrying about blockchain performance bottlenecks.",
+      icon: FaChartLine
+    },
+    {
+      title: "Future-Proof Architecture",
+      description: "Built on industry standards and best practices, our infrastructure evolves with the blockchain ecosystem, ensuring your game stays compatible and secure.",
+      icon: FaShieldAlt
+    },
+    {
+      title: "Minimize Technical Debt",
+      description: "Avoid common blockchain implementation pitfalls with our optimized architecture. Build on a solid foundation that grows with your game.",
+      icon: FaCode
+    },
+    {
+      title: "Rapid Integration",
+      description: "Get your game on-chain in days, not months. Our SDK and documentation make blockchain integration as simple as traditional web services.",
+      icon: FaBolt
     },
   ];
 
@@ -116,116 +126,38 @@ export default function Statements() {
       </div>
 
       <motion.div
-        className="w-full relative z-10 px-4 md:px-8 lg:px-16 flex items-center"
+        className="w-full relative z-10 px-4 md:px-8 lg:px-16"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
-        <div className={`flex ${isMobile ? 'flex-col' : 'flex-row'} items-center justify-between gap-8 w-full max-w-7xl mx-auto`}>
-          {/* Text Content */}
-          <motion.div
-            variants={itemVariants}
-            className={`${isMobile ? 'w-full pt-16' : 'w-1/2'} text-left`}
-          >
-            <h2 className="text-3xl md:text-4xl lg:text-6xl font-bold mb-4 md:mb-6 bg-gradient-to-r from-[#0CC0DF] to-[#0CC0DF]/70 bg-clip-text text-transparent">
-              {cards[cardOrder[1]].title}
-            </h2>
-            <p className="text-lg md:text-xl lg:text-2xl text-gray-300 leading-relaxed">
-              {cards[cardOrder[1]].description}
-            </p>
-          </motion.div>
-
-          {/* Image Carousel */}
-          <motion.div
-            variants={itemVariants}
-            className={`${isMobile ? 'w-full' : 'w-1/2'} relative aspect-[4/3]`}
-          >
+        <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-center mb-32 mt-32">
+          <span className="text-white">Purpose built for</span>
+          <br className="mb-4"/>
+          <span className="bg-gradient-to-r from-[#14F195] to-[#9945FF] bg-clip-text text-transparent">Games Applications</span>
+        </h1>
+        
+        <div className={`grid ${isMobile ? 'grid-cols-1 gap-6' : 'grid-cols-3 gap-8'} w-full max-w-6xl mx-auto`}>
+          {cards.map((card, index) => (
             <motion.div
-              className="relative w-full h-full rounded-xl overflow-hidden cursor-pointer group"
-              onClick={rotateCards}
-              whileHover={{ scale: 1.05 }}
+              key={index}
+              variants={itemVariants}
+              className="flex flex-col gap-3"
             >
-              <Image
-                src={cards[cardOrder[1]].image}
-                alt={cards[cardOrder[1]].title}
-                fill
-                priority
-                loading="eager"
-                className="object-cover"
-              />
-
-              {/* Portal effect */}
-              <motion.div
-                animate={{
-                  boxShadow: ['0 0 30px #0CC0DF', '0 0 50px #0CC0DF', '0 0 30px #0CC0DF']
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-                className="absolute inset-0 border-4 border-[#0CC0DF]/60 rounded-xl"
-              />
-
-              {/* Top glowing orb */}
-              <motion.div
-                animate={{
-                  opacity: [0.6, 1, 0.6],
-                  scale: [1, 1.2, 1]
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-                className="absolute top-4 left-1/2 -translate-x-1/2 w-6 md:w-8 h-6 md:h-8 rounded-full bg-gradient-to-br from-[#0CC0DF] to-[#0CC0DF]/70"
-              />
-
-              {/* Navigation dots */}
-              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
-                {[0, 1, 2].map((index) => (
-                  <div
-                    key={index}
-                    className={`w-2 h-2 rounded-full transition-all duration-300 ${cardOrder[1] === index ? 'bg-[#0CC0DF] w-4' : 'bg-white/50'}`}
-                  />
-                ))}
+              <div className="flex justify-center items-center w-24 h-24 mx-auto rounded-full bg-[#0CC0DF]/10">
+                <card.icon className="w-12 h-12 text-[#0CC0DF]" />
               </div>
 
-              {/* Click to next indicator */}
-              <div className={`absolute inset-0 flex items-center justify-between px-4 ${isMobile ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} transition-opacity`}>
-                <motion.div
-                  animate={{ x: [0, -10, 0] }}
-                  transition={{ repeat: Infinity, duration: 1.5 }}
-                  className="bg-[#0CC0DF]/20 backdrop-blur-sm p-2 rounded-full"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 md:h-6 md:w-6 text-[#0CC0DF]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
-                </motion.div>
-                <motion.div
-                  animate={{ x: [0, 10, 0] }}
-                  transition={{ repeat: Infinity, duration: 1.5 }}
-                  className="bg-[#0CC0DF]/20 backdrop-blur-sm p-2 rounded-full"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 md:h-6 md:w-6 text-[#0CC0DF]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </motion.div>
+              <div className="text-left">
+                <h2 className="text-xl md:text-2xl font-bold mb-2 bg-gradient-to-r from-[#0CC0DF] to-[#0CC0DF]/70 bg-clip-text text-transparent">
+                  {card.title}
+                </h2>
+                <p className="text-sm md:text-base text-gray-300 leading-relaxed">
+                  {card.description}
+                </p>
               </div>
-
-              {/* Mobile tap indicator */}
-              {isMobile && (
-                <motion.div 
-                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center text-white/80 bg-black/50 px-4 py-2 rounded-full backdrop-blur-sm"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: [0, 1, 0] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                >
-                  Tap to navigate
-                </motion.div>
-              )}
             </motion.div>
-          </motion.div>
+          ))}
         </div>
       </motion.div>
     </section>
