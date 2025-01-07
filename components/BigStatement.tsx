@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import Image from 'next/image'
 
 export default function BigStatement() {
     return (
@@ -27,51 +28,35 @@ export default function BigStatement() {
                 </div>
             </div>
 
-            <div className="hero-content text-center relative z-10">
-                <motion.div
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, staggerChildren: 0.3 }}
-                    className="max-w-7xl mx-auto"
-                >
+            <div className="hero-content relative z-10">
+                <div className="flex flex-col items-center gap-16">
+                    <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-center mt-32 mb-32">
+                        <span className="text-white">Analytics Dashboard</span>
+                        <br className="mb-4"/>
+                        <span className="bg-gradient-to-r from-[#14F195] to-[#9945FF] bg-clip-text text-transparent">for Better Decisions</span>
+                    </h1>
+
                     <motion.div
-                        className="space-y-8"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 1 }}
+                        initial={{ opacity: 0, scale: 0.5 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ 
+                            duration: 0.5,
+                            type: "spring",
+                            stiffness: 260,
+                            damping: 20
+                        }}
+                        className="relative w-full max-w-4xl mx-auto"
                     >
-                        <motion.p
-                            className="text-2xl md:text-4xl text-white font-medium max-w-4xl mx-auto"
-                            animate={{
-                                opacity: [0.8, 1, 0.8]
-                            }}
-                            transition={{
-                                duration: 3,
-                                repeat: Infinity,
-                                ease: "easeInOut"
-                            }}
-                        >
-                            <span className="text-white text-6xl md:text-8xl font-black block mb-8 drop-shadow-[0_0_15px_rgba(12,192,223,0.5)]">
-                                MetaLoot
-                            </span>
-                            Brings your favorite game on-chain
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 inline mx-4 text-[#0CC0DF]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                            </svg>
-                            <br />
-                            <span className="text-white text-3xl md:text-5xl font-bold block mt-8 drop-shadow-[0_0_10px_rgba(12,192,223,0.3)]">
-                                Allowing you to earn money
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 inline mx-4 text-[#0CC0DF]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                                with just your skills.
-                            </span>
-                        </motion.p>
+                        <Image
+                            src="/apiDashboard.png"
+                            alt="API Dashboard"
+                            width={1200}
+                            height={800}
+                            className="w-full h-auto"
+                        />
                     </motion.div>
-                </motion.div>
+                </div>
             </div>
         </div>
     )
 }
-
-

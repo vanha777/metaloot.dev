@@ -4,15 +4,16 @@ import { useState, useEffect, Suspense } from 'react'
 import Hero from '@/components/Hero'
 import Satements from '@/components/statements'
 import Roadmap from '@/components/Roadmap'
-import Contact from '@/components/Contact'
 import About from '@/components/about'
 import BigStatement from '@/components/BigStatement'
 import Coin from '@/components/Coin'
 import Hero2 from '@/components/Hero2'
 import Demo from '@/components/Demo'
-import Features from '@/components/features'
+import Features from '@/components/Features'
 import NavBar from '@/components/NavBar'
 import Partner from '@/components/Partner'
+import Starters from '@/components/Starters'
+import WhatNew from '@/components/whatNew'
 export default function Home() {
   const [isMobile, setIsMobile] = useState(false)
 
@@ -39,9 +40,10 @@ export default function Home() {
           <Satements />
           <Features />
           <BigStatement />
-          <Coin />
-          <Roadmap />
-          <Contact />
+          <Starters />
+          {/* <Coin /> */}
+          {/* <Roadmap /> */}
+          <WhatNew/>
         </div>
 
         {/* Solana Stamp */}

@@ -11,12 +11,16 @@ export default function Partner() {
       image: "/solana.png"
     },
     {
-      name: "Ethereum", 
-      image: "/coin.png"
+      name: "MagicDen", 
+      image: "/magicDen.png"
     },
     {
-      name: "Polygon",
-      image: "/coin.png"
+      name: "Metaplex",
+      image: "/metaplex.png"
+    },
+    {
+      name: "Hacken",
+      image: "/hacken.png"
     }
   ]
 
@@ -47,9 +51,9 @@ export default function Partner() {
             {[...partners, ...partners].map((partner, index) => (
               <div
                 key={index}
-                className="relative w-48 h-48 flex items-center justify-center"
+                className="relative w-32 h-32 flex items-center justify-center"
               >
-                <div className="relative w-32 h-32">
+                <div className="relative w-24 h-24">
                   <Image
                     src={partner.image}
                     alt={partner.name}

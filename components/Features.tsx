@@ -92,7 +92,7 @@ export default function Features() {
         initial="hidden"
         animate="visible"
       >
-        <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-center my-32">
+        <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-left my-32">
           <span className="text-white">Designed by devs</span>
           <br className="mb-12"/>
           <span className="bg-gradient-to-r from-[#14F195] to-[#9945FF] bg-clip-text text-transparent">For Devs</span>
