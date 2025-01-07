@@ -14,6 +14,7 @@ import NavBar from '@/components/NavBar'
 import Partner from '@/components/Partner'
 import Starters from '@/components/Starters'
 import WhatNew from '@/components/whatNew'
+import Footer from '@/components/Footer'
 export default function Home() {
   const [isMobile, setIsMobile] = useState(false)
 
@@ -45,7 +46,7 @@ export default function Home() {
           {/* <Roadmap /> */}
           <WhatNew/>
         </div>
-
+        <Footer />
         {/* Solana Stamp */}
         <div className="fixed left-8 bottom-8 bg-gradient-to-r from-[#9945FF] to-[#14F195] p-[1px] rounded-lg rotate-[-4deg] shadow-lg hover:rotate-0 transition-all duration-300">
           <div className="bg-black/90 backdrop-blur-sm px-4 py-2 rounded-lg">
