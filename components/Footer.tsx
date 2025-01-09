@@ -11,7 +11,7 @@ export default function Footer() {
       links: [
         { name: "LaunchPad", href: "/launchpad" },
         { name: "SDK", href: "/sdk" },
-        { name: "Developer Portal", href: "/developers" },
+        { name: "Analytics Dashboard", href: "/developers" },
         { name: "Community Hub", href: "/community" }
       ]
     },

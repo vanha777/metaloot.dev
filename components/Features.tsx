@@ -12,7 +12,7 @@ export default function Features() {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768)
     }
-    
+
     checkMobile()
     window.addEventListener('resize', checkMobile)
     return () => window.removeEventListener('resize', checkMobile)
@@ -49,25 +49,37 @@ export default function Features() {
 
   const cards = [
     {
-      title: "Blockchain Gaming API",
-      description: "Seamlessly integrate blockchain functionality into your games with our robust API. Handle in-game transactions, NFT minting, and token management with simple API calls.",
+      title: "Simple Player Login",
+      description: "Let your players log in using Google or Apple accounts—no wallets, no seed phrases, no friction. A Web2-like onboarding experience powered by Web3 technology.",
+      image: "/standard1.jpg"
+    },
+    {
+      title: "One-Click Asset Minting",
+      description: "Mint NFTs, game items, and tokens effortlessly with a single API call. No need for smart contract development or blockchain expertise—our API handles it all.",
+      image: "/statement_2.png",
+    },
+    {
+      title: "Custom Tokenomics in Minutes",
+      description: "Define your game’s economy and create in-game currencies or rewards systems with a few API calls. Build tokenomics tailored to your game’s unique vision without writing blockchain code.",
       image: "/statement_1.png"
     },
-
-
     {
-      title: "Cross-Chain Integration", 
-      description: "Connect your game to multiple blockchain networks. Our API supports cross-chain operations, allowing players to use assets across different blockchain ecosystems.",
-      image: "/statement_2.png"
+      title: "Launch a Branded Marketplace",
+      description: "Create your own fully-branded, decentralized marketplace. Publicly accessible on the Solana blockchain, enabling players to trade assets seamlessly and securely.",
+      image: "/statement_3.png",
     },
-
-
     {
-      title: "Smart Contract Management",
-      description: "Deploy and manage smart contracts effortlessly. Our API handles the complexity of blockchain interactions, letting you focus on creating great gaming experiences.",
-      image: "/statement_3.png"
+      title: "No Blockchain Expertise Needed",
+      description: "Focus on building amazing gameplay. We provide all the tools—minting, transactions, token management—through an intuitive API, so you never need to worry about blockchain intricacies.",
+      image: "/no_blockchain_expertise.png",
+    },
+    {
+      title: "True On-Chain Ownership",
+      description: "Every asset is real, on-chain, and belongs to the player. They can withdraw items or tokens to their personal wallets anytime, ensuring transparency and true ownership.",
+      image: "/statement_3.png",
     },
   ];
+
 
   return (
     <section className="relative overflow-hidden flex items-center justify-center px-2 md:px-4 text-white py-24">
@@ -77,13 +89,13 @@ export default function Features() {
         <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-[#14F195] rounded-full filter blur-[120px] opacity-75 animate-pulse" />
         <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-[#9945FF] rounded-full filter blur-[120px] opacity-70 animate-pulse delay-1000" />
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-[#14F195] rounded-full filter blur-[150px] opacity-65 animate-pulse delay-500" />
-        
+
         {/* Gradient mesh */}
         <div className="absolute inset-0 bg-gradient-to-br from-[#0f1c3d]/80 via-[#132552]/75 to-[#1b2f66]/70" />
-        
+
         {/* Subtle grid overlay */}
-        <div className="absolute inset-0 bg-[url('/grid.png')] opacity-40 bg-repeat bg-center" 
-             style={{ backgroundSize: '50px 50px' }} />
+        <div className="absolute inset-0 bg-[url('/grid.png')] opacity-40 bg-repeat bg-center"
+          style={{ backgroundSize: '50px 50px' }} />
       </div>
 
       <motion.div
@@ -94,12 +106,12 @@ export default function Features() {
       >
         <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-left my-32">
           <span className="text-white">Designed by devs</span>
-          <br className="mb-12"/>
+          <br className="mb-12" />
           <span className="bg-gradient-to-r from-[#14F195] to-[#9945FF] bg-clip-text text-transparent">For Devs</span>
         </h1>
         <div className="flex flex-col gap-48 w-full max-w-7xl mx-auto">
           {cards.map((card, index) => (
-            <motion.div 
+            <motion.div
               key={index}
               variants={itemVariants}
               className={`flex flex-col ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} items-center gap-16 w-full`}

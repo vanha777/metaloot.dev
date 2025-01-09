@@ -8,22 +8,22 @@ export default function WhatNew() {
   const projects = [
     {
       title: "MetaLoot Launch Pad",
-      image: "/launchpad.png",
+      image: "/launchPad.jpeg",
       link: "/launchpad"
     },
     {
       title: "MetaLoot SDK", 
-      image: "/sdk.png",
+      image: "/comingSoon.png",
       link: "/sdk"
     },
     {
-      title: "Developer Portal",
-      image: "/portal.png",
+      title: "Analytics Dashboard",
+      image: "/comingSoon.png",
       link: "/developers"
     },
     {
       title: "Community Hub",
-      image: "/community.png", 
+      image: "/comingSoon.png", 
       link: "/community"
     }
   ]

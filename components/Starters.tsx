@@ -53,7 +53,7 @@ export default function Starters() {
         "Configure environment variables",
         "Run the development server"
       ],
-      image: "/quickstart.png"
+      image: "/starter1.jpeg"
     },
     {
       title: "NFT Marketplace Setup",
@@ -64,7 +64,7 @@ export default function Starters() {
         "Implement frontend components",
         "Deploy to mainnet"
       ],
-      image: "/nft-marketplace.png"
+      image: "/starter2.jpg"
     },
     {
       title: "Token Gating Implementation",
@@ -75,7 +75,7 @@ export default function Starters() {
         "Configure access rules",
         "Test gated content"
       ],
-      image: "/token-gating.png"
+      image: "/starter3.png"
     }
   ];
 

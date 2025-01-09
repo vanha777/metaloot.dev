@@ -54,7 +54,7 @@ export default function Demo() {
           <div className="flex flex-col md:flex-row">
             <div className="md:w-1/2 relative h-[300px] md:h-auto">
               <Image
-                src="/demo-game.png"
+                src="/demo.jpg"
                 alt="Demo Game Preview"
                 fill
                 priority

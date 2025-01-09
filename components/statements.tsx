@@ -44,36 +44,37 @@ export default function Statements() {
 
   const cards = [
     {
-      title: "Accelerate Development",
-      description: "Cut months off your development cycle with our ready-to-use blockchain infrastructure. Focus on creating amazing gameplay while we handle the Web3 complexity.",
-      icon: FaRocket
+      title: "Save Development Time",
+      description: "Developers spend an average of 6–12 months integrating blockchain from scratch. With our API, you can get your game on-chain in as little as 7 days, letting you focus on gameplay instead of infrastructure.",
+      icon: FaRocket,
     },
     {
-      title: "Reduce Operational Costs", 
-      description: "Save on infrastructure and maintenance costs. Our managed blockchain services eliminate the need for specialized blockchain DevOps teams.",
-      icon: FaPiggyBank
+      title: "Cut Costs Significantly",
+      description: "Building and maintaining blockchain infrastructure requires expensive DevOps teams and constant upgrades. Our managed services save you up to 70% in operational costs.",
+      icon: FaPiggyBank,
     },
     {
-      title: "Scale With Confidence",
-      description: "Our battle-tested infrastructure handles millions of transactions daily. Scale your game without worrying about blockchain performance bottlenecks.",
-      icon: FaChartLine
+      title: "Ensure Reliable Performance",
+      description: "Our infrastructure is built to handle millions of transactions daily with low latency and high reliability. Whether it's player trades or on-chain rewards, scale confidently without disruptions.",
+      icon: FaChartLine,
     },
     {
-      title: "Future-Proof Architecture",
-      description: "Built on industry standards and best practices, our infrastructure evolves with the blockchain ecosystem, ensuring your game stays compatible and secure.",
-      icon: FaShieldAlt
+      title: "Stay Ahead with Future-Proof Tech",
+      description: "Blockchain technology evolves rapidly. Our system ensures compatibility with emerging standards, so your game remains secure, scalable, and compatible with new Web3 advancements.",
+      icon: FaShieldAlt,
     },
     {
-      title: "Minimize Technical Debt",
-      description: "Avoid common blockchain implementation pitfalls with our optimized architecture. Build on a solid foundation that grows with your game.",
-      icon: FaCode
+      title: "Avoid Costly Mistakes",
+      description: "Blockchain is complex, and poorly implemented solutions lead to downtime, exploits, or high costs. Our robust architecture ensures you avoid technical pitfalls and build on a solid foundation.",
+      icon: FaCode,
     },
     {
-      title: "Rapid Integration",
-      description: "Get your game on-chain in days, not months. Our SDK and documentation make blockchain integration as simple as traditional web services.",
-      icon: FaBolt
+      title: "Simple Integration, Immediate Results",
+      description: "Our SDKs and step-by-step documentation make blockchain integration as easy as connecting to a traditional API. No need for Web3 expertise—get started in hours, not months.",
+      icon: FaBolt,
     },
   ];
+  
 
   return (
     <section className="bg-[#010205] relative overflow-hidden flex items-center justify-center px-2 md:px-4 text-white py-24">
