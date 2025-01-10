@@ -91,7 +91,8 @@ export default function Features() {
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-[#14F195] rounded-full filter blur-[150px] opacity-65 animate-pulse delay-500" />
 
         {/* Gradient mesh */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0f1c3d]/80 via-[#132552]/75 to-[#1b2f66]/70" />
+        {/* <div className="absolute inset-0 bg-gradient-to-br from-[#0f1c3d]/80 via-[#132552]/75 to-[#1b2f66]/70" /> */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#071A2F]/90 via-[#0A527A]/80 to-[#0CC0DF]/70" />
 
         {/* Subtle grid overlay */}
         <div className="absolute inset-0 bg-[url('/grid.png')] opacity-40 bg-repeat bg-center"
@@ -105,9 +106,9 @@ export default function Features() {
         animate="visible"
       >
         <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-left my-32">
-          <span className="text-white">Designed by devs</span>
+          <span className="text-white">DESIGNED BY DEVS</span>
           <br className="mb-12" />
-          <span className="bg-gradient-to-r from-[#14F195] to-[#9945FF] bg-clip-text text-transparent">For Devs</span>
+          <span className="bg-gradient-to-r from-[#0CC0DF] to-[#14F195] bg-clip-text text-transparent">FOR DEVS</span>
         </h1>
         <div className="flex flex-col gap-48 w-full max-w-7xl mx-auto">
           {cards.map((card, index) => (
@@ -121,7 +122,7 @@ export default function Features() {
                 <h2 className="text-xl md:text-2xl font-bold mb-2 bg-gradient-to-r from-[#0CC0DF] to-[#0CC0DF]/70 bg-clip-text text-transparent">
                   {card.title}
                 </h2>
-                <p className="text-sm md:text-base text-gray-300 leading-relaxed">
+                <p className="text-sm md:text-base text-gray-200 leading-relaxed">
                   {card.description}
                 </p>
               </div>

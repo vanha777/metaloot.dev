@@ -99,9 +99,7 @@ export default function Starters() {
       <div className="absolute inset-0 bg-[#0f1c3d]">
         <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-[#14F195] rounded-full filter blur-[120px] opacity-75 animate-pulse" />
         <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-[#9945FF] rounded-full filter blur-[120px] opacity-70 animate-pulse delay-1000" />
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0f1c3d]/80 via-[#132552]/75 to-[#1b2f66]/70" />
-        <div className="absolute inset-0 bg-[url('/grid.png')] opacity-40 bg-repeat bg-center" 
-             style={{ backgroundSize: '50px 50px' }} />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#071A2F]/90 via-[#0A527A]/80 to-[#0CC0DF]/70" />
       </div>
 
       <motion.div
@@ -111,9 +109,9 @@ export default function Starters() {
         animate="visible"
       >
         <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-left my-32">
-          <span className="text-white">Quick Start</span>
+          <span className="text-white">QUICK START</span>
           <br className="mb-12"/>
-          <span className="bg-gradient-to-r from-[#14F195] to-[#9945FF] bg-clip-text text-transparent">Guides</span>
+          <span className="bg-gradient-to-r from-[#0CC0DF] to-[#14F195] bg-clip-text text-transparent">GUIDES</span>
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
@@ -132,7 +130,7 @@ export default function Starters() {
                 />
               </div>
               
-              <h3 className="text-xl font-bold mb-2 bg-gradient-to-r from-[#14F195] to-[#9945FF] bg-clip-text text-transparent">
+              <h3 className="text-xl font-bold mb-2 bg-gradient-to-r from-[#0CC0DF] to-[#14F195] bg-clip-text text-transparent">
                 {tutorial.title}
               </h3>
               

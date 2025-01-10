@@ -31,9 +31,9 @@ export default function BigStatement() {
             <div className="hero-content relative z-10">
                 <div className="flex flex-col items-center gap-16">
                     <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-center mt-32 mb-32">
-                        <span className="text-white">Analytics Dashboard</span>
+                        <span className="text-white">ANALYTICS DASHBOARD</span>
                         <br className="mb-4"/>
-                        <span className="bg-gradient-to-r from-[#14F195] to-[#9945FF] bg-clip-text text-transparent">for Better Decisions</span>
+                        <span className="bg-gradient-to-r from-[#0CC0DF] to-[#14F195] bg-clip-text text-transparent">FOR BETTER DECISIONS</span>
                     </h1>
 
                     <motion.div

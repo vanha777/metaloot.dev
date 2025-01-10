@@ -37,11 +37,11 @@ export default function Demo() {
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-[#14F195] rounded-full filter blur-[150px] opacity-65 animate-pulse delay-500" />
         
         {/* Gradient mesh */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0f1c3d]/80 via-[#132552]/75 to-[#1b2f66]/70" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#071A2F]/90 via-[#0A527A]/80 to-[#0CC0DF]/70" />
         
         {/* Subtle grid overlay */}
-        <div className="absolute inset-0 bg-[url('/grid.png')] opacity-40 bg-repeat bg-center" 
-             style={{ backgroundSize: '50px 50px' }} />
+        {/* <div className="absolute inset-0 bg-[url('/grid.png')] opacity-40 bg-repeat bg-center" 
+             style={{ backgroundSize: '50px 50px' }} /> */}
       </div>
 
       <motion.div
@@ -63,14 +63,14 @@ export default function Demo() {
             </div>
             
             <div className="md:w-1/2 p-8 flex flex-col justify-center">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-[#14F195] to-[#9945FF] bg-clip-text text-transparent">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-[#0CC0DF] to-[#14F195] bg-clip-text text-transparent">
                 Try Our Demo Game
               </h2>
               <p className="text-gray-200 mb-6 text-lg leading-relaxed">
                 Experience the future of blockchain gaming with our interactive demo. 
                 Features NFT integration, real-time transactions, and seamless wallet connectivity.
               </p>
-              <button className="bg-gradient-to-r from-[#14F195] to-[#9945FF] text-white font-bold py-3 px-8 rounded-lg hover:opacity-90 transition-opacity w-fit">
+              <button className="bg-gradient-to-r from-[#0CC0DF] to-[#14F195] text-white font-bold py-3 px-8 rounded-lg hover:opacity-90 transition-opacity w-fit">
                 Play Now
               </button>
             </div>

@@ -133,11 +133,10 @@ export default function Statements() {
         animate="visible"
       >
         <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-center mb-32 mt-32">
-          <span className="text-white">Purpose built for</span>
+          <span className="text-white">PURPOSE BUILT FOR</span>
           <br className="mb-4"/>
-          <span className="bg-gradient-to-r from-[#14F195] to-[#9945FF] bg-clip-text text-transparent">Games Applications</span>
+          <span className="bg-gradient-to-r from-[#0CC0DF] to-[#14F195] bg-clip-text text-transparent">GAMES APPLICATIONS</span>
         </h1>
-        
         <div className={`grid ${isMobile ? 'grid-cols-1 gap-6' : 'grid-cols-3 gap-8'} w-full max-w-6xl mx-auto`}>
           {cards.map((card, index) => (
             <motion.div
