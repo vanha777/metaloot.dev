@@ -152,7 +152,7 @@ export default function Statements() {
                 <h2 className="text-xl md:text-2xl font-bold mb-2 bg-gradient-to-r from-[#0CC0DF] to-[#0CC0DF]/70 bg-clip-text text-transparent">
                   {card.title}
                 </h2>
-                <p className="text-sm md:text-base text-gray-300 leading-relaxed">
+                <p className="text-sm md:text-base text-gray-200 leading-relaxed">
                   {card.description}
                 </p>
               </div>

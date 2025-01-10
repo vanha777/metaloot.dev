@@ -54,7 +54,7 @@ export default function WhatNew() {
       {/* Background effects */}
       <div className="absolute inset-0">
         <div className="absolute w-full h-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#0CC0DF] via-black to-[#020309] opacity-10" />
-        <div className="absolute inset-0 bg-[url('/grid.png')] opacity-20" />
+        {/* <div className="absolute inset-0 bg-[url('/grid.png')] opacity-20" /> */}
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
