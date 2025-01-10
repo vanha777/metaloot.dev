@@ -11,7 +11,7 @@ export default function Statements() {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768)
     }
-    
+
     checkMobile()
     window.addEventListener('resize', checkMobile)
     return () => window.removeEventListener('resize', checkMobile)
@@ -74,7 +74,7 @@ export default function Statements() {
       icon: FaBolt,
     },
   ];
-  
+
 
   return (
     <section className="bg-[#010205] relative overflow-hidden flex items-center justify-center px-2 md:px-4 text-white py-24">
@@ -133,11 +133,24 @@ export default function Statements() {
         animate="visible"
       >
         <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-center mb-32 mt-32">
-          <span className="text-white">Purpose built for</span>
-          <br className="mb-4"/>
-          <span className="bg-gradient-to-r from-[#14F195] to-[#9945FF] bg-clip-text text-transparent">Games Applications</span>
+          <div className="flex flex-col items-center w-full">
+            <span className="text-white w-full md:w-[800px] border-t border-b border-white/60 py-4 text-4xl md:text-5xl lg:text-7xl px-4 md:px-0 font-jersey">PURPOSE BUILT FOR</span>
+            <div className="h-8 md:h-16"></div>
+            <span className="bg-[#14F195] text-black w-full md:w-[800px] text-4xl md:text-4xl px-4 md:px-0">Games Applications.</span>
+            <div className="h-4 md:h-6"></div>
+            {/* Vertical lines */}
+            <div className="w-full md:w-[800px] h-4">
+              <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                <pattern id="warning-stripes" patternUnits="userSpaceOnUse" width="30" height="30" patternTransform="rotate(45)">
+                  <rect width="30" height="15" fill="#14F195" />
+                  <rect width="30" height="15" y="15" fill="#0d9d5f" />
+                </pattern>
+                <rect width="100%" height="100%" fill="url(#warning-stripes)" />
+              </svg>
+            </div>
+          </div>
         </h1>
-        
+
         <div className={`grid ${isMobile ? 'grid-cols-1 gap-6' : 'grid-cols-3 gap-8'} w-full max-w-6xl mx-auto`}>
           {cards.map((card, index) => (
             <motion.div

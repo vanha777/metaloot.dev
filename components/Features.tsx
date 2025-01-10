@@ -104,10 +104,22 @@ export default function Features() {
         initial="hidden"
         animate="visible"
       >
-        <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-left my-32">
-          <span className="text-white">Designed by devs</span>
-          <br className="mb-12" />
-          <span className="bg-gradient-to-r from-[#14F195] to-[#9945FF] bg-clip-text text-transparent">For Devs</span>
+        <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-center mb-32 mt-32">
+          <div className="flex flex-col items-center w-full">
+            <span className="text-white w-full md:w-[800px] border-t border-b border-white/60 py-4 text-4xl md:text-5xl lg:text-7xl px-4 md:px-0 font-jersey">DESIGNED BY DEVS</span>
+            <div className="h-8 md:h-16"></div>
+            <span className="bg-[#14F195] text-black w-full md:w-[800px] text-4xl md:text-4xl px-4 md:px-0">For Devs.</span>
+            <div className="h-4 md:h-6"></div>
+            <div className="w-full md:w-[800px] h-4">
+              <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                <pattern id="warning-stripes" patternUnits="userSpaceOnUse" width="30" height="30" patternTransform="rotate(45)">
+                  <rect width="30" height="15" fill="#14F195" />
+                  <rect width="30" height="15" y="15" fill="#0d9d5f" />
+                </pattern>
+                <rect width="100%" height="100%" fill="url(#warning-stripes)" />
+              </svg>
+            </div>
+          </div>
         </h1>
         <div className="flex flex-col gap-48 w-full max-w-7xl mx-auto">
           {cards.map((card, index) => (

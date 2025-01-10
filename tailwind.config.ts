@@ -12,6 +12,10 @@ module.exports = {
         secondary: '#4ECDC4',
         accent: '#45B7D1',
       },
+      fontFamily: {
+        mono: ['JetBrains Mono', 'Roboto Mono', 'Courier New', 'monospace','Transformers'],
+        jersey: ['Jersey15', 'sans-serif'],
+      },
     },
   },
   plugins: [
