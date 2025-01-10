@@ -194,7 +194,7 @@ export default function Starters() {
             <h3 className="text-2xl font-bold mb-4">Want to know more?</h3>
             <p className="text-gray-400 mb-6">Join our Discord community! We're happy to answer any questions you might have.</p>
             <a
-              href="https://discord.gg/metaloot"
+              href="https://discord.com/invite/U7WJBdCtjv"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-[#5865F2] hover:bg-[#4752C4] transition-colors px-8 py-3 rounded-lg font-medium flex items-center gap-2"
