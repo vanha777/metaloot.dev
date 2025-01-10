@@ -51,32 +51,32 @@ export default function Features() {
     {
       title: "Simple Player Login",
       description: "Let your players log in using Google or Apple accounts—no wallets, no seed phrases, no friction. A Web2-like onboarding experience powered by Web3 technology.",
-      image: "/standard1.jpg"
+      image: "/login.jpeg"
     },
     {
       title: "One-Click Asset Minting",
       description: "Mint NFTs, game items, and tokens effortlessly with a single API call. No need for smart contract development or blockchain expertise—our API handles it all.",
-      image: "/statement_2.png",
+      image: "/rewards.jpeg",
     },
     {
       title: "Custom Tokenomics in Minutes",
       description: "Define your game’s economy and create in-game currencies or rewards systems with a few API calls. Build tokenomics tailored to your game’s unique vision without writing blockchain code.",
-      image: "/statement_1.png"
+      image: "/tokenomic.jpeg"
     },
     {
       title: "Launch a Branded Marketplace",
       description: "Create your own fully-branded, decentralized marketplace. Publicly accessible on the Solana blockchain, enabling players to trade assets seamlessly and securely.",
-      image: "/statement_3.png",
+      image: "/marketplaces.jpeg",
     },
     {
       title: "No Blockchain Expertise Needed",
       description: "Focus on building amazing gameplay. We provide all the tools—minting, transactions, token management—through an intuitive API, so you never need to worry about blockchain intricacies.",
-      image: "/no_blockchain_expertise.png",
+      image: "/zeroknowledge.png",
     },
     {
       title: "True On-Chain Ownership",
       description: "Every asset is real, on-chain, and belongs to the player. They can withdraw items or tokens to their personal wallets anytime, ensuring transparency and true ownership.",
-      image: "/statement_3.png",
+      image: "/ownership.jpeg",
     },
   ];
 
