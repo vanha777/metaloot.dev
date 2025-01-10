@@ -33,7 +33,7 @@ export default function Partner() {
       <div className="relative z-10">
         <h2 className="text-sm md:text-base text-center mb-16">
           <span className="text-white">Built on and Partnered with</span>{" "}
-          <span className="bg-gradient-to-r from-[#14F195] to-[#9945FF] bg-clip-text text-transparent">Leading Web3 Protocols</span>
+          <span className="bg-gradient-to-r from-[#0CC0DF] to-[#14F195] bg-clip-text text-transparent">Leading Web3 Protocols</span>
         </h2>
 
         <div className="relative flex overflow-x-hidden">

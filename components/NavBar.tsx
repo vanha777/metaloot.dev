@@ -14,7 +14,7 @@ export default function NavBar() {
                 <div className="flex justify-between items-center h-16">
                     {/* Logo */}
                     <Link href="/" className="flex items-center">
-                        <span className="text-xl font-bold bg-gradient-to-r from-[#14F195] to-[#9945FF] bg-clip-text text-transparent">
+                        <span className="text-xl font-bold bg-gradient-to-r from-[#0CC0DF] to-[#14F195] bg-clip-text text-transparent">
                             MetaLoot
                         </span>
                     </Link>
@@ -39,7 +39,7 @@ export default function NavBar() {
                     <div>
                         <Link
                             href="/demo"
-                            className="bg-gradient-to-r from-[#14F195] to-[#9945FF] text-white px-6 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity"
+                            className="bg-gradient-to-r from-[#0CC0DF] to-[#14F195] text-white px-6 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity"
                         >
                             Let's Build
                         </Link>
