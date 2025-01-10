@@ -64,8 +64,9 @@ export default function WhatNew() {
           transition={{ duration: 0.5 }}
           className="text-center mb-20"
         >
-          <h2 className="text-4xl md:text-6xl font-bold mb-6">
-            <span className="text-[#0CC0DF]">What's New</span>
+          <h2 className="text-4xl md:text-5xl lg:text-7xl font-bold text-center mt-32 mb-10">
+            <span className="text-white">WHAT'S</span>{" "}
+            <span className="bg-gradient-to-r from-[#0CC0DF] to-[#14F195] bg-clip-text text-transparent">NEW</span>
           </h2>
           <p className="text-xl text-gray-400 max-w-2xl mx-auto">
             Discover the latest updates about MetaLoot, our projects and development progress. Stay informed about new features and improvements.
