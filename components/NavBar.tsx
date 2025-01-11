@@ -34,7 +34,12 @@ export default function NavBar() {
                         <Link href="#about" className="text-gray-300 hover:text-white transition-colors">
                             Pricing
                         </Link>
-                        <Link href="#roadmap" className="text-gray-300 hover:text-white transition-colors">
+                        <Link 
+                            href="https://elements.getpostman.com/redirect?entityId=29394455-c5b64067-a25c-42c6-b34d-1b5399dcbcf7&entityType=collection"
+                            target="_blank"
+                            rel="noopener noreferrer" 
+                            className="text-gray-300 hover:text-white transition-colors"
+                        >
                             Docs
                         </Link>
                         <Link href="#contact" className="text-gray-300 hover:text-white transition-colors">
@@ -45,7 +50,9 @@ export default function NavBar() {
                     {/* CTA Button */}
                     <div>
                         <Link
-                            href="/demo"
+                            href="https://elements.getpostman.com/redirect?entityId=29394455-c5b64067-a25c-42c6-b34d-1b5399dcbcf7&entityType=collection"
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="bg-gradient-to-r from-[#0CC0DF] to-[#14F195] text-white px-6 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity"
                         >
                             Let's Build
