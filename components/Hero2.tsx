@@ -6,26 +6,22 @@ export default function Hero() {
   const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
-    // Initialize with window check to avoid hydration mismatch
-    if (typeof window !== 'undefined') {
-      const checkMobile = () => {
-        setIsMobile(window.innerWidth < 768)
-      }
-      
-      // Run initial check
-      checkMobile()
-
-      // Add resize listener
-      window.addEventListener('resize', checkMobile)
-
-      // Cleanup
-      return () => window.removeEventListener('resize', checkMobile)
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
     }
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
   }, [])
+
+  useEffect(() => {
+    console.log("this is mobile check", isMobile);
+  }, [isMobile])
 
   return (
     <div className="hero min-h-screen bg-[#020309] relative overflow-hidden">
       <video
+        key={isMobile ? "mobile" : "desktop"}
         autoPlay
         loop
         muted
