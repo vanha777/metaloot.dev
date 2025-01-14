@@ -18,7 +18,7 @@ export default function Footer() {
     {
       title: "Resources",
       links: [
-        { name: "Documentation", href: "https://elements.getpostman.com/redirect?entityId=29604463-cfbfb0ff-3b84-43fb-a332-30f653010457&entityType=collection" },
+        { name: "Documentation", href: "https://documenter.getpostman.com/view/29604463/2sAYQXnsMR" },
         { name: "Tutorials", href: "/tutorials" },
         { name: "Blog", href: "/blog" },
         { name: "Support", href: "/support" }

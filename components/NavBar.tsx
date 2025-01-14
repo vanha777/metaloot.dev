@@ -35,7 +35,7 @@ export default function NavBar() {
                             Pricing
                         </Link>
                         <Link 
-                            href="https://elements.getpostman.com/redirect?entityId=29604463-cfbfb0ff-3b84-43fb-a332-30f653010457&entityType=collection"
+                            href="https://documenter.getpostman.com/view/29604463/2sAYQXnsMR"
                             target="_blank"
                             rel="noopener noreferrer" 
                             className="text-gray-300 hover:text-white transition-colors"
@@ -50,7 +50,7 @@ export default function NavBar() {
                     {/* CTA Button */}
                     <div>
                         <Link
-                            href="https://elements.getpostman.com/redirect?entityId=29604463-cfbfb0ff-3b84-43fb-a332-30f653010457&entityType=collection"
+                            href="https://documenter.getpostman.com/view/29604463/2sAYQXnsMR"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="bg-gradient-to-r from-[#0CC0DF] to-[#14F195] text-white px-6 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity"
