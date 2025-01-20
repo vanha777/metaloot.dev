@@ -9,7 +9,7 @@ export default function WhatNew() {
     {
       title: "MetaLoot Launch Pad",
       image: "/launchPad.jpeg",
-      link: "/launchpad"
+      link: "https://www.metaloot.app/"
     },
     {
       title: "MetaLoot SDK", 
