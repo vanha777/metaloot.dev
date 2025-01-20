@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 import Image from 'next/image'
-import Link from 'next/link'
+// import Link from 'next/link'
 
 export default function WhatNew() {
   const projects = [
@@ -80,7 +80,7 @@ export default function WhatNew() {
           className="grid grid-cols-1 md:grid-cols-2 gap-8"
         >
           {projects.map((project, index) => (
-            <Link href={project.link} key={index}>
+            <a href={project.link} target="_blank" rel="noopener noreferrer" key={index}>
               <motion.div
                 variants={itemVariants}
                 className="relative group cursor-pointer"
@@ -100,7 +100,7 @@ export default function WhatNew() {
                   </div>
                 </div>
               </motion.div>
-            </Link>
+            </a>
           ))}
         </motion.div>
       </div>
