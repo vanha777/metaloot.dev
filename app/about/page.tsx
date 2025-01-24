@@ -119,28 +119,28 @@ export default function About() {
                 <motion.div
                   key={index}
                   variants={itemVariants}
-                  className="bg-[#0f1c3d]/50 rounded-xl p-6 backdrop-blur-sm"
+                  className="bg-[#0f1c3d]/50 rounded-xl p-6 backdrop-blur-sm hover:bg-[#0f1c3d]/70 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-[#0CC0DF]/20 group"
                 >
                   <div className="relative w-full aspect-square mb-4 rounded-xl overflow-hidden">
                     <Image
                       src={member.image}
                       alt={member.name}
                       fill
-                      className="object-cover"
+                      className="object-cover object-center scale-75 group-hover:scale-85 transition-transform duration-300" 
                     />
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-2">{member.name}</h3>
-                  <p className="text-gray-300 mb-4">{member.role}</p>
+                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-[#0CC0DF] transition-colors">{member.name}</h3>
+                  <p className="text-gray-300 mb-4 group-hover:text-white transition-colors">{member.role}</p>
                   <a
                     href={member.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[#9945FF] hover:underline flex items-center gap-2"
+                    className="text-[#9945FF] hover:text-[#0CC0DF] transition-colors flex items-center gap-2 group-hover:translate-x-2 duration-300"
                   >
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                     </svg>
-                    Find me
+                    Poke me
                   </a>
                 </motion.div>
               ))}
