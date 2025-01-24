@@ -14,17 +14,17 @@ export default function WhatNew() {
     {
       title: "MetaLoot SDK", 
       image: "/comingSoon.png",
-      link: "/sdk"
+      link: "/"
     },
     {
       title: "Analytics Dashboard",
       image: "/comingSoon.png",
-      link: "/developers"
+      link: "/"
     },
     {
       title: "Community Hub",
       image: "/comingSoon.png", 
-      link: "/community"
+      link: "/"
     }
   ]
 

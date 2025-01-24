@@ -10,8 +10,8 @@ export default function Footer() {
       title: "Product",
       links: [
         { name: "LaunchPad", href: "https://www.metaloot.app/" },
-        { name: "SDK", href: "/sdk" },
-        { name: "Analytics Dashboard", href: "/developers" },
+        // { name: "SDK", href: "/sdk" },
+        // { name: "Analytics Dashboard", href: "/developers" },
         { name: "Community Hub", href: "https://discord.gg/U7WJBdCtjv" }
       ]
     },
@@ -20,15 +20,15 @@ export default function Footer() {
       links: [
         { name: "Documentation", href: "https://documenter.getpostman.com/view/29604463/2sAYQXnsMR" },
         { name: "Tutorials", href: "/tutorials" },
-        { name: "Blog", href: "/blog" },
-        { name: "Support", href: "/support" }
+        // { name: "Blog", href: "/blog" },
+        { name: "Support", href: "https://discord.gg/U7WJBdCtjv" }
       ]
     },
     {
       title: "Company",
       links: [
         { name: "About", href: "/about" },
-        { name: "Careers", href: "/careers" },
+        // { name: "Careers", href: "/careers" },
         { name: "Contact", href: "/contact" },
       ]
     }
