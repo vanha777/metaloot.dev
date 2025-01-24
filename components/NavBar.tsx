@@ -28,10 +28,10 @@ export default function NavBar() {
 
                     {/* Navigation Links */}
                     <div className="hidden md:flex items-center space-x-8">
-                        <Link href="#features" className="text-gray-300 hover:text-white transition-colors">
+                        <Link href="about" className="text-gray-300 hover:text-white transition-colors">
                             About
                         </Link>
-                        <Link href="#about" className="text-gray-300 hover:text-white transition-colors">
+                        <Link href="pricing" className="text-gray-300 hover:text-white transition-colors">
                             Pricing
                         </Link>
                         <Link 
@@ -42,7 +42,7 @@ export default function NavBar() {
                         >
                             Docs
                         </Link>
-                        <Link href="#contact" className="text-gray-300 hover:text-white transition-colors">
+                        <Link href="contact" className="text-gray-300 hover:text-white transition-colors">
                             Support
                         </Link>
                     </div>

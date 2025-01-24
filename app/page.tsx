@@ -1,12 +1,8 @@
 'use client'
 
 import { useState, useEffect, Suspense } from 'react'
-import Hero from '@/components/Hero'
 import Satements from '@/components/statements'
-import Roadmap from '@/components/Roadmap'
-import About from '@/components/about'
 import BigStatement from '@/components/BigStatement'
-import Coin from '@/components/Coin'
 import Hero2 from '@/components/Hero2'
 import Demo from '@/components/Demo'
 import Features from '@/components/Features'

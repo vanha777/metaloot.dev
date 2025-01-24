@@ -9,10 +9,10 @@ export default function Footer() {
     {
       title: "Product",
       links: [
-        { name: "LaunchPad", href: "/launchpad" },
+        { name: "LaunchPad", href: "https://www.metaloot.app/" },
         { name: "SDK", href: "/sdk" },
         { name: "Analytics Dashboard", href: "/developers" },
-        { name: "Community Hub", href: "/community" }
+        { name: "Community Hub", href: "https://discord.gg/U7WJBdCtjv" }
       ]
     },
     {
@@ -30,7 +30,6 @@ export default function Footer() {
         { name: "About", href: "/about" },
         { name: "Careers", href: "/careers" },
         { name: "Contact", href: "/contact" },
-        { name: "Privacy Policy", href: "/privacy" }
       ]
     }
   ]
