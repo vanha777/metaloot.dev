@@ -34,13 +34,13 @@ export default function About() {
   const teamMembers = [
     {
       name: "Patrick Ha",
-      role: "Founder & CEO",
+      role: "Saturnors",
       image: "/founder11.jpeg",
       linkedin: "https://x.com/patricksaturnor"
     },
     {
       name: "Roman Lobanov",
-      role: "Founder & CEO",
+      role: "Saturnors",
       image: "/founder2.jpeg",
       linkedin: "https://x.com/ComplexiaSC"
     }
