@@ -39,37 +39,37 @@ export default function RootLayout({
     <html lang="en" data-theme="metaloot">
       <Head>
         {/* General Meta Tags */}
-        <meta name="title" content="MetaLoot - Bridge Between Gaming and Reality" />
-        <meta name="description" content="Multiverse On-Chain Gaming Protocol: Revolutionizing Gaming Experiences." />
+        <meta name="title" content="MetaLoot - Blockchain API For Gaming" />
+        <meta name="description" content="Ship faster, cheaper and better with our API." />
 
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.metaloot.app/" />
-        <meta property="og:title" content="MetaLoot - Bridge Between Gaming and Reality" />
-        <meta property="og:description" content="Multiverse On-Chain Gaming Protocol: Revolutionizing Gaming Experiences." />
-        <meta property="og:image" content="https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/fire.jpg" />
+        <meta property="og:url" content="https://www.metaloot.dev/" />
+        <meta property="og:title" content="MetaLoot - Blockchain API For Gaming" />
+        <meta property="og:description" content="Ship faster, cheaper and better with our API." />
+        <meta property="og:image" content="https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/banner.png" />
         <meta property="og:image:alt" content="A stunning preview of MetaLoot's multiverse gaming platform" />
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content="https://www.metaloot.app/" />
-        <meta name="twitter:title" content="MetaLoot - Bridge Between Gaming and Reality" />
-        <meta name="twitter:description" content="Multiverse On-Chain Gaming Protocol: Revolutionizing Gaming Experiences." />
-        <meta name="twitter:image" content="https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/fire.jpg" />
+        <meta name="twitter:url" content="https://www.metaloot.dev/" />
+        <meta name="twitter:title" content="MetaLoot - Blockchain API For Gaming" />
+        <meta name="twitter:description" content="Ship faster, cheaper and better with our API." />
+        <meta name="twitter:image" content="https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/banner.png" />
         <meta name="twitter:image:alt" content="A stunning preview of MetaLoot's multiverse gaming platform" />
         <meta name="twitter:site" content="@playmetaloot" />
         <meta name="twitter:creator" content="@playmetaloot" />
 
         {/* Telegram */}
-        <meta property="og:title" content="MetaLoot - Bridge Between Gaming and Reality" />
-        <meta property="og:description" content="Multiverse On-Chain Gaming Protocol: Revolutionizing Gaming Experiences." />
-        <meta property="og:image" content="https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/fire.jpg" />
-        <meta property="og:url" content="https://www.metaloot.app/" />
+        <meta property="og:title" content="MetaLoot - Blockchain API For Gaming" />
+        <meta property="og:description" content="Ship faster, cheaper and better with our API." />
+        <meta property="og:image" content="https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/banner.png" />
+        <meta property="og:url" content="https://www.metaloot.dev/" />
 
         {/* Discord */}
-        <meta property="og:title" content="MetaLoot - Bridge Between Gaming and Reality" />
-        <meta property="og:description" content="Multiverse On-Chain Gaming Protocol: Revolutionizing Gaming Experiences." />
-        <meta property="og:image" content="https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/fire.jpg" />
+        <meta property="og:title" content="MetaLoot - Blockchain API For Gaming" />
+        <meta property="og:description" content="Ship faster, cheaper and better with our API." />
+        <meta property="og:image" content="https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/banner.png" />
         <meta property="og:type" content="website" />
       </Head>
       <body className={inter.className}>
