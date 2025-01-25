@@ -60,7 +60,7 @@ export default function Pricing() {
     },
     {
       name: "Pro",
-      price: "$499",
+      price: "$20",
       description: "Ideal for growing games and applications",
       features: [
         "Up to 100,000 transactions/month",
