@@ -6,16 +6,16 @@ import { Analytics } from "@vercel/analytics/react"
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'MetaLoot - Bridge Between Gaming and Reality',
-  description: 'Multiverse On-Chain Gaming Protocol: Revolutionizing Gaming Experiences.',
+  title: 'MetaLoot - Blockchain API For Gamingy',
+  description: 'Ship faster, cheaper and better with our API.',
   openGraph: {
-    title: 'MetaLoot - Bridge Between Gaming and Reality',
-    description: 'Multiverse On-Chain Gaming Protocol: Revolutionizing Gaming Experiences.',
-    url: 'https://www.metaloot.app/',
+    title: 'MetaLoot - Blockchain API For Gamingy',
+    description: 'Ship faster, cheaper and better with our API.',
+    url: 'https://www.metaloot.dev/',
     images: [
       {
-        url: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/crypto-ql/fire.jpg',
-        alt: 'MetaLoot In Action',
+        url: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/banner.png',
+        alt: 'MetaLoot blockchain API For Gaming',
       },
     ],
   },
