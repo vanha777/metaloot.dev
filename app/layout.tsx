@@ -6,10 +6,10 @@ import { Analytics } from "@vercel/analytics/react"
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'MetaLoot - Blockchain API For Gamingy',
+  title: 'MetaLoot - Blockchain API For Gaming',
   description: 'Ship faster, cheaper and better with our API.',
   openGraph: {
-    title: 'MetaLoot - Blockchain API For Gamingy',
+    title: 'MetaLoot - Blockchain API For Gaming',
     description: 'Ship faster, cheaper and better with our API.',
     url: 'https://www.metaloot.dev/',
     images: [
