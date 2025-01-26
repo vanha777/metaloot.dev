@@ -5,6 +5,11 @@ import NavBar from '@/components/NavBar'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { useState } from 'react'
+import AnalyticsSection from './components/AnalyticsSection'
+import GameSection from './components/GameSection'
+import PlayersSection from './components/PlayersSection'
+import CollectionsSection from './components/CollectionsSection'
+import TokenomicsSection from './components/TokenomicsSection'
 
 export default function Dashboard() {
   const containerVariants = {
@@ -87,35 +92,11 @@ export default function Dashboard() {
             animate="visible"
             className="bg-[#0f1c3d]/50 rounded-xl p-6 backdrop-blur-sm"
           >
-            {activeMenu === 'analytics' && (
-              <div className="space-y-6">
-                <h2 className="text-2xl font-bold text-white">Analytics Dashboard</h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  {['Total Players', 'Active Games', 'Revenue'].map((metric) => (
-                    <div key={metric} className="bg-[#071A2F] p-6 rounded-xl">
-                      <h3 className="text-[#0CC0DF] text-lg">{metric}</h3>
-                      <p className="text-white text-2xl font-bold">0</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {activeMenu === 'game' && (
-              <div className="space-y-6">
-                <h2 className="text-2xl font-bold text-white">Game Management</h2>
-                <div className="space-y-4">
-                  <button className="bg-[#14F195] text-[#071A2F] px-6 py-3 rounded-lg font-bold">
-                    Create New Game
-                  </button>
-                  <button className="bg-[#0CC0DF] text-[#071A2F] px-6 py-3 rounded-lg font-bold ml-4">
-                    Update Game Info
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* Add similar sections for tokenomics, collections, and player stats */}
+            {activeMenu === 'analytics' && <AnalyticsSection />}
+            {activeMenu === 'game' && <GameSection />}
+            {activeMenu === 'tokenomics' && <TokenomicsSection />}
+            {activeMenu === 'collections' && <CollectionsSection />}
+            {activeMenu === 'players' && <PlayersSection />}
           </motion.div>
         </div>
       </div>
