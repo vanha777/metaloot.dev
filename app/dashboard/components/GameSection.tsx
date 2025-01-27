@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Game } from "@/app/types/game";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGhost, faPencil, faPlus, faXmark, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FaGhost, FaPencilAlt, FaPlus, FaTimes, FaTrash } from "react-icons/fa";
 
 export default function GameSection() {
   const [games, setGames] = useState<Game[]>([]);
@@ -68,7 +67,7 @@ export default function GameSection() {
         <h2 className="text-2xl font-bold text-white">Game Management</h2>
         <div className="flex gap-4">
           <button className="bg-[#14F195] hover:bg-[#14F195]/80 text-[#071A2F] px-6 py-3 rounded-lg font-medium flex items-center gap-2">
-            <FontAwesomeIcon icon={faPlus} className="text-lg text-[#071A2F]" />
+            <FaPlus className="text-base text-[#071A2F]" />
             <span className="text-lg">New Game</span>
           </button>
         </div>
@@ -118,11 +117,8 @@ export default function GameSection() {
             ))}
           </div>
         ) : (
-          <div className="text-center py-8 text-gray-400">
-            <FontAwesomeIcon
-              icon={faGhost}
-              className="text-[#0CC0DF] text-4xl mb-2"
-            />
+          <div className="text-center py-8 text-gray-40 flex flex-col items-center justify-center">
+            <FaGhost className="text-[#0CC0DF] text-4xl mb-2" />
             <p>No game data available. Create a new game to get started.</p>
           </div>
         )}
@@ -130,13 +126,13 @@ export default function GameSection() {
         
       {/* Modal */}
       {showModal && selectedGame && (
-        <div className="absolute w-full h-[calc(100vh-4rem)] inset-0 bg-black/50 flex items-center justify-center z-50">
+        <div className="absolute w-full h-[calc(100vh-4rem)] inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowModal(false)}>
           <div className="bg-[#071A2F] p-8 rounded-lg w-full max-w-2xl m-4 relative">
             <button 
               onClick={() => setShowModal(false)}
               className="absolute top-4 right-4 text-gray-400 hover:text-white"
             >
-              <FontAwesomeIcon icon={faXmark} className="text-2xl" />
+              <FaTimes className="text-2xl" />
             </button>
             
             <h2 className="text-2xl font-bold text-white mb-6">Game Details</h2>
@@ -194,7 +190,7 @@ export default function GameSection() {
                   // Edit function
                 }}
               >
-                <FontAwesomeIcon icon={faPencil} className="text-lg" />
+                <FaPencilAlt className="text-lg" />
                 <span>Edit Game</span>
               </button>
               <button 
@@ -203,7 +199,7 @@ export default function GameSection() {
                   // Delete function
                 }}
               >
-                <FontAwesomeIcon icon={faTrash} className="text-lg" />
+                <FaTrash className="text-lg" />
                 <span>Delete Game</span>
               </button>
             </div>

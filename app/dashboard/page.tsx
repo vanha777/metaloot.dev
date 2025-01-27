@@ -3,13 +3,24 @@
 import Footer from "@/components/Footer";
 import NavBar from "@/components/NavBar";
 import { motion } from "framer-motion";
-import Image from "next/image";
 import { useState } from "react";
 import AnalyticsSection from "./components/AnalyticsSection";
 import GameSection from "./components/GameSection";
 import PlayersSection from "./components/PlayersSection";
 import CollectionsSection from "./components/CollectionsSection";
 import TokenomicsSection from "./components/TokenomicsSection";
+import { 
+  IoGameControllerOutline, 
+  IoGameControllerSharp,
+  IoStatsChartOutline,
+  IoStatsChartSharp,
+  IoPeopleOutline,
+  IoPeopleSharp,
+  IoImagesOutline,
+  IoImagesSharp 
+} from "react-icons/io5";
+import { MdGeneratingTokens, MdOutlineGeneratingTokens } from "react-icons/md";
+
 
 export default function Dashboard() {
   const containerVariants = {
@@ -55,11 +66,36 @@ export default function Dashboard() {
   const [activeMenu, setActiveMenu] = useState("analytics");
 
   const menuItems = [
-    { id: "analytics", label: "Analytics", icon: "📊" },
-    { id: "game", label: "Game Management", icon: "🎮" },
-    { id: "tokenomics", label: "Tokenomics", icon: "💰" },
-    { id: "collections", label: "Collections", icon: "🎨" },
-    { id: "players", label: "Player Stats", icon: "👥" },
+    { 
+      id: "analytics", 
+      label: "Analytics", 
+      icon: IoStatsChartOutline,
+      selectedIcon: IoStatsChartSharp 
+    },
+    { 
+      id: "game", 
+      label: "Game Management", 
+      icon: IoGameControllerOutline,
+      selectedIcon: IoGameControllerSharp 
+    },
+    { 
+      id: "tokenomics", 
+      label: "Tokenomics", 
+      icon: MdOutlineGeneratingTokens,
+      selectedIcon: MdGeneratingTokens 
+    },
+    { 
+      id: "collections", 
+      label: "Collections", 
+      icon: IoImagesOutline,
+      selectedIcon: IoImagesSharp 
+    },
+    { 
+      id: "players", 
+      label: "Player Stats", 
+      icon: IoPeopleOutline,
+      selectedIcon: IoPeopleSharp 
+    },
   ];
 
   return (
@@ -69,31 +105,33 @@ export default function Dashboard() {
 
         <div className="flex min-h-[calc(100vh-4rem)] bg-[#0f1c3d]">
           {/* Sidebar */}
-          <div className="w-64 bg-[#071A2F] text-white/60 p-6 space-y-4">
-            {menuItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => setActiveMenu(item.id)}
-                className={`w-full text-left p-3 rounded-lg flex items-center space-x-3 transition-all
-                ${
-                  activeMenu === item.id
-                    ? "bg-[#0CC0DF]/20 text-white"
-                    : "hover:bg-[#0CC0DF]/10"
-                }`}
-              >
-                <span>{item.icon}</span>
-                <span>{item.label}</span>
-              </button>
-            ))}
+          <div className="w-64 bg-black/80 text-white/60 p-5 space-y-4 border-r border-white/10">
+            {menuItems.map((item) => {
+              const isSelected = activeMenu === item.id;
+              const IconComponent = isSelected ? item.selectedIcon : item.icon;
+              
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => setActiveMenu(item.id)}
+                  className={`flex items-center gap-2 px-4 py-3 rounded-lg transition-colors w-full ${
+                    isSelected ? 'bg-slate-300/10 text-white' : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  <IconComponent className={`text-xl ${isSelected ? 'text-green' : 'text-white/60'}`} />
+                  <span className="text-base font-light text-left">{item.label}</span>
+                </button>
+              );
+            })}
           </div>
 
           {/* Main Content */}
-          <div className="flex-1 h-full">
+          <div className="flex-1 min-h-full">
             <motion.div
               variants={containerVariants}
               initial="hidden"
               animate="visible"
-              className="bg-[#0f1c3d]/50 rounded-xl p-6 backdrop-blur-sm"
+              className="bg-black/80 h-full p-6 backdrop-blur-sm"
             >
               {activeMenu === "analytics" && <AnalyticsSection />}
               {activeMenu === "game" && <GameSection />}
