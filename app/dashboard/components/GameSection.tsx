@@ -1,19 +1,21 @@
 import { useState, useEffect } from "react";
 import { Game } from "@/app/types/game";
 import { FaGhost, FaPencilAlt, FaPlus, FaTimes, FaTrash } from "react-icons/fa";
+import { RiGameFill } from "react-icons/ri";
 
 export default function GameSection() {
   const [games, setGames] = useState<Game[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedGame, setSelectedGame] = useState<Game | null>(null);
   const [showModal, setShowModal] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
 
   useEffect(() => {
     const fetchGames = async () => {
       setLoading(true);
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       setGames([
         {
           account: {
@@ -48,7 +50,7 @@ export default function GameSection() {
             pubkey: "82hyS5N75W8d6pu9dXT7akgZgNRgq2L1LT9dEsLhEFgt",
           },
           status: "success",
-        }
+        },
       ]);
       setLoading(false);
     };
@@ -66,29 +68,32 @@ export default function GameSection() {
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold text-white">Game Management</h2>
         <div className="flex gap-4">
-          <button className="bg-[#14F195] hover:bg-[#14F195]/80 text-[#071A2F] px-6 py-3 rounded-lg font-medium flex items-center gap-2">
-            <FaPlus className="text-base text-[#071A2F]" />
-            <span className="text-lg">New Game</span>
+          <button
+            onClick={() => setShowAddModal(true)}
+            className="bg-green group hover:bg-grey border-green hover:border border text-grey px-4 py-2 rounded-full font-medium flex items-center gap-2 transition-all"
+          >
+            <FaPlus className="text-sm text-grey group-hover:text-green" />
+            <span className="text-sm group-hover:text-green">New Game</span>
           </button>
         </div>
       </div>
 
-      <div className="space-y-4 bg-[#071A2F] p-6 rounded-lg">
+      <div className="space-y-4 bg-grey p-6 rounded-lg">
         {loading ? (
           <div className="space-y-2">
             {[1, 2].map((index) => (
               <div key={index} className="grid grid-cols-3 gap-4 p-4">
                 <div>
-                  <div className="h-4 w-20 skeleton bg-[#0A2540] mb-2"></div>
-                  <div className="h-6 w-32 skeleton bg-[#0A2540]"></div>
+                  <div className="h-4 w-20 skeleton bg-slate-400/10 mb-2"></div>
+                  <div className="h-6 w-32 skeleton bg-slate-400/10"></div>
                 </div>
                 <div>
-                  <div className="h-4 w-20 skeleton bg-[#0A2540] mb-2"></div>
-                  <div className="h-6 w-24 skeleton bg-[#0A2540]"></div>
+                  <div className="h-4 w-20 skeleton bg-slate-400/10 mb-2"></div>
+                  <div className="h-6 w-24 skeleton bg-slate-400/10"></div>
                 </div>
                 <div>
-                  <div className="h-4 w-20 skeleton bg-[#0A2540] mb-2"></div>
-                  <div className="h-6 w-40 skeleton bg-[#0A2540]"></div>
+                  <div className="h-4 w-20 skeleton bg-slate-400/10 mb-2"></div>
+                  <div className="h-6 w-40 skeleton bg-slate-400/10"></div>
                 </div>
               </div>
             ))}
@@ -96,24 +101,29 @@ export default function GameSection() {
         ) : games.length > 0 ? (
           <div className="space-y-2">
             {games.map((game, index) => (
-              <div 
-                key={index}
-                onClick={() => handleGameClick(game)}
-                className="grid grid-cols-3 gap-4 cursor-pointer hover:bg-[#0A2540] p-4 rounded-lg transition-colors"
-              >
-                <div>
-                  <h3 className="text-gray-400 text-sm">Game Name</h3>
-                  <p className="text-white">{game.account.data.name}</p>
+              <>
+                <div
+                  key={index}
+                  onClick={() => handleGameClick(game)}
+                  className="grid grid-cols-3 gap-4 cursor-pointer hover:bg-slate-400/10 p-4 rounded-lg transition-colors"
+                >
+                  <div>
+                    <h3 className="text-gray-400 text-sm">Game Name</h3>
+                    <p className="text-white">{game.account.data.name}</p>
+                  </div>
+                  <div>
+                    <h3 className="text-gray-400 text-sm">Symbol</h3>
+                    <p className="text-white">{game.account.data.symbol}</p>
+                  </div>
+                  <div>
+                    <h3 className="text-gray-400 text-sm">Owner</h3>
+                    <p className="text-white truncate">{game.account.owner}</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-gray-400 text-sm">Symbol</h3>
-                  <p className="text-white">{game.account.data.symbol}</p>
-                </div>
-                <div>
-                  <h3 className="text-gray-400 text-sm">Owner</h3>
-                  <p className="text-white truncate">{game.account.owner}</p>
-                </div>
-              </div>
+                {index < games.length - 1 && (
+                  <hr className="my-2 border-t border-white/10 w-full" />
+                )}
+              </>
             ))}
           </div>
         ) : (
@@ -123,28 +133,146 @@ export default function GameSection() {
           </div>
         )}
       </div>
-        
-      {/* Modal */}
+
+      {/* Add Game Modal */}
+      {showAddModal && (
+        <div
+          className="absolute w-full h-[calc(100vh-4rem)] inset-0 bg-black/50 flex items-center justify-center z-50"
+          onClick={() => setShowAddModal(false)}
+        >
+          <div
+            className="bg-grey p-8 rounded-lg w-full max-w-2xl m-4 relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setShowAddModal(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-white"
+            >
+              <FaTimes className="text-2xl" />
+            </button>
+
+            <h2 className="text-2xl font-bold text-white mb-6 flex items-start"> <RiGameFill className="inline-block mr-2 text-3xl" />Add New Game</h2>
+
+            <div className="grid grid-cols-2 gap-6">
+                <div className="col-span-2">
+                <h3 className="text-gray-400 mb-2">Wallet Address</h3>
+                <input 
+                  type="text"
+                  className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green"
+                  placeholder="Enter wallet address"
+                />
+              </div>
+              <div>
+                <h3 className="text-gray-400 mb-2">Username</h3>
+                <input
+                  type="text"
+                  className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green"
+                  placeholder="Enter username"
+                />
+              </div>
+              <div>
+                <h3 className="text-gray-400 mb-2">User Password</h3>
+                <input
+                  type="password"
+                  className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green"
+                  placeholder="Enter password"
+                />
+              </div>
+              <div>
+                <h3 className="text-gray-400 mb-2">Game Name</h3>
+                <input
+                  type="text"
+                  required
+                  className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green"
+                  placeholder="Enter game name"
+                />
+              </div>
+              <div>
+                <h3 className="text-gray-400 mb-2">Symbol</h3>
+                <input
+                  type="text"
+                  required
+                  className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green"
+                  placeholder="Enter symbol"
+                />
+              </div>
+              <div>
+                <h3 className="text-gray-400 mb-2">Native Token</h3>
+                <input
+                  type="text"
+                  className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green"
+                  placeholder="Enter native token address"
+                />
+              </div>
+              <div>
+                <h3 className="text-gray-400 mb-2">NFT Collection</h3>
+                <input
+                  type="text"
+                  className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green"
+                  placeholder="Enter NFT collection address"
+                />
+              </div>
+              <div className="col-span-2">
+                <h3 className="text-gray-400 mb-2">Metadata URI</h3>
+                <input
+                  type="text"
+                  required
+                  className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green"
+                  placeholder="Enter metadata URI"
+                />
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-gray-800">
+              <button
+                className="bg-grey hover:bg-slate-400/10 text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2 border border-white/20"
+                onClick={() => setShowAddModal(false)}
+              >
+                <span className="text-sm">Cancel</span>
+              </button>
+              <button
+                className="bg-green hover:bg-green/90 text-grey px-4 py-2 rounded-lg font-medium flex items-center gap-2"
+                onClick={() => {
+                  // Add new game logic here
+                  setShowAddModal(false);
+                }}
+              >
+                <FaPlus className="text-sm" />
+                <span className="text-sm">Create Game</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Existing View/Edit Modal */}
       {showModal && selectedGame && (
-        <div className="absolute w-full h-[calc(100vh-4rem)] inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowModal(false)}>
-          <div className="bg-[#071A2F] p-8 rounded-lg w-full max-w-2xl m-4 relative">
-            <button 
+        <div
+          className="absolute w-full h-[calc(100vh-4rem)] inset-0 bg-black/50 flex items-center justify-center z-50"
+          onClick={() => setShowModal(false)}
+        >
+          <div className="bg-grey p-8 rounded-lg w-full max-w-2xl m-4 relative">
+            <button
               onClick={() => setShowModal(false)}
               className="absolute top-4 right-4 text-gray-400 hover:text-white"
             >
               <FaTimes className="text-2xl" />
             </button>
-            
+
             <h2 className="text-2xl font-bold text-white mb-6">Game Details</h2>
-            
+
             <div className="grid grid-cols-2 gap-6">
               <div>
                 <h3 className="text-gray-400">Game Name</h3>
-                <p className="text-white text-lg">{selectedGame.account.data.name}</p>
+                <p className="text-white text-lg">
+                  {selectedGame.account.data.name}
+                </p>
               </div>
               <div>
                 <h3 className="text-gray-400">Symbol</h3>
-                <p className="text-white text-lg">{selectedGame.account.data.symbol}</p>
+                <p className="text-white text-lg">
+                  {selectedGame.account.data.symbol}
+                </p>
               </div>
               <div>
                 <h3 className="text-gray-400">Native Token</h3>
@@ -184,8 +312,8 @@ export default function GameSection() {
             </div>
 
             <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-gray-800">
-              <button 
-                className="bg-[#071A2F] hover:bg-[#0A2540] text-white px-6 py-3 rounded-lg font-medium flex items-center gap-2"
+              <button
+                className="bg-[#0C0E12] hover:bg-[#0A2540] text-white px-6 py-3 rounded-lg font-medium flex items-center gap-2"
                 onClick={() => {
                   // Edit function
                 }}
@@ -193,7 +321,7 @@ export default function GameSection() {
                 <FaPencilAlt className="text-lg" />
                 <span>Edit Game</span>
               </button>
-              <button 
+              <button
                 className="bg-red-500/10 hover:bg-red-500/20 text-red-500 px-6 py-3 rounded-lg font-medium flex items-center gap-2"
                 onClick={() => {
                   // Delete function

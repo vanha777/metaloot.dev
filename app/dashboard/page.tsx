@@ -103,7 +103,7 @@ export default function Dashboard() {
       <div>
         <NavBar />
 
-        <div className="flex min-h-[calc(100vh-4rem)] bg-[#0f1c3d]">
+        <div className="flex min-h-[calc(100vh-4rem)] bg-black/80">
           {/* Sidebar */}
           <div className="w-64 bg-black/80 text-white/60 p-5 space-y-4 border-r border-white/10">
             {menuItems.map((item) => {
@@ -115,7 +115,7 @@ export default function Dashboard() {
                   key={item.id}
                   onClick={() => setActiveMenu(item.id)}
                   className={`flex items-center gap-2 px-4 py-3 rounded-lg transition-colors w-full ${
-                    isSelected ? 'bg-slate-300/10 text-white' : 'text-gray-400 hover:text-white'
+                    isSelected ? 'bg-grey text-white' : 'text-gray-400 hover:text-white'
                   }`}
                 >
                   <IconComponent className={`text-xl ${isSelected ? 'text-green' : 'text-white/60'}`} />
