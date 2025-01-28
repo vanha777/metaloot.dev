@@ -1,7 +1,7 @@
 "use client";
 
 import Footer from "@/components/Footer";
-import NavBar from "@/components/NavBar";
+import DashboardHeader from "./components/DashboardHeader";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import AnalyticsSection from "./components/AnalyticsSection";
@@ -101,11 +101,11 @@ export default function Dashboard() {
   return (
     <>
       <div>
-        <NavBar />
+        <DashboardHeader />
 
         <div className="flex min-h-[calc(100vh-4rem)] bg-black/80">
           {/* Sidebar */}
-          <div className="w-64 bg-black/80 text-white/60 p-5 space-y-4 border-r border-white/10">
+          <div className="hidden md:block lg:w-64 bg-black/80 text-white/60 p-5 space-y-4 border-r border-white/10">
             {menuItems.map((item) => {
               const isSelected = activeMenu === item.id;
               const IconComponent = isSelected ? item.selectedIcon : item.icon;
@@ -119,7 +119,8 @@ export default function Dashboard() {
                   }`}
                 >
                   <IconComponent className={`text-xl ${isSelected ? 'text-green' : 'text-white/60'}`} />
-                  <span className="text-base font-light text-left">{item.label}</span>
+
+                  <span className="hidden lg:block text-base font-light text-left">{item.label}</span>
                 </button>
               );
             })}
@@ -141,9 +142,28 @@ export default function Dashboard() {
             </motion.div>
           </div>
         </div>
+            
+        <div className="md:hidden absolute bottom-0 left-0 w-full flex flex-row justify-between bg-black/80 text-white/60 py-4 px-5">
+            {menuItems.map((item) => {
+              const isSelected = activeMenu === item.id;
+              const IconComponent = isSelected ? item.selectedIcon : item.icon;
+              
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => setActiveMenu(item.id)}
+                  className={`flex justify-center items-center gap-2 px-3 py-3 rounded-lg transition-colors h-12 w-12 ${
+                    isSelected ? 'bg-grey text-white' : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  <IconComponent className={`text-xl ${isSelected ? 'text-green' : 'text-white/60'}`} />
+                </button>
+              );
+            })}
+          </div>
 
         
-          <Footer />
+          {/* <Footer /> */}
       </div>
     </>
   );
