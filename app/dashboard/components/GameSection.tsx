@@ -3,6 +3,7 @@ import { Game } from "@/app/types/game";
 import { FaGhost, FaPencilAlt, FaPlus, FaTimes, FaTrash } from "react-icons/fa";
 import { RiGameFill } from "react-icons/ri";
 import Alert from "@/components/Alert";
+import { IoGameControllerSharp } from "react-icons/io5";
 
 export default function GameSection() {
   const [games, setGames] = useState<Game[]>([]);
@@ -103,12 +104,17 @@ export default function GameSection() {
         message: 'Game created successfully!',
         type: 'success'
       });
+
+      setShowAddModal(false);
   };
 
   return (
     <div className="flex flex-col gap-6 p-8 min-h-full">
       <div className="flex justify-between items-center">
+        <div className="flex items-center gap-3">
+        <IoGameControllerSharp className="text-3xl text-green" />
         <h2 className="text-2xl font-bold text-white">Game Management</h2>
+        </div>
         <div className="flex gap-4">
           <button
             onClick={() => setShowAddModal(true)}
@@ -195,39 +201,40 @@ export default function GameSection() {
             <form className="mb-6">
               <h2 className="text-2xl font-bold text-white mb-6 flex items-start"> <RiGameFill className="inline-block mr-2 text-3xl" />Add New Game</h2>
               <div className="grid grid-cols-2 gap-6">
-                <div>
-                  <h3 className="text-gray-400 mb-2">User Password</h3>
-                  <input
-                    type="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green"
-                    placeholder="Enter password"
-                  />
-                </div>
-                <div>
-                  <h3 className="text-gray-400 mb-2">Game Name</h3>
+              <div>
+                  <h3 className="text-gray-400 mb-2 flex items-start gap-1">Game Name <span className="opacity-50 text-xs">*required</span></h3>
                   <input
                     type="text"
                     name="gameName"
                     value={formData.gameName}
                     onChange={handleChange}
                     required
-                    className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green"
+                    className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-1 focus:ring-green"
                     placeholder="Enter game name"
                   />
                 </div>
                 <div>
-                  <h3 className="text-gray-400 mb-2">Symbol</h3>
+                  <h3 className="text-gray-400 mb-2 flex items-start gap-1">Token Symbol <span className="opacity-50 text-xs">*required</span></h3>
                   <input
                     type="text"
                     name="symbol"
                     value={formData.symbol}
                     onChange={handleChange}
                     required
-                    className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green"
+                    className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-1 focus:ring-green"
                     placeholder="Enter symbol"
+                  />
+                </div>
+                <div className="">
+                  <h3 className="text-gray-400 mb-2 flex items-start gap-1">Metadata URI <span className="opacity-50 text-xs">*required</span></h3>
+                  <input
+                    type="text"
+                    name="metadataUri"
+                    value={formData.metadataUri}
+                    onChange={handleChange}
+                    required
+                    className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-1 focus:ring-green"
+                    placeholder="Enter metadata URI"
                   />
                 </div>
                 <div>
@@ -237,7 +244,7 @@ export default function GameSection() {
                     name="nativeToken"
                     value={formData.nativeToken}
                     onChange={handleChange}
-                    className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green"
+                    className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-1 focus:ring-green"
                     placeholder="Enter native token address"
                   />
                 </div>
@@ -248,20 +255,19 @@ export default function GameSection() {
                     name="nftCollection"
                     value={formData.nftCollection}
                     onChange={handleChange}
-                    className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green"
+                    className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-1 focus:ring-green"
                     placeholder="Enter NFT collection address"
                   />
                 </div>
-                <div className="">
-                  <h3 className="text-gray-400 mb-2">Metadata URI</h3>
+                <div>
+                  <h3 className="text-gray-400 mb-2">User Password</h3>
                   <input
-                    type="text"
-                    name="metadataUri"
-                    value={formData.metadataUri}
+                    type="password"
+                    name="password"
+                    value={formData.password}
                     onChange={handleChange}
-                    required
-                    className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green"
-                    placeholder="Enter metadata URI"
+                    className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-1 focus:ring-green"
+                    placeholder="Enter password"
                   />
                 </div>
               </div>
