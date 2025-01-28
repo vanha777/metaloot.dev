@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Game } from "@/app/types/game";
 import { FaGhost, FaPencilAlt, FaPlus, FaTimes, FaTrash } from "react-icons/fa";
 import { RiGameFill } from "react-icons/ri";
+import Alert from "@/components/Alert";
 
 export default function GameSection() {
   const [games, setGames] = useState<Game[]>([]);
@@ -9,6 +10,19 @@ export default function GameSection() {
   const [selectedGame, setSelectedGame] = useState<Game | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [formData, setFormData] = useState({
+    password: '',
+    gameName: '',
+    symbol: '',
+    nativeToken: '',
+    nftCollection: '',
+    metadataUri: ''
+  });
+  const [alert, setAlert] = useState({
+    show: false,
+    message: '',
+    type: 'info' as 'success' | 'error' | 'info'
+  });
 
   useEffect(() => {
     const fetchGames = async () => {
@@ -61,6 +75,34 @@ export default function GameSection() {
   const handleGameClick = (game: Game) => {
     setSelectedGame(game);
     setShowModal(true);
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const createGame = () => {
+    if (!formData.gameName || !formData.symbol || !formData.metadataUri) {
+        // Show error alert
+        setAlert({
+            show: true,
+            message: 'Please fill in all required fields',
+            type: 'error'
+          });
+          return;
+    }
+
+    console.log('Creating game with data:', formData);
+    // Show success alert
+    setAlert({
+        show: true,
+        message: 'Game created successfully!',
+        type: 'success'
+      });
   };
 
   return (
@@ -150,78 +192,80 @@ export default function GameSection() {
             >
               <FaTimes className="text-2xl" />
             </button>
-
-            <h2 className="text-2xl font-bold text-white mb-6 flex items-start"> <RiGameFill className="inline-block mr-2 text-3xl" />Add New Game</h2>
-
-            <div className="grid grid-cols-2 gap-6">
-                <div className="col-span-2">
-                <h3 className="text-gray-400 mb-2">Wallet Address</h3>
-                <input 
-                  type="text"
-                  className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green"
-                  placeholder="Enter wallet address"
-                />
+            <form className="mb-6">
+              <h2 className="text-2xl font-bold text-white mb-6 flex items-start"> <RiGameFill className="inline-block mr-2 text-3xl" />Add New Game</h2>
+              <div className="grid grid-cols-2 gap-6">
+                <div>
+                  <h3 className="text-gray-400 mb-2">User Password</h3>
+                  <input
+                    type="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green"
+                    placeholder="Enter password"
+                  />
+                </div>
+                <div>
+                  <h3 className="text-gray-400 mb-2">Game Name</h3>
+                  <input
+                    type="text"
+                    name="gameName"
+                    value={formData.gameName}
+                    onChange={handleChange}
+                    required
+                    className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green"
+                    placeholder="Enter game name"
+                  />
+                </div>
+                <div>
+                  <h3 className="text-gray-400 mb-2">Symbol</h3>
+                  <input
+                    type="text"
+                    name="symbol"
+                    value={formData.symbol}
+                    onChange={handleChange}
+                    required
+                    className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green"
+                    placeholder="Enter symbol"
+                  />
+                </div>
+                <div>
+                  <h3 className="text-gray-400 mb-2">Native Token</h3>
+                  <input
+                    type="text"
+                    name="nativeToken"
+                    value={formData.nativeToken}
+                    onChange={handleChange}
+                    className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green"
+                    placeholder="Enter native token address"
+                  />
+                </div>
+                <div>
+                  <h3 className="text-gray-400 mb-2">NFT Collection</h3>
+                  <input
+                    type="text"
+                    name="nftCollection"
+                    value={formData.nftCollection}
+                    onChange={handleChange}
+                    className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green"
+                    placeholder="Enter NFT collection address"
+                  />
+                </div>
+                <div className="">
+                  <h3 className="text-gray-400 mb-2">Metadata URI</h3>
+                  <input
+                    type="text"
+                    name="metadataUri"
+                    value={formData.metadataUri}
+                    onChange={handleChange}
+                    required
+                    className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green"
+                    placeholder="Enter metadata URI"
+                  />
+                </div>
               </div>
-              <div>
-                <h3 className="text-gray-400 mb-2">Username</h3>
-                <input
-                  type="text"
-                  className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green"
-                  placeholder="Enter username"
-                />
-              </div>
-              <div>
-                <h3 className="text-gray-400 mb-2">User Password</h3>
-                <input
-                  type="password"
-                  className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green"
-                  placeholder="Enter password"
-                />
-              </div>
-              <div>
-                <h3 className="text-gray-400 mb-2">Game Name</h3>
-                <input
-                  type="text"
-                  required
-                  className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green"
-                  placeholder="Enter game name"
-                />
-              </div>
-              <div>
-                <h3 className="text-gray-400 mb-2">Symbol</h3>
-                <input
-                  type="text"
-                  required
-                  className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green"
-                  placeholder="Enter symbol"
-                />
-              </div>
-              <div>
-                <h3 className="text-gray-400 mb-2">Native Token</h3>
-                <input
-                  type="text"
-                  className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green"
-                  placeholder="Enter native token address"
-                />
-              </div>
-              <div>
-                <h3 className="text-gray-400 mb-2">NFT Collection</h3>
-                <input
-                  type="text"
-                  className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green"
-                  placeholder="Enter NFT collection address"
-                />
-              </div>
-              <div className="col-span-2">
-                <h3 className="text-gray-400 mb-2">Metadata URI</h3>
-                <input
-                  type="text"
-                  required
-                  className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green"
-                  placeholder="Enter metadata URI"
-                />
-              </div>
-            </div>
+            </form>
 
             <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-gray-800">
               <button
@@ -232,13 +276,10 @@ export default function GameSection() {
               </button>
               <button
                 className="bg-green hover:bg-green/90 text-grey px-4 py-2 rounded-lg font-medium flex items-center gap-2"
-                onClick={() => {
-                  // Add new game logic here
-                  setShowAddModal(false);
-                }}
+                onClick={createGame}
               >
                 <FaPlus className="text-sm" />
-                <span className="text-sm">Create Game</span>
+                <button className="text-sm">Create Game</button>
               </button>
             </div>
           </div>
@@ -334,6 +375,12 @@ export default function GameSection() {
           </div>
         </div>
       )}
+      <Alert
+        isOpen={alert.show}
+        message={alert.message}
+        type={alert.type}
+        onClose={() => setAlert(prev => ({ ...prev, show: false }))}
+      />
     </div>
   );
 }
