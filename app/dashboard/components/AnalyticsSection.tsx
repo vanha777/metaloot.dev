@@ -185,7 +185,7 @@ export default function AnalyticsSection() {
         <h2 className="text-2xl font-bold text-white">Analytics Overview</h2>
       </div>
     {/* Skeleton Loading */}
-      {!loading ? (
+      {loading ? (
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             <div className="bg-grey p-4 md:p-6 rounded-xl space-y-4">
               <div className="h-4 md:w-20 w-20 skeleton bg-slate-400/10"></div>
