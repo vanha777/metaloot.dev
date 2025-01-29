@@ -175,7 +175,6 @@ export default function AnalyticsSection() {
       });
       setLoading(false);
     };
-
     fetchAnalytics();
   }, []);
 

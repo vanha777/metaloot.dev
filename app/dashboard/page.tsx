@@ -82,7 +82,7 @@ export default function Dashboard() {
       id: "tokenomics", 
       label: "Tokenomics", 
       icon: MdOutlineGeneratingTokens,
-      selectedIcon: MdGeneratingTokens 
+      selectedIcon: MdGeneratingTokens
     },
     { 
       id: "collections", 
