@@ -1,23 +1,25 @@
 import { useState } from "react";
 import { IoWalletOutline } from "react-icons/io5";
-import { FaPlus, FaUpload, FaCopy } from "react-icons/fa";
+import { FaPlus, FaCopy } from "react-icons/fa";
 import Alert from "@/components/Alert";
 
 interface TokenForm {
   name: string;
   symbol: string;
-  decimals: string;
-  totalSupply: string;
-  metadata: File | null;
+  uri: string;
+  // decimals: string;
+  // totalSupply: string;
+  // metadata: File | null;
 }
 
 export default function TokenomicsSection() {
   const [formData, setFormData] = useState<TokenForm>({
     name: '',
     symbol: '',
-    decimals: '9',
-    totalSupply: '',
-    metadata: null
+    uri: '',
+    // decimals: '9',
+    // totalSupply: '',
+    // metadata: null
   });
   const [alert, setAlert] = useState({
     show: false,
@@ -33,18 +35,18 @@ export default function TokenomicsSection() {
     }));
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setFormData(prev => ({
-        ...prev,
-        metadata: file
-      }));
-    }
-  };
+//   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+//     const file = e.target.files?.[0];
+//     if (file) {
+//       setFormData(prev => ({
+//         ...prev,
+//         metadata: file
+//       }));
+//     }
+//   };
 
   const createToken = async () => {
-    if (!formData.name || !formData.symbol || !formData.totalSupply) {
+    if (!formData.name || !formData.symbol || !formData.uri) {
       setAlert({
         show: true,
         message: 'Please fill in all required fields',
@@ -104,6 +106,17 @@ export default function TokenomicsSection() {
               />
             </div>
             <div>
+              <h3 className="text-gray-400 mb-2">URI <span className="opacity-50 text-xs">*required</span></h3>
+              <input
+                type="text"
+                name="uri"
+                value={formData.uri}
+                onChange={handleChange}
+                className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-1 focus:ring-green"
+                placeholder="Enter URI"
+              />
+            </div>
+            {/* <div>
               <h3 className="text-gray-400 mb-2">Decimals</h3>
               <input
                 type="number"
@@ -113,8 +126,8 @@ export default function TokenomicsSection() {
                 className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-1 focus:ring-green"
                 placeholder="Enter decimals"
               />
-            </div>
-            <div>
+            </div> */}
+            {/* <div>
               <h3 className="text-gray-400 mb-2 flex items-start gap-1">Total Supply <span className="opacity-50 text-xs">*required</span></h3>
               <input
                 type="number"
@@ -124,8 +137,8 @@ export default function TokenomicsSection() {
                 className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-1 focus:ring-green"
                 placeholder="Enter total supply"
               />
-            </div>
-            <div>
+            </div> */}
+            {/* <div>
               <h3 className="text-gray-400 mb-2">Metadata</h3>
               <label className="flex items-center gap-2 bg-black/50 text-white rounded-lg px-4 py-2 cursor-pointer hover:bg-black/60">
                 <FaUpload className="text-green" />
@@ -137,7 +150,7 @@ export default function TokenomicsSection() {
                   className="hidden"
                 />
               </label>
-            </div>
+            </div> */}
             <button
               onClick={createToken}
               className="w-full bg-green hover:bg-green/90 text-grey px-6 py-3 rounded-lg font-medium flex items-center justify-center gap-2 mt-6"
@@ -155,8 +168,9 @@ export default function TokenomicsSection() {
             <div className="bg-black/50 p-4 rounded-lg">
               <div className="flex justify-between items-start mb-2">
                 <div>
-                  <h4 className="text-white font-medium">Example Token</h4>
-                  <p className="text-gray-400 text-sm">EXT</p>
+                  <h4 className="text-white font-medium">AWG</h4>
+                  <p className="text-gray-400 text-sm">Awesome Game 101</p>
+                  <p className="text-gray-400 text-sm">GA4jV9ESNBwjxQKs6HgoSebTFTMztacZPCYv8NCs8y8J</p>
                 </div>
                 <button 
                   className="text-gray-400 hover:text-white"
@@ -173,8 +187,11 @@ export default function TokenomicsSection() {
                 </button>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-gray-400">Supply: 1,000,000</span>
-                <span className="text-green">Active</span>
+                <div className="flex items-center gap-2">
+                    <label className="text-gray-400">Supply: </label>
+                    <input className="bg-transparent w-20 border-b border-white/20 focus:outline-none text-white" type="number" value="100000" />
+                </div>
+                <button className="text-green">Mint</button>
               </div>
             </div>
           </div>
