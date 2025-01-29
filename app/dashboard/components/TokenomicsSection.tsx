@@ -64,7 +64,7 @@ export default function TokenomicsSection() {
     } catch (error) {
       setAlert({
         show: true,
-        message: 'Failed to create token',
+        message: 'Failed to create token: ' + error,
         type: 'error'
       });
     }

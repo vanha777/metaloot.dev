@@ -143,7 +143,7 @@ export default function Dashboard() {
           </div>
         </div>
             
-        <div className="md:hidden absolute bottom-0 left-0 w-full flex flex-row justify-between bg-black/80 text-white/60 py-4 px-5">
+        <div className="md:hidden sticky bottom-0 left-0 w-full flex flex-row justify-between bg-[#020303] text-white/60 py-4 px-5">
             {menuItems.map((item) => {
               const isSelected = activeMenu === item.id;
               const IconComponent = isSelected ? item.selectedIcon : item.icon;
