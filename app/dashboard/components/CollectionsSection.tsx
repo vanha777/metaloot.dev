@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { IoImagesOutline } from "react-icons/io5";
-import { FaPlus, FaUpload, FaCopy, FaImage } from "react-icons/fa";
+import { FaPlus, FaUpload, FaImage } from "react-icons/fa";
 import Alert from "@/components/Alert";
 
 interface CollectionForm {
@@ -77,7 +77,6 @@ export default function CollectionsSection() {
     }
 
     try {
-      // Add collection creation logic here
       console.log('Creating collection with data:', collectionForm);
       setAlert({
         show: true,
@@ -104,7 +103,6 @@ export default function CollectionsSection() {
     }
 
     try {
-      // Add NFT minting logic here
       console.log('Minting NFT with data:', nftForm);
       setAlert({
         show: true,
@@ -121,7 +119,7 @@ export default function CollectionsSection() {
   };
 
   return (
-    <div className="space-y-6 p-8">
+    <div className="space-y-6 p-2 md:p-8">
       <div className="flex items-center gap-3">
         <IoImagesOutline className="text-3xl text-green" />
         <h2 className="text-2xl font-bold text-white">NFT Collections</h2>

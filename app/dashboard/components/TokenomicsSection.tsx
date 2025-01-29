@@ -54,7 +54,6 @@ export default function TokenomicsSection() {
     }
 
     try {
-      // Add token creation logic here
       console.log('Creating token with data:', formData);
       setAlert({
         show: true,
@@ -71,7 +70,7 @@ export default function TokenomicsSection() {
   };
 
   return (
-    <div className="space-y-6 p-8">
+    <div className="space-y-6 p-2 md:p-8">
       <div className="flex items-center gap-3">
         <IoWalletOutline className="text-3xl text-green" />
         <h2 className="text-2xl font-bold text-white">Token Management</h2>
@@ -153,7 +152,6 @@ export default function TokenomicsSection() {
         <div className="bg-grey p-6 rounded-xl">
           <h3 className="text-xl text-white mb-6">Your Tokens</h3>
           <div className="space-y-4">
-            {/* Example Token */}
             <div className="bg-black/50 p-4 rounded-lg">
               <div className="flex justify-between items-start mb-2">
                 <div>

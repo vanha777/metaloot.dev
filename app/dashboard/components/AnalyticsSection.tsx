@@ -179,41 +179,39 @@ export default function AnalyticsSection() {
   }, []);
 
   return (
-    <div className="space-y-6 p-8">
+    <div className="space-y-6 p-2 md:p-8">
       <div className="flex items-center gap-3">
         <IoStatsChart className="text-3xl text-green" />
         <h2 className="text-2xl font-bold text-white">Analytics Overview</h2>
       </div>
-
-      {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-grey p-6 rounded-xl space-y-4">
-              <div className="h-4 w-20 skeleton bg-slate-400/10"></div>
-              <div className="h-8 w-32 skeleton bg-slate-400/10"></div>
+    {/* Skeleton Loading */}
+      {!loading ? (
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+            <div className="bg-grey p-4 md:p-6 rounded-xl space-y-4">
+              <div className="h-4 md:w-20 w-20 skeleton bg-slate-400/10"></div>
+              <div className="h-5 md:w-32 w-24 skeleton bg-slate-400/10"></div>
             </div>
-            <div className="bg-grey p-6 rounded-xl space-y-4">
-              <div className="h-4 w-20 skeleton bg-slate-400/10"></div>
-              <div className="h-8 w-32 skeleton bg-slate-400/10"></div>
+            <div className="bg-grey p-4 md:p-6 rounded-xl space-y-4">
+              <div className="h-4 md:w-20 w-20 skeleton bg-slate-400/10"></div>
+              <div className="h-5 md:w-32 w-24 skeleton bg-slate-400/10"></div>
             </div>
-            <div className="bg-grey p-6 rounded-xl space-y-4">
-              <div className="h-4 w-20 skeleton bg-slate-400/10"></div>
-              <div className="h-8 w-32 skeleton bg-slate-400/10"></div>
+            <div className="bg-grey p-4 md:p-6 rounded-xl space-y-4">
+              <div className="h-4 md:w-20 w-20 skeleton bg-slate-400/10"></div>
+              <div className="h-5 md:w-32 w-24 skeleton bg-slate-400/10"></div>
             </div>
-            <div className="bg-grey p-6 rounded-xl space-y-4">
-              <div className="h-4 w-20 skeleton bg-slate-400/10"></div>
-              <div className="h-8 w-32 skeleton bg-slate-400/10"></div>
+            <div className="bg-grey p-4 md:p-6 rounded-xl space-y-4">
+              <div className="h-4 md:w-20 w-20 skeleton bg-slate-400/10"></div>
+              <div className="h-5 md:w-32 w-24 skeleton bg-slate-400/10"></div>
             </div>
-            <div className="bg-grey p-6 rounded-xl space-y-4 col-span-2 h-48">
-              <div className="h-4 w-20 skeleton bg-slate-400/10"></div>
-              <div className="h-8 w-32 skeleton bg-slate-400/10"></div>
-              <div className="h-8 w-32 skeleton bg-slate-400/10"></div>
+            <div className="bg-grey p-4 md:p-6 rounded-xl space-y-4 col-span-2 h-48">
+              <div className="h-4 md:w-20 w-20 skeleton bg-slate-400/10"></div>
+              <div className="h-5 md:w-32 w-24 skeleton bg-slate-400/10"></div>
             </div>
-            <div className="bg-grey p-6 rounded-xl space-y-4 col-span-2 h-48">
-              <div className="h-4 w-20 skeleton bg-slate-400/10"></div>
-              <div className="h-8 w-32 skeleton bg-slate-400/10"></div>
-              <div className="h-8 w-32 skeleton bg-slate-400/10"></div>
+            <div className="bg-grey p-4 md:p-6 rounded-xl space-y-4 col-span-2 h-48">
+              <div className="h-4 md:w-20 w-20 skeleton bg-slate-400/10"></div>
+              <div className="h-5 md:w-32 w-24 skeleton bg-slate-400/10"></div>
             </div>
-            <div className="bg-grey p-6 rounded-xl space-y-4 col-span-4 h-40">
+            <div className="bg-grey p-6 rounded-xl space-y-4 lg:col-span-4 col-span-2 hidden md:block h-40">
               <div className="h-6 w-32 skeleton bg-slate-400/10"></div>
               <div className="h-6 w-full skeleton bg-slate-400/10"></div>
               <div className="h-6 w-full skeleton bg-slate-400/10"></div>
@@ -221,89 +219,87 @@ export default function AnalyticsSection() {
         </div>
       ) : analytics ? (
         <>
-          {/* Key Metrics */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-grey p-6 rounded-xl">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+            <div className="bg-grey p-4 md:p-6 rounded-xl">
               <div className="flex items-center gap-3 mb-4">
-                <FaUsers className="text-xl text-green" />
-                <h3 className="text-green">Players</h3>
+                <FaUsers className="hidden md:block text-xl text-green" />
+                <h3 className="md:text-xl text-base text-green">Players</h3>
               </div>
-              <p className="text-3xl font-bold text-white mb-2">{analytics.playerStats.totalPlayers}</p>
-              <p className="text-sm text-gray-400">
+              <p className="md:text-3xl text-2xl font-bold text-white mb-2">{analytics.playerStats.totalPlayers}</p>
+              <p className="md:text-sm text-xs text-gray-400">
                 +{analytics.playerStats.newPlayersThisWeek} this week
               </p>
             </div>
 
-            <div className="bg-grey p-6 rounded-xl">
+            <div className="bg-grey p-4 md:p-6 rounded-xl">
               <div className="flex items-center gap-3 mb-4">
-                <FaWallet className="text-xl text-green" />
-                <h3 className="text-green">Revenue</h3>
+                <FaWallet className="hidden md:block text-xl text-green" />
+                <h3 className="md:text-xl text-base text-green">Revenue</h3>
               </div>
-              <p className="text-3xl font-bold text-white mb-2">
+              <p className="md:text-3xl text-2xl font-bold text-white mb-2">
                 ${analytics.revenueMetrics.revenueFromTokenSales + analytics.revenueMetrics.revenueFromNFTSales}
               </p>
-              <p className="text-sm text-gray-400">
+              <p className="md:text-sm text-xs text-gray-400">
                 From token & NFT sales
               </p>
             </div>
 
-            <div className="bg-grey p-6 rounded-xl">
+            <div className="bg-grey p-4 md:p-6 rounded-xl">
               <div className="flex items-center gap-3 mb-4">
-                <FaGamepad className="text-xl text-green" />
-                <h3 className="text-green">Active Players</h3>
+                <FaGamepad className="hidden md:block text-xl text-green" />
+                <h3 className="md:text-xl text-base text-green">Active Players</h3>
               </div>
-              <p className="text-3xl font-bold text-white mb-2">{analytics.playerStats.activePlayers}</p>
-              <p className="text-sm text-gray-400">
+              <p className="md:text-3xl text-2xl font-bold text-white mb-2">{analytics.playerStats.activePlayers}</p>
+              <p className="md:text-sm text-xs text-gray-400">
                 {analytics.playerStats.retentionRate}% retention rate
               </p>
             </div>
 
-            <div className="bg-grey p-6 rounded-xl">
+            <div className="bg-grey p-4 md:p-6 rounded-xl">
               <div className="flex items-center gap-3 mb-4">
-                <FaChartLine className="text-xl text-green" />
-                <h3 className="text-green">Daily Transactions</h3>
+                <FaChartLine className="hidden md:block text-xl text-green" />
+                <h3 className="md:text-xl text-base text-green">Daily Transactions</h3>
               </div>
-              <p className="text-3xl font-bold text-white mb-2">{analytics.tokenAnalytics.dailyTokenTransactions}</p>
-              <p className="text-sm text-gray-400">
+              <p className="md:text-3xl text-2xl font-bold text-white mb-2">{analytics.tokenAnalytics.dailyTokenTransactions}</p>
+              <p className="md:text-sm text-xs text-gray-400">
                 Avg. ${analytics.tokenAnalytics.tokenDistribution.averageTransactionValue}
               </p>
             </div>
           </div>
 
-          {/* Additional Metrics */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-            <div className="bg-grey p-6 rounded-xl">
-              <h3 className="text-xl text-white mb-4">Token Analytics</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-6">
+            <div className="bg-grey p-4 md:p-6 rounded-xl">
+              <h3 className="md:text-xl text-base text-white mb-4">Token Analytics</h3>
               <div className="space-y-4">
                 <div>
-                  <p className="text-gray-400 mb-1">Total Tokens Minted</p>
-                  <p className="text-2xl font-bold text-white">{analytics.tokenAnalytics.totalTokensMinted}</p>
+                  <p className="md:text-sm text-xs text-gray-400 mb-1">Total Tokens Minted</p>
+                  <p className="md:text-2xl text-xl font-bold text-white">{analytics.tokenAnalytics.totalTokensMinted}</p>
                 </div>
                 <div>
-                  <p className="text-gray-400 mb-1">Top 10 Players Ownership</p>
-                  <p className="text-2xl font-bold text-white">{analytics.tokenAnalytics.tokenDistribution.top10PlayersOwnershipPercentage}%</p>
+                  <p className="md:text-sm text-xs text-gray-400 mb-1">Top 10 Players Ownership</p>
+                  <p className="md:text-2xl text-xl font-bold text-white">{analytics.tokenAnalytics.tokenDistribution.top10PlayersOwnershipPercentage}%</p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-grey p-6 rounded-xl">
-              <h3 className="text-xl text-white mb-4">NFT Analytics</h3>
+            <div className="bg-grey p-4 md:p-6 rounded-xl">
+              <h3 className="md:text-xl text-base text-white mb-4">NFT Analytics</h3>
               <div className="space-y-4">
                 <div>
-                  <p className="text-gray-400 mb-1">Total NFTs Minted</p>
-                  <p className="text-2xl font-bold text-white">{analytics.nftAnalytics.totalNFTsMinted}</p>
+                  <p className="md:text-sm text-xs text-gray-400 mb-1">Total NFTs Minted</p>
+                  <p className="md:text-2xl text-xl font-bold text-white">{analytics.nftAnalytics.totalNFTsMinted}</p>
                 </div>
                 <div>
-                  <p className="text-gray-400 mb-1">Players with NFTs</p>
-                  <p className="text-2xl font-bold text-white">{analytics.nftAnalytics.nftOwnershipStats.totalPlayersWithNFTs}</p>
+                  <p className="md:text-sm text-xs text-gray-400 mb-1">Players with NFTs</p>
+                  <p className="md:text-2xl text-xl font-bold text-white">{analytics.nftAnalytics.nftOwnershipStats.totalPlayersWithNFTs}</p>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Recent Transactions */}
-          <div className="bg-grey rounded-xl overflow-hidden">
-            <div className="p-6 border-b border-white/10">
+          {/* Recent Transactions Table */}
+          <div className="bg-grey rounded-xl overflow-hidden mt-6">
+            <div className="p-4 md:p-6 border-b border-white/10">
               <h3 className="text-xl text-white">Recent Transactions</h3>
             </div>
             <TransactionTable transactions={analytics.recentTransactions} />

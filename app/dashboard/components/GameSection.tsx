@@ -109,7 +109,7 @@ export default function GameSection() {
   };
 
   return (
-    <div className="flex flex-col gap-6 p-8 min-h-full">
+    <div className="flex flex-col gap-6 p-2 md:p-8 min-h-full">
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-3">
         <IoGameControllerSharp className="text-3xl text-green" />
