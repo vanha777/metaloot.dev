@@ -1,12 +1,10 @@
 "use client";
 
-import Footer from "@/components/Footer";
 import DashboardHeader from "./components/DashboardHeader";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import AnalyticsSection from "./components/AnalyticsSection";
 import GameSection from "./components/GameSection";
-import PlayersSection from "./components/PlayersSection";
 import CollectionsSection from "./components/CollectionsSection";
 import TokenomicsSection from "./components/TokenomicsSection";
 import { 
@@ -14,12 +12,20 @@ import {
   IoGameControllerSharp,
   IoStatsChartOutline,
   IoStatsChartSharp,
-  IoPeopleOutline,
-  IoPeopleSharp,
   IoImagesOutline,
-  IoImagesSharp 
+  IoImagesSharp,
+  IoSettingsOutline,
+  IoSettingsSharp,
+  IoCodeSlashOutline,
+  IoCodeSlashSharp,
+  IoStorefrontOutline,
+  IoStorefrontSharp
 } from "react-icons/io5";
-import { MdGeneratingTokens, MdOutlineGeneratingTokens } from "react-icons/md";
+import { MdGeneratingTokens, MdOutlineGeneratingTokens, MdOutlineWebhook, MdWebhook } from "react-icons/md";
+import APISection from "./components/APISection";
+import SettingsSection from "./components/SettingsSection";
+import WebhookSection from "./components/WebhookSection";
+import MarketplaceSection from "./components/MarketplaceSection";
 
 
 export default function Dashboard() {
@@ -91,11 +97,29 @@ export default function Dashboard() {
       selectedIcon: IoImagesSharp 
     },
     { 
-      id: "players", 
-      label: "Player Stats", 
-      icon: IoPeopleOutline,
-      selectedIcon: IoPeopleSharp 
+      id: "marketplace", 
+      label: "Marketplace", 
+      icon: IoStorefrontOutline,
+      selectedIcon: IoStorefrontSharp
     },
+    { 
+      id: "webhook", 
+      label: "Webhooks", 
+      icon: MdOutlineWebhook,
+      selectedIcon: MdWebhook
+    },
+    { 
+      id: "api", 
+      label: "API Management", 
+      icon: IoCodeSlashOutline,
+      selectedIcon: IoCodeSlashSharp
+    },
+    { 
+      id: "settings", 
+      label: "Settings", 
+      icon: IoSettingsOutline,
+      selectedIcon: IoSettingsSharp 
+    }
   ];
 
   return (
@@ -109,7 +133,6 @@ export default function Dashboard() {
             {menuItems.map((item) => {
               const isSelected = activeMenu === item.id;
               const IconComponent = isSelected ? item.selectedIcon : item.icon;
-              
               return (
                 <button
                   key={item.id}
@@ -138,7 +161,10 @@ export default function Dashboard() {
               {activeMenu === "game" && <GameSection />}
               {activeMenu === "tokenomics" && <TokenomicsSection />}
               {activeMenu === "collections" && <CollectionsSection />}
-              {activeMenu === "players" && <PlayersSection />}
+              {activeMenu === "marketplace" && <MarketplaceSection />}
+              {activeMenu === "webhook" && <WebhookSection />}
+              {activeMenu === "api" && <APISection />}
+              {activeMenu === "settings" && <SettingsSection />}
             </motion.div>
           </div>
         </div>

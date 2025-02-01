@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { IoWalletOutline } from "react-icons/io5";
 import { FaPlus, FaCopy } from "react-icons/fa";
 import Alert from "@/components/Alert";
+import { MdGeneratingTokens } from "react-icons/md";
 
 interface TokenForm {
   name: string;
@@ -35,16 +35,6 @@ export default function TokenomicsSection() {
     }));
   };
 
-//   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     const file = e.target.files?.[0];
-//     if (file) {
-//       setFormData(prev => ({
-//         ...prev,
-//         metadata: file
-//       }));
-//     }
-//   };
-
   const createToken = async () => {
     if (!formData.name || !formData.symbol || !formData.uri) {
       setAlert({
@@ -74,7 +64,7 @@ export default function TokenomicsSection() {
   return (
     <div className="space-y-6 p-2 md:p-8">
       <div className="flex items-center gap-3">
-        <IoWalletOutline className="text-3xl text-green" />
+        <MdGeneratingTokens className="text-3xl text-green" />
         <h2 className="text-2xl font-bold text-white">Token Management</h2>
       </div>
 
@@ -83,6 +73,7 @@ export default function TokenomicsSection() {
         <div className="bg-grey p-6 rounded-xl">
           <h3 className="text-xl text-white mb-6">Create New Token</h3>
           <div className="space-y-4">
+
             <div>
               <h3 className="text-gray-400 mb-2 flex items-start gap-1">Token Name <span className="opacity-50 text-xs">*required</span></h3>
               <input
@@ -94,6 +85,7 @@ export default function TokenomicsSection() {
                 placeholder="Enter token name"
               />
             </div>
+
             <div>
               <h3 className="text-gray-400 mb-2 flex items-start gap-1">Symbol <span className="opacity-50 text-xs">*required</span></h3>
               <input
@@ -105,6 +97,7 @@ export default function TokenomicsSection() {
                 placeholder="Enter token symbol"
               />
             </div>
+
             <div>
               <h3 className="text-gray-400 mb-2">URI <span className="opacity-50 text-xs">*required</span></h3>
               <input
@@ -116,41 +109,7 @@ export default function TokenomicsSection() {
                 placeholder="Enter URI"
               />
             </div>
-            {/* <div>
-              <h3 className="text-gray-400 mb-2">Decimals</h3>
-              <input
-                type="number"
-                name="decimals"
-                value={formData.decimals}
-                onChange={handleChange}
-                className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-1 focus:ring-green"
-                placeholder="Enter decimals"
-              />
-            </div> */}
-            {/* <div>
-              <h3 className="text-gray-400 mb-2 flex items-start gap-1">Total Supply <span className="opacity-50 text-xs">*required</span></h3>
-              <input
-                type="number"
-                name="totalSupply"
-                value={formData.totalSupply}
-                onChange={handleChange}
-                className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-1 focus:ring-green"
-                placeholder="Enter total supply"
-              />
-            </div> */}
-            {/* <div>
-              <h3 className="text-gray-400 mb-2">Metadata</h3>
-              <label className="flex items-center gap-2 bg-black/50 text-white rounded-lg px-4 py-2 cursor-pointer hover:bg-black/60">
-                <FaUpload className="text-green" />
-                <span>{formData.metadata ? formData.metadata.name : 'Upload metadata JSON'}</span>
-                <input
-                  type="file"
-                  accept=".json"
-                  onChange={handleFileChange}
-                  className="hidden"
-                />
-              </label>
-            </div> */}
+
             <button
               onClick={createToken}
               className="w-full bg-green hover:bg-green/90 text-grey px-6 py-3 rounded-lg font-medium flex items-center justify-center gap-2 mt-6"
@@ -158,6 +117,7 @@ export default function TokenomicsSection() {
               <FaPlus className="text-sm" />
               <span>Create Token</span>
             </button>
+
           </div>
         </div>
 
