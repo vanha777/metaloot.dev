@@ -125,33 +125,11 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="bg-white overflow-hidden">
+    <div className="bg-black/90 overflow-hidden ">
       <SimpleSupport />
-      <DashboardHeader />
 
-      <div className="flex min-h-[calc(100vh-4rem)] bg-black/90 backdrop-blur-xl">
-        {/* Sidebar */}
-        {/* <div className="hidden md:block lg:w-64 bg-zinc-900/50 text-white/80 p-5 space-y-4 border-r border-white/10 backdrop-filter backdrop-blur-lg">
-            {menuItems.map((item) => {
-              const isSelected = activeMenu === item.id;
-              const IconComponent = isSelected ? item.selectedIcon : item.icon;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => setActiveMenu(item.id)}
-                  className={`flex items-center gap-2 px-4 py-3 rounded-lg transition-all duration-200 w-full 
-                    ${isSelected 
-                      ? 'bg-gradient-to-r from-emerald-600 to-emerald-500 text-white shadow-lg shadow-emerald-500/20' 
-                      : 'text-gray-400 hover:bg-white/5 hover:text-white'
-                    }`}
-                >
-                  <IconComponent className={`text-xl ${isSelected ? 'text-white' : 'text-white/60'}`} />
-                  <span className="hidden lg:block text-base font-medium text-left">{item.label}</span>
-                </button>
-              );
-            })}
-          </div> */}
 
+      <div className="flex min-h-[calc(100vh-4rem)] backdrop-blur-xl">
         <SimpleSideBar
           onContentChange={setActiveMenu}
           content={activeMenu}
@@ -159,12 +137,13 @@ export default function Dashboard() {
         >
 
           {/* Main Content */}
-          <div className="flex-1 min-h-full">
+          <div className="flex-1 h-[calc(100vh-4rem)]">
+            <DashboardHeader />
             <motion.div
               variants={containerVariants}
               initial="hidden"
               animate="visible"
-              className="bg-zinc-900/30 h-full p-6 backdrop-blur-xl"
+              className="bg-zinc-900/30 h-full p-6 backdrop-blur-xl overflow-y-auto"
             >
               {activeMenu === "analytics" && <AnalyticsSection />}
               {activeMenu === "game" && <GameSection />}

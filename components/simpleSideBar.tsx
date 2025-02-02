@@ -1,3 +1,4 @@
+import DashboardHeader from '@/app/dashboard/components/DashboardHeader';
 import React from 'react';
 
 interface SimpleSideBarProps {
@@ -19,7 +20,7 @@ const SimpleSideBar: React.FC<SimpleSideBarProps> = ({
     menuItems
 }) => {
     return (
-        <div className="bg-gray-50 drawer lg:drawer-open">
+        <div className="bg-black drawer lg:drawer-open overflow-hidden">
             <input id="sidebar" type="checkbox" className="drawer-toggle" />
 
             {/* Drawer content */}
@@ -29,6 +30,7 @@ const SimpleSideBar: React.FC<SimpleSideBarProps> = ({
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
                 </label>
+              
                 <div className="p-4">
                     {children}
                 </div>
@@ -37,7 +39,7 @@ const SimpleSideBar: React.FC<SimpleSideBarProps> = ({
             {/* Sidebar Content */}
             <div className="drawer-side">
                 <label htmlFor="sidebar" aria-label="close sidebar" className="drawer-overlay"></label>
-                <ul className="menu p-4 w-48 min-h-full bg-gray-50 text-base-content flex flex-col items-center gap-4">
+                <ul className="menu p-4 w-48 min-h-full bg-black text-base-content flex flex-col items-center gap-4">
                     <li className="mb-4">
                         <div className="rounded-full bg-base-100 p-2 shadow-lg hover:shadow-xl transition-shadow duration-300 flex items-center justify-center">
                             <img

@@ -38,7 +38,6 @@ export default function DashboardHeader() {
                 <div className="flex justify-between items-center h-16">
                     {/* Left side with user info and integration */}
                     <div className="flex items-center gap-4">
-
                         {loginResponse?.access_token && (
                             <div className="bg-base-200 rounded-full px-6 py-2 shadow-lg flex items-center gap-4">
                                 <div className="text-lg font-semibold">
@@ -95,12 +94,14 @@ export default function DashboardHeader() {
                         </SettingsPage> */}
                         
                         {loginResponse?.access_token && (
-                            <button 
-                                className="btn btn-ghost text-red-500"
-                                // onClick={handleSignOut}
-                            >
-                                Sign Out
-                            </button>
+                            <div className="bg-base-200 rounded-full px-6 py-2 shadow-lg flex items-center gap-4">
+                                <button 
+                                    className="text-red-500 flex items-center gap-2"
+                                    // onClick={handleSignOut}
+                                >
+                                    Sign Out
+                                </button>
+                            </div>
                         )}
                     </div>
                 </div>
