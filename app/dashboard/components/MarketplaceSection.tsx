@@ -75,14 +75,16 @@ export default function MarketplaceSection() {
   };
 
   return (
-    <div className="space-y-6 p-2 md:p-8">
-      <div className="flex items-center gap-3">
-        <IoStorefrontSharp className="text-3xl text-green" />
-        <h2 className="text-2xl font-bold text-white">Marketplace</h2>
+    <div className="flex flex-col gap-6 p-2 md:p-8">
+      <div className="flex justify-between items-center">
+        <div className="flex items-center gap-3">
+          <IoStorefrontSharp className="text-3xl text-green" />
+          <h2 className="text-2xl font-bold text-white">Marketplace</h2>
+        </div>
       </div>
 
       {/* Filters and Search */}
-      <div className="bg-grey rounded-xl p-4 md:p-6">
+      <div className="space-y-4 bg-slate-800/80 p-6 rounded-lg">
         <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
           <div className="relative w-full md:w-96">
             <IoSearchOutline className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -91,7 +93,7 @@ export default function MarketplaceSection() {
               placeholder="Search items..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-black/50 text-white rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-1 focus:ring-green"
+              className="w-full bg-slate-900/90 text-white rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-green border border-slate-700/50"
             />
           </div>
 
@@ -99,7 +101,7 @@ export default function MarketplaceSection() {
             <select
               value={selectedType}
               onChange={(e) => setSelectedType(e.target.value)}
-              className="bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-1 focus:ring-green"
+              className="bg-slate-900/90 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green border border-slate-700/50"
             >
               <option value="All">All Types</option>
               <option value="Natural">Natural</option>
@@ -109,7 +111,7 @@ export default function MarketplaceSection() {
             <select
               value={selectedRarity}
               onChange={(e) => setSelectedRarity(e.target.value)}
-              className="bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-1 focus:ring-green"
+              className="bg-slate-900/90 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green border border-slate-700/50"
             >
               <option value="All">All Rarities</option>
               <option value="Common">Common</option>
@@ -135,7 +137,7 @@ export default function MarketplaceSection() {
                   onChange={(e) =>
                     handlePriceChange(Number(e.target.value), "min")
                   }
-                  className="w-24 bg-black text-white rounded-lg px-3 py-1 focus:outline-none focus:ring-1 focus:ring-green [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  className="w-24 bg-slate-900 text-white rounded-lg px-3 py-1 focus:outline-none focus:ring-2 focus:ring-green border border-slate-700/50 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
               </div>
               <span className="text-gray-400">to</span>
@@ -148,7 +150,7 @@ export default function MarketplaceSection() {
                   onChange={(e) =>
                     handlePriceChange(Number(e.target.value), "max")
                   }
-                  className="w-24 bg-black text-white rounded-lg px-3 py-1 focus:outline-none focus:ring-1 focus:ring-green [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  className="w-24 bg-slate-900 text-white rounded-lg px-3 py-1 focus:outline-none focus:ring-2 focus:ring-green border border-slate-700/50 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
               </div>
             </div>
@@ -199,7 +201,7 @@ export default function MarketplaceSection() {
         {items.map((item) => (
           <div
             key={item.id}
-            className="bg-grey rounded-xl overflow-hidden hover:scale-[1.02] transition-transform"
+            className="bg-slate-800/80 rounded-lg overflow-hidden hover:scale-[1.02] transition-transform"
           >
             <div className="aspect-square relative">
               <Image
@@ -233,7 +235,7 @@ export default function MarketplaceSection() {
                 <span className="text-green font-medium">
                   ${item.price.toLocaleString()}
                 </span>
-                <button className="bg-green/10 text-green px-3 py-1 rounded-lg text-sm hover:bg-green/20">
+                <button className="bg-green hover:bg-green/90 text-white px-3 py-1 rounded-lg text-sm transition-colors">
                   Buy Now
                 </button>
               </div>

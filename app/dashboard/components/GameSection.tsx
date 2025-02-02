@@ -112,21 +112,21 @@ export default function GameSection() {
     <div className="flex flex-col gap-6 p-2 md:p-8 min-h-full">
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-3">
-        <IoGameControllerSharp className="text-3xl text-green" />
-        <h2 className="text-2xl font-bold text-white">Game Management</h2>
+          <IoGameControllerSharp className="text-3xl text-green" />
+          <h2 className="text-2xl font-bold text-white">Game Management</h2>
         </div>
         <div className="flex gap-4">
           <button
             onClick={() => setShowAddModal(true)}
-            className="bg-green group hover:bg-grey border-green hover:border border text-grey px-4 py-2 rounded-full font-medium flex items-center gap-2 transition-all"
+            className="bg-green/90 group hover:bg-green border-green text-white px-4 py-2 rounded-full font-medium flex items-center gap-2 transition-all"
           >
-            <FaPlus className="text-sm text-grey group-hover:text-green" />
-            <span className="text-sm group-hover:text-green">New Game</span>
+            <FaPlus className="text-sm text-white" />
+            <span className="text-sm">New Game</span>
           </button>
         </div>
       </div>
 
-      <div className="space-y-4 bg-grey p-6 rounded-lg">
+      <div className="space-y-4 bg-slate-800/80 p-6 rounded-lg">
         {loading ? (
           <div className="space-y-2">
             {[1, 2].map((index) => (
@@ -153,29 +153,29 @@ export default function GameSection() {
                 <div
                   key={index}
                   onClick={() => handleGameClick(game)}
-                  className="grid grid-cols-3 gap-4 cursor-pointer hover:bg-slate-400/10 p-4 rounded-lg transition-colors"
+                  className="grid grid-cols-3 gap-4 cursor-pointer hover:bg-slate-700/50 p-4 rounded-lg transition-colors"
                 >
                   <div>
-                    <h3 className="text-gray-400 text-sm">Game Name</h3>
-                    <p className="text-white">{game.account.data.name}</p>
+                    <h3 className="text-gray-300 text-sm">Game Name</h3>
+                    <p className="text-white font-medium">{game.account.data.name}</p>
                   </div>
                   <div>
-                    <h3 className="text-gray-400 text-sm">Symbol</h3>
-                    <p className="text-white">{game.account.data.symbol}</p>
+                    <h3 className="text-gray-300 text-sm">Symbol</h3>
+                    <p className="text-white font-medium">{game.account.data.symbol}</p>
                   </div>
                   <div>
-                    <h3 className="text-gray-400 text-sm">Owner</h3>
-                    <p className="text-white truncate">{game.account.owner}</p>
+                    <h3 className="text-gray-300 text-sm">Owner</h3>
+                    <p className="text-white font-medium truncate">{game.account.owner}</p>
                   </div>
                 </div>
                 {index < games.length - 1 && (
-                  <hr className="my-2 border-t border-white/10 w-full" />
+                  <hr className="my-2 border-t border-white/20 w-full" />
                 )}
               </>
             ))}
           </div>
         ) : (
-          <div className="text-center py-8 text-gray-40 flex flex-col items-center justify-center">
+          <div className="text-center py-8 text-gray-300 flex flex-col items-center justify-center">
             <FaGhost className="text-[#0CC0DF] text-4xl mb-2" />
             <p>No game data available. Create a new game to get started.</p>
           </div>
@@ -185,11 +185,11 @@ export default function GameSection() {
       {/* Add Game Modal */}
       {showAddModal && (
         <div
-          className="absolute w-full h-[calc(100vh-4rem)] inset-0 bg-black/50 flex items-center justify-center z-50"
+          className="absolute w-full h-[calc(100vh-4rem)] inset-0 bg-black/60 flex items-center justify-center z-50"
           onClick={() => setShowAddModal(false)}
         >
           <div
-            className="bg-grey p-8 rounded-lg w-full max-w-2xl m-4 relative"
+            className="bg-slate-800 p-8 rounded-lg w-full max-w-2xl m-4 relative shadow-xl"
             onClick={(e) => e.stopPropagation()}
           >
             <button
@@ -209,7 +209,7 @@ export default function GameSection() {
                     value={formData.gameName}
                     onChange={handleChange}
                     required
-                    className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-1 focus:ring-green"
+                    className="w-full bg-slate-900/90 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green border border-slate-700/50"
                     placeholder="Enter game name"
                   />
                 </div>
@@ -221,7 +221,7 @@ export default function GameSection() {
                     value={formData.symbol}
                     onChange={handleChange}
                     required
-                    className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-1 focus:ring-green"
+                    className="w-full bg-slate-900/90 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green border border-slate-700/50"
                     placeholder="Enter symbol"
                   />
                 </div>
@@ -233,7 +233,7 @@ export default function GameSection() {
                     value={formData.metadataUri}
                     onChange={handleChange}
                     required
-                    className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-1 focus:ring-green"
+                    className="w-full bg-slate-900/90 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green border border-slate-700/50"
                     placeholder="Enter metadata URI"
                   />
                 </div>
@@ -244,7 +244,7 @@ export default function GameSection() {
                     name="nativeToken"
                     value={formData.nativeToken}
                     onChange={handleChange}
-                    className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-1 focus:ring-green"
+                    className="w-full bg-slate-900/90 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green border border-slate-700/50"
                     placeholder="Enter native token address"
                   />
                 </div>
@@ -255,7 +255,7 @@ export default function GameSection() {
                     name="nftCollection"
                     value={formData.nftCollection}
                     onChange={handleChange}
-                    className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-1 focus:ring-green"
+                    className="w-full bg-slate-900/90 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green border border-slate-700/50"
                     placeholder="Enter NFT collection address"
                   />
                 </div>
@@ -266,26 +266,26 @@ export default function GameSection() {
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
-                    className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-1 focus:ring-green"
+                    className="w-full bg-slate-900/90 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green border border-slate-700/50"
                     placeholder="Enter password"
                   />
                 </div>
               </div>
             </form>
 
-            <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-gray-800">
+            <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-slate-700">
               <button
-                className="bg-grey hover:bg-slate-400/10 text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2 border border-white/20"
+                className="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2"
                 onClick={() => setShowAddModal(false)}
               >
                 <span className="text-sm">Cancel</span>
               </button>
               <button
-                className="bg-green hover:bg-green/90 text-grey px-4 py-2 rounded-lg font-medium flex items-center gap-2"
+                className="bg-green hover:bg-green/90 text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2"
                 onClick={createGame}
               >
                 <FaPlus className="text-sm" />
-                <button className="text-sm">Create Game</button>
+                <span className="text-sm">Create Game</span>
               </button>
             </div>
           </div>
@@ -295,10 +295,10 @@ export default function GameSection() {
       {/* Existing View/Edit Modal */}
       {showModal && selectedGame && (
         <div
-          className="absolute w-full h-[calc(100vh-4rem)] inset-0 bg-black/50 flex items-center justify-center z-50"
+          className="absolute w-full h-[calc(100vh-4rem)] inset-0 bg-black/60 flex items-center justify-center z-50"
           onClick={() => setShowModal(false)}
         >
-          <div className="bg-grey p-8 rounded-lg w-full max-w-2xl m-4 relative">
+          <div className="bg-slate-800 p-8 rounded-lg w-full max-w-2xl m-4 relative shadow-xl">
             <button
               onClick={() => setShowModal(false)}
               className="absolute top-4 right-4 text-gray-400 hover:text-white"
@@ -358,9 +358,9 @@ export default function GameSection() {
               </div>
             </div>
 
-            <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-gray-800">
+            <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-slate-700">
               <button
-                className="bg-[#0C0E12] hover:bg-[#0A2540] text-white px-6 py-3 rounded-lg font-medium flex items-center gap-2"
+                className="bg-slate-700 hover:bg-slate-600 text-white px-6 py-3 rounded-lg font-medium flex items-center gap-2"
                 onClick={() => {
                   // Edit function
                 }}
@@ -369,7 +369,7 @@ export default function GameSection() {
                 <span>Edit Game</span>
               </button>
               <button
-                className="bg-red-500/10 hover:bg-red-500/20 text-red-500 px-6 py-3 rounded-lg font-medium flex items-center gap-2"
+                className="bg-red-500/20 hover:bg-red-500/30 text-red-400 hover:text-red-300 px-6 py-3 rounded-lg font-medium flex items-center gap-2"
                 onClick={() => {
                   // Delete function
                 }}

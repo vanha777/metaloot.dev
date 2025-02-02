@@ -62,7 +62,7 @@ export default function TokenomicsSection() {
   };
 
   return (
-    <div className="space-y-6 p-2 md:p-8">
+    <div className="flex flex-col gap-6 p-2 md:p-8 min-h-full">
       <div className="flex items-center gap-3">
         <MdGeneratingTokens className="text-3xl text-green" />
         <h2 className="text-2xl font-bold text-white">Token Management</h2>
@@ -70,10 +70,9 @@ export default function TokenomicsSection() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Token Creation Form */}
-        <div className="bg-grey p-6 rounded-xl">
+        <div className="space-y-4 bg-slate-800/80 p-6 rounded-lg">
           <h3 className="text-xl text-white mb-6">Create New Token</h3>
           <div className="space-y-4">
-
             <div>
               <h3 className="text-gray-400 mb-2 flex items-start gap-1">Token Name <span className="opacity-50 text-xs">*required</span></h3>
               <input
@@ -81,7 +80,7 @@ export default function TokenomicsSection() {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-1 focus:ring-green"
+                className="w-full bg-slate-900/90 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green border border-slate-700/50"
                 placeholder="Enter token name"
               />
             </div>
@@ -93,39 +92,38 @@ export default function TokenomicsSection() {
                 name="symbol"
                 value={formData.symbol}
                 onChange={handleChange}
-                className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-1 focus:ring-green"
+                className="w-full bg-slate-900/90 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green border border-slate-700/50"
                 placeholder="Enter token symbol"
               />
             </div>
 
             <div>
-              <h3 className="text-gray-400 mb-2">URI <span className="opacity-50 text-xs">*required</span></h3>
+              <h3 className="text-gray-400 mb-2 flex items-start gap-1">URI <span className="opacity-50 text-xs">*required</span></h3>
               <input
                 type="text"
                 name="uri"
                 value={formData.uri}
                 onChange={handleChange}
-                className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-1 focus:ring-green"
+                className="w-full bg-slate-900/90 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green border border-slate-700/50"
                 placeholder="Enter URI"
               />
             </div>
 
             <button
               onClick={createToken}
-              className="w-full bg-green hover:bg-green/90 text-grey px-6 py-3 rounded-lg font-medium flex items-center justify-center gap-2 mt-6"
+              className="w-full bg-green hover:bg-green/90 text-white px-6 py-3 rounded-lg font-medium flex items-center justify-center gap-2 mt-6"
             >
               <FaPlus className="text-sm" />
               <span>Create Token</span>
             </button>
-
           </div>
         </div>
 
         {/* Token List */}
-        <div className="bg-grey p-6 rounded-xl">
+        <div className="space-y-4 bg-slate-800/80 p-6 rounded-lg">
           <h3 className="text-xl text-white mb-6">Your Tokens</h3>
           <div className="space-y-4">
-            <div className="bg-black/50 p-4 rounded-lg">
+            <div className="bg-slate-900/90 p-4 rounded-lg border border-slate-700/50">
               <div className="flex justify-between items-start mb-2">
                 <div>
                   <h4 className="text-white font-medium">AWG</h4>
@@ -148,10 +146,10 @@ export default function TokenomicsSection() {
               </div>
               <div className="flex justify-between text-sm">
                 <div className="flex items-center gap-2">
-                    <label className="text-gray-400">Supply: </label>
-                    <input className="bg-transparent w-20 border-b border-white/20 focus:outline-none text-white" type="number" value="100000" />
+                  <label className="text-gray-400">Supply: </label>
+                  <input className="bg-transparent w-20 border-b border-slate-700/50 focus:outline-none text-white" type="number" value="100000" />
                 </div>
-                <button className="text-green">Mint</button>
+                <button className="text-green hover:text-green/90">Mint</button>
               </div>
             </div>
           </div>

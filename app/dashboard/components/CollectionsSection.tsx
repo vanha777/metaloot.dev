@@ -119,15 +119,17 @@ export default function CollectionsSection() {
   };
 
   return (
-    <div className="space-y-6 p-2 md:p-8">
-      <div className="flex items-center gap-3">
-        <IoImagesSharp className="text-3xl text-green" />
-        <h2 className="text-2xl font-bold text-white">NFT Collections</h2>
+    <div className="flex flex-col gap-6 p-2 md:p-8 min-h-full">
+      <div className="flex justify-between items-center">
+        <div className="flex items-center gap-3">
+          <IoImagesSharp className="text-3xl text-green" />
+          <h2 className="text-2xl font-bold text-white">NFT Collections</h2>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Collection Creation Form */}
-        <div className="bg-grey p-6 rounded-xl">
+        <div className="bg-slate-800/80 p-6 rounded-lg">
           <h3 className="text-xl text-white mb-6">Create New Collection</h3>
           <div className="space-y-4">
             <div>
@@ -137,7 +139,7 @@ export default function CollectionsSection() {
                 name="name"
                 value={collectionForm.name}
                 onChange={handleCollectionChange}
-                className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-1 focus:ring-green"
+                className="w-full bg-slate-900/90 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green border border-slate-700/50"
                 placeholder="Enter collection name"
               />
             </div>
@@ -148,7 +150,7 @@ export default function CollectionsSection() {
                 name="symbol"
                 value={collectionForm.symbol}
                 onChange={handleCollectionChange}
-                className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-1 focus:ring-green"
+                className="w-full bg-slate-900/90 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green border border-slate-700/50"
                 placeholder="Enter collection symbol"
               />
             </div>
@@ -158,13 +160,13 @@ export default function CollectionsSection() {
                 name="description"
                 value={collectionForm.description}
                 onChange={handleCollectionChange}
-                className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-1 focus:ring-green h-24 resize-none"
+                className="w-full bg-slate-900/90 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green border border-slate-700/50 h-24 resize-none"
                 placeholder="Enter collection description"
               />
             </div>
             <div>
               <h3 className="text-gray-400 mb-2">Collection Image</h3>
-              <label className="flex items-center gap-2 bg-black/50 text-white rounded-lg px-4 py-2 cursor-pointer hover:bg-black/60">
+              <label className="flex items-center gap-2 bg-slate-900/90 text-white rounded-lg px-4 py-2 cursor-pointer hover:bg-slate-800/90 border border-slate-700/50">
                 <FaImage className="text-green" />
                 <span>{collectionForm.image ? collectionForm.image.name : 'Upload collection image'}</span>
                 <input
@@ -178,7 +180,7 @@ export default function CollectionsSection() {
             </div>
             <div>
               <h3 className="text-gray-400 mb-2">Metadata</h3>
-              <label className="flex items-center gap-2 bg-black/50 text-white rounded-lg px-4 py-2 cursor-pointer hover:bg-black/60">
+              <label className="flex items-center gap-2 bg-slate-900/90 text-white rounded-lg px-4 py-2 cursor-pointer hover:bg-slate-800/90 border border-slate-700/50">
                 <FaUpload className="text-green" />
                 <span>{collectionForm.metadata ? collectionForm.metadata.name : 'Upload metadata JSON'}</span>
                 <input
@@ -192,7 +194,7 @@ export default function CollectionsSection() {
             </div>
             <button
               onClick={createCollection}
-              className="w-full bg-green hover:bg-green/90 text-grey px-6 py-3 rounded-lg font-medium flex items-center justify-center gap-2 mt-6"
+              className="w-full bg-green hover:bg-green/90 text-white px-6 py-3 rounded-lg font-medium flex items-center justify-center gap-2 mt-6"
             >
               <FaPlus className="text-sm" />
               <span>Create Collection</span>
@@ -201,7 +203,7 @@ export default function CollectionsSection() {
         </div>
 
         {/* NFT Minting Form */}
-        <div className="bg-grey p-6 rounded-xl">
+        <div className="bg-slate-800/80 p-6 rounded-lg">
           <h3 className="text-xl text-white mb-6">Mint NFT</h3>
           <div className="space-y-4">
             <div>
@@ -209,7 +211,7 @@ export default function CollectionsSection() {
               <select
                 value={selectedCollection || ''}
                 onChange={(e) => setSelectedCollection(e.target.value)}
-                className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-1 focus:ring-green"
+                className="w-full bg-slate-900/90 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green border border-slate-700/50"
               >
                 <option value="">Select a collection</option>
                 <option value="example">Example Collection</option>
@@ -222,7 +224,7 @@ export default function CollectionsSection() {
                 name="name"
                 value={nftForm.name}
                 onChange={(e) => setNftForm(prev => ({ ...prev, name: e.target.value }))}
-                className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-1 focus:ring-green"
+                className="w-full bg-slate-900/90 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green border border-slate-700/50"
                 placeholder="Enter NFT name"
               />
             </div>
@@ -232,13 +234,13 @@ export default function CollectionsSection() {
                 name="description"
                 value={nftForm.description}
                 onChange={(e) => setNftForm(prev => ({ ...prev, description: e.target.value }))}
-                className="w-full bg-black/50 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-1 focus:ring-green h-24 resize-none"
+                className="w-full bg-slate-900/90 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green border border-slate-700/50 h-24 resize-none"
                 placeholder="Enter NFT description"
               />
             </div>
             <div>
               <h3 className="text-gray-400 mb-2 flex items-start gap-1">NFT Image <span className="opacity-50 text-xs">*required</span></h3>
-              <label className="flex items-center gap-2 bg-black/50 text-white rounded-lg px-4 py-2 cursor-pointer hover:bg-black/60">
+              <label className="flex items-center gap-2 bg-slate-900/90 text-white rounded-lg px-4 py-2 cursor-pointer hover:bg-slate-800/90 border border-slate-700/50">
                 <FaImage className="text-green" />
                 <span>{nftForm.image ? nftForm.image.name : 'Upload NFT image'}</span>
                 <input
@@ -252,7 +254,7 @@ export default function CollectionsSection() {
             </div>
             <button
               onClick={mintNFT}
-              className="w-full bg-green hover:bg-green/90 text-grey px-6 py-3 rounded-lg font-medium flex items-center justify-center gap-2 mt-6"
+              className="w-full bg-green hover:bg-green/90 text-white px-6 py-3 rounded-lg font-medium flex items-center justify-center gap-2 mt-6"
               disabled={!selectedCollection}
             >
               <FaPlus className="text-sm" />

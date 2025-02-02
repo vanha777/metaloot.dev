@@ -7,8 +7,8 @@ import AnalyticsSection from "./components/AnalyticsSection";
 import GameSection from "./components/GameSection";
 import CollectionsSection from "./components/CollectionsSection";
 import TokenomicsSection from "./components/TokenomicsSection";
-import { 
-  IoGameControllerOutline, 
+import {
+  IoGameControllerOutline,
   IoGameControllerSharp,
   IoStatsChartOutline,
   IoStatsChartSharp,
@@ -26,6 +26,8 @@ import APISection from "./components/APISection";
 import SettingsSection from "./components/SettingsSection";
 import WebhookSection from "./components/WebhookSection";
 import MarketplaceSection from "./components/MarketplaceSection";
+import SimpleSideBar from "@/components/simpleSideBar";
+import SimpleSupport from "@/components/simpleSupport";
 
 
 export default function Dashboard() {
@@ -72,64 +74,64 @@ export default function Dashboard() {
   const [activeMenu, setActiveMenu] = useState("analytics");
 
   const menuItems = [
-    { 
-      id: "analytics", 
-      label: "Analytics", 
+    {
+      id: "analytics",
+      label: "Analytics",
       icon: IoStatsChartOutline,
-      selectedIcon: IoStatsChartSharp 
+      selectedIcon: IoStatsChartSharp
     },
-    { 
-      id: "game", 
-      label: "Game Management", 
+    {
+      id: "game",
+      label: "Game Management",
       icon: IoGameControllerOutline,
-      selectedIcon: IoGameControllerSharp 
+      selectedIcon: IoGameControllerSharp
     },
-    { 
-      id: "tokenomics", 
-      label: "Tokenomics", 
+    {
+      id: "tokenomics",
+      label: "Tokenomics",
       icon: MdOutlineGeneratingTokens,
       selectedIcon: MdGeneratingTokens
     },
-    { 
-      id: "collections", 
-      label: "Collections", 
+    {
+      id: "collections",
+      label: "Collections",
       icon: IoImagesOutline,
-      selectedIcon: IoImagesSharp 
+      selectedIcon: IoImagesSharp
     },
-    { 
-      id: "marketplace", 
-      label: "Marketplace", 
+    {
+      id: "marketplace",
+      label: "Marketplace",
       icon: IoStorefrontOutline,
       selectedIcon: IoStorefrontSharp
     },
-    { 
-      id: "webhook", 
-      label: "Webhooks", 
+    {
+      id: "webhook",
+      label: "Webhooks",
       icon: MdOutlineWebhook,
       selectedIcon: MdWebhook
     },
-    { 
-      id: "api", 
-      label: "API Management", 
+    {
+      id: "api",
+      label: "API Management",
       icon: IoCodeSlashOutline,
       selectedIcon: IoCodeSlashSharp
     },
-    { 
-      id: "settings", 
-      label: "Settings", 
+    {
+      id: "settings",
+      label: "Settings",
       icon: IoSettingsOutline,
-      selectedIcon: IoSettingsSharp 
+      selectedIcon: IoSettingsSharp
     }
   ];
 
   return (
-    <>
-      <div>
-        <DashboardHeader />
+    <div className="bg-white overflow-hidden">
+      <SimpleSupport />
+      <DashboardHeader />
 
-        <div className="flex min-h-[calc(100vh-4rem)] bg-black/80">
-          {/* Sidebar */}
-          <div className="hidden md:block lg:w-64 bg-black/80 text-white/60 p-5 space-y-4 border-r border-white/10">
+      <div className="flex min-h-[calc(100vh-4rem)] bg-black/90 backdrop-blur-xl">
+        {/* Sidebar */}
+        {/* <div className="hidden md:block lg:w-64 bg-zinc-900/50 text-white/80 p-5 space-y-4 border-r border-white/10 backdrop-filter backdrop-blur-lg">
             {menuItems.map((item) => {
               const isSelected = activeMenu === item.id;
               const IconComponent = isSelected ? item.selectedIcon : item.icon;
@@ -137,17 +139,24 @@ export default function Dashboard() {
                 <button
                   key={item.id}
                   onClick={() => setActiveMenu(item.id)}
-                  className={`flex items-center gap-2 px-4 py-3 rounded-lg transition-colors w-full ${
-                    isSelected ? 'bg-grey text-white' : 'text-gray-400 hover:text-white'
-                  }`}
+                  className={`flex items-center gap-2 px-4 py-3 rounded-lg transition-all duration-200 w-full 
+                    ${isSelected 
+                      ? 'bg-gradient-to-r from-emerald-600 to-emerald-500 text-white shadow-lg shadow-emerald-500/20' 
+                      : 'text-gray-400 hover:bg-white/5 hover:text-white'
+                    }`}
                 >
-                  <IconComponent className={`text-xl ${isSelected ? 'text-green' : 'text-white/60'}`} />
-
-                  <span className="hidden lg:block text-base font-light text-left">{item.label}</span>
+                  <IconComponent className={`text-xl ${isSelected ? 'text-white' : 'text-white/60'}`} />
+                  <span className="hidden lg:block text-base font-medium text-left">{item.label}</span>
                 </button>
               );
             })}
-          </div>
+          </div> */}
+
+        <SimpleSideBar
+          onContentChange={setActiveMenu}
+          content={activeMenu}
+          menuItems={menuItems}
+        >
 
           {/* Main Content */}
           <div className="flex-1 min-h-full">
@@ -155,7 +164,7 @@ export default function Dashboard() {
               variants={containerVariants}
               initial="hidden"
               animate="visible"
-              className="bg-black/80 h-full p-6 backdrop-blur-sm"
+              className="bg-zinc-900/30 h-full p-6 backdrop-blur-xl"
             >
               {activeMenu === "analytics" && <AnalyticsSection />}
               {activeMenu === "game" && <GameSection />}
@@ -167,30 +176,30 @@ export default function Dashboard() {
               {activeMenu === "settings" && <SettingsSection />}
             </motion.div>
           </div>
-        </div>
-            
-        <div className="md:hidden sticky bottom-0 left-0 w-full flex flex-row justify-between bg-[#020303] text-white/60 py-4 px-5">
-            {menuItems.map((item) => {
-              const isSelected = activeMenu === item.id;
-              const IconComponent = isSelected ? item.selectedIcon : item.icon;
-              
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => setActiveMenu(item.id)}
-                  className={`flex justify-center items-center gap-2 px-3 py-3 rounded-lg transition-colors h-12 w-12 ${
-                    isSelected ? 'bg-grey text-white' : 'text-gray-400 hover:text-white'
-                  }`}
-                >
-                  <IconComponent className={`text-xl ${isSelected ? 'text-green' : 'text-white/60'}`} />
-                </button>
-              );
-            })}
-          </div>
-
-        
-          {/* <Footer /> */}
+        </SimpleSideBar>
       </div>
-    </>
+
+      {/* Mobile Navigation */}
+      <div className="md:hidden sticky bottom-0 left-0 w-full flex flex-row justify-between bg-zinc-900/90 backdrop-blur-xl text-white/80 py-4 px-5 border-t border-white/10">
+        {menuItems.map((item) => {
+          const isSelected = activeMenu === item.id;
+          const IconComponent = isSelected ? item.selectedIcon : item.icon;
+
+          return (
+            <button
+              key={item.id}
+              onClick={() => setActiveMenu(item.id)}
+              className={`flex justify-center items-center gap-2 px-3 py-3 rounded-lg transition-all duration-200 h-12 w-12 
+                    ${isSelected
+                  ? 'bg-gradient-to-r from-emerald-600 to-emerald-500 text-white shadow-lg shadow-emerald-500/20'
+                  : 'text-gray-400 hover:bg-white/5 hover:text-white'
+                }`}
+            >
+              <IconComponent className={`text-xl ${isSelected ? 'text-white' : 'text-white/60'}`} />
+            </button>
+          );
+        })}
+      </div>
+    </div>
   );
 }
