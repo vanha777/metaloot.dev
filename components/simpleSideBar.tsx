@@ -56,10 +56,16 @@ const SimpleSideBar: React.FC<SimpleSideBarProps> = ({
                             <li key={item.id} className="flex justify-center">
                                 <div
                                     onClick={() => onContentChange?.(item.id)}
-                                    className={`rounded-full ${content === item.id ? "bg-[#14F195]" : "bg-base-100"} p-4 shadow-lg hover:bg-[#14F195]/50 transition-shadow duration-300 flex items-center justify-center cursor-pointer`}
+                                    className={`rounded-full ${
+                                        content === item.id 
+                                            ? "bg-base-100 p-[2px] bg-gradient-to-r from-[#0CC0DF] to-[#14F195]" 
+                                            : "bg-base-100"
+                                    } shadow-lg hover:ring-2 hover:ring-gradient-to-r hover:ring-[#0CC0DF]/50 transition-all duration-300 flex items-center justify-center cursor-pointer`}
                                     title={item.label}
                                 >
-                                    <Icon className="h-10 w-10" />
+                                    <div className={`${content === item.id ? 'bg-base-100 rounded-full' : ''} p-3`}>
+                                        <Icon className={`h-10 w-10 ${content === item.id ? 'text-white' : 'text-gray-400'}`} />
+                                    </div>
                                 </div>
                             </li>
                         );
