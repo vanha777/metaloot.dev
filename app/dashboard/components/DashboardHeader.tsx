@@ -5,10 +5,16 @@ import { IoSettings, IoServer, IoShare, IoSettingsSharp, IoShapesSharp } from "r
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import { GameData } from '@/app/utils/storage'
 // import { useAuthStore, useIntegrationPartnerStore } from '@/store/store'
 // import SettingsPage from '../settings/settings-page'
 
-export default function DashboardHeader() {
+interface DashboardHeaderProps {
+    selectedGameData: GameData | null;
+    setSelectedGameData: (game: GameData | null) => void;
+}
+
+export default function DashboardHeader({ selectedGameData, setSelectedGameData }: DashboardHeaderProps) {
     // const { integrationPartner, setIntegrationPartner } = useIntegrationPartnerStore()
     // const { loginResponse, clearAuth } = useAuthStore()
 
@@ -26,7 +32,7 @@ export default function DashboardHeader() {
         integration_partner: "emis"
     };
 
-    let setIntegrationPartner = (integration_partner: string) => {}
+    let setIntegrationPartner = (integration_partner: string) => { }
 
     return (
         <motion.nav
@@ -36,50 +42,20 @@ export default function DashboardHeader() {
         >
             <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16">
-                    {/* Left side with user info and integration */}
+                    {/* Left side with user info and game info */}
                     <div className="flex items-center gap-4">
                         {loginResponse?.access_token && (
                             <div className="bg-base-200 rounded-full px-6 py-2 shadow-lg flex items-center gap-4">
                                 <div className="text-lg font-semibold">
-                                    <span className="text-white">{loginResponse.first_name}</span>{" "}
-                                    <span className="bg-gradient-to-r from-[#0CC0DF] to-[#14F195] text-transparent bg-clip-text font-bold">
-                                        {loginResponse.last_name}
-                                    </span>
+                                    <span className="text-white">{selectedGameData?.name || "No Game Selected"}</span>
                                 </div>
 
-                                <div className="dropdown dropdown-end">
-                                    <div className="tooltip tooltip-bottom" data-tip={`Current Integration: ${integrationPartner?.integration_partner || 'None'}`}>
-                                        <label tabIndex={0} className="btn btn-ghost btn-circle text-white">
-                                            <IoServer className="h-6 w-6" />
-                                        </label>
-                                    </div>
-                                    <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
-                                        <li>
-                                            <a className="text-black"
-                                            //  onClick={() => setIntegrationPartner({ integration_partner: 'emis' })}
-                                             >
-                                                <IoShare className="h-6 w-6" />
-                                                EMIS
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a className="text-black" 
-                                            // onClick={() => setIntegrationPartner({ integration_partner: 'rxweb' })}
-                                            >
-                                                <IoSettingsSharp className="h-6 w-6" />
-                                                rxweb
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a className="text-black"
-                                            //  onClick={() => setIntegrationPartner({ integration_partner: 'pharma_outcomes' })}
-                                             >
-                                                <IoShapesSharp className="h-6 w-6" />
-                                                Pharma Outcomes
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
+                                <button
+                                    className="btn btn-ghost btn-sm"
+                                    onClick={() => setSelectedGameData(null)}
+                                >
+                                    Change Game
+                                </button>
                             </div>
                         )}
                     </div>
@@ -92,12 +68,12 @@ export default function DashboardHeader() {
                                 Settings
                             </button>
                         </SettingsPage> */}
-                        
+
                         {loginResponse?.access_token && (
                             <div className="bg-base-200 rounded-full px-6 py-2 shadow-lg flex items-center gap-4">
-                                <button 
+                                <button
                                     className="text-red-500 flex items-center gap-2"
-                                    // onClick={handleSignOut}
+                                // onClick={handleSignOut}
                                 >
                                     Sign Out
                                 </button>

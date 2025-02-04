@@ -41,12 +41,13 @@ const SimpleSideBar: React.FC<SimpleSideBarProps> = ({
                 <label htmlFor="sidebar" aria-label="close sidebar" className="drawer-overlay"></label>
                 <ul className="menu p-4 w-48 min-h-full bg-black text-base-content flex flex-col items-center gap-4">
                     <li className="mb-4">
-                        <div className="rounded-full bg-base-100 p-2 shadow-lg hover:shadow-xl transition-shadow duration-300 flex items-center justify-center">
+                        <div className="rounded-full bg-transparent p-2 shadow-lg hover:shadow-xl transition-shadow duration-300 flex items-center justify-center">
                             <img
                                 src="/transLogo.png"
                                 alt="MetaLoot Logo"
-                                width={32}
-                                height={32}
+                                width={92}
+                                height={92}
+                                className="rotate-12 hover:rotate-0 transition-transform duration-300"
                             />
                         </div>
                     </li>

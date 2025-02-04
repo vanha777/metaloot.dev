@@ -89,12 +89,12 @@ export default function MainUniverse() {
             icon: IoStatsChartOutline,
             selectedIcon: IoStatsChartSharp
         },
-        {
-            id: "game",
-            label: "Game Management",
-            icon: IoGameControllerOutline,
-            selectedIcon: IoGameControllerSharp
-        },
+        // {
+        //     id: "game",
+        //     label: "Game Management",
+        //     icon: IoGameControllerOutline,
+        //     selectedIcon: IoGameControllerSharp
+        // },
         {
             id: "tokenomics",
             label: "Tokenomics",
@@ -133,20 +133,6 @@ export default function MainUniverse() {
         }
     ];
 
-    // useEffect(() => {
-    //   let auth = authStorage.get();
-    //   console.log("this is the auth", auth);
-    //   if (auth.isAuthenticated) {
-    //     setIsAuthenticated(true);
-    //   }
-    //   // setUserData(auth?.userData ?? null); 
-    //   if (auth?.gameData) {
-    //     setGameData(auth.gameData);
-    //   }
-    //   if (auth?.userData) {
-    //     setUserData(auth.userData);
-    //   }
-    // }, []);
 
     return (
         <>
@@ -155,9 +141,10 @@ export default function MainUniverse() {
                     <SSOLogin />
                 </div>
             ) : !selectedGameData ? (
-                <div className="bg-black/90 overflow-hidden flex items-center justify-center min-h-screen">
-                    <GameUniverse games={auth.gameData ?? []} />
-                </div>
+                <GameUniverse 
+                    games={auth.gameData ?? []} 
+                    setSelectedGame={setSelectedGameData}
+                />
             ) : (
                 <div className="bg-black/90 overflow-hidden">
                     <SimpleSupport />
@@ -171,7 +158,10 @@ export default function MainUniverse() {
 
                             {/* Main Content */}
                             <div className="flex-1 h-[calc(100vh-4rem)]">
-                                <DashboardHeader />
+                                <DashboardHeader 
+                                    selectedGameData={selectedGameData}
+                                    setSelectedGameData={setSelectedGameData}
+                                />
                                 <motion.div
                                     variants={containerVariants}
                                     initial="hidden"
@@ -179,7 +169,7 @@ export default function MainUniverse() {
                                     className="bg-zinc-900/30 h-full p-6 backdrop-blur-xl overflow-y-auto"
                                 >
                                     {activeMenu === "analytics" && <AnalyticsSection />}
-                                    {activeMenu === "game" && <GameSection />}
+                                    {/* {activeMenu === "game" && <GameSection />} */}
                                     {activeMenu === "tokenomics" && <TokenomicsSection />}
                                     {activeMenu === "collections" && <CollectionsSection />}
                                     {activeMenu === "marketplace" && <MarketplaceSection />}
