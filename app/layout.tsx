@@ -75,7 +75,7 @@ export default function RootLayout({
         <meta property="og:image" content="https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/banner.png" />
         <meta property="og:type" content="website" />
       </Head>
-      <body className={inter.className}>
+      <body suppressHydrationWarning={true} className={inter.className}>
         {children}
         <Analytics />
       </body>
