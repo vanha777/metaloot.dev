@@ -2,6 +2,7 @@ import { useState } from "react";
 import { IoCodeSlashSharp } from "react-icons/io5";
 import { FaPlus, FaTimes, FaTrash, FaPencilAlt } from "react-icons/fa";
 import Alert from "@/components/Alert";
+import { GameData } from "@/app/utils/AppContext";
 
 interface API {
   name: string;
@@ -11,7 +12,7 @@ interface API {
   lastUsed: string;
 }
 
-export default function APISection() {
+export default function APISection({ selectedGame }: { selectedGame: GameData }) {
   const [apis, setApis] = useState<API[]>([
     {
       name: "Production API",

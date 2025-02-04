@@ -2,6 +2,7 @@ import { useState } from "react";
 import { FaPlus, FaCopy } from "react-icons/fa";
 import Alert from "@/components/Alert";
 import { MdGeneratingTokens } from "react-icons/md";
+import { GameData } from "@/app/utils/AppContext";
 
 interface TokenForm {
   name: string;
@@ -12,7 +13,7 @@ interface TokenForm {
   // metadata: File | null;
 }
 
-export default function TokenomicsSection() {
+export default function TokenomicsSection({ selectedGame }: { selectedGame: GameData }) {
   const [formData, setFormData] = useState<TokenForm>({
     name: '',
     symbol: '',

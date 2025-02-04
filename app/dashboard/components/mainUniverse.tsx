@@ -166,16 +166,16 @@ export default function MainUniverse() {
                                     variants={containerVariants}
                                     initial="hidden"
                                     animate="visible"
-                                    className="bg-zinc-900/30 h-full p-6 backdrop-blur-xl overflow-y-auto"
+                                    className=" h-full p-6 backdrop-blur-xl overflow-y-auto"
                                 >
-                                    {activeMenu === "analytics" && <AnalyticsSection />}
+                                    {activeMenu === "analytics" && <AnalyticsSection selectedGame={selectedGameData}/>}
                                     {/* {activeMenu === "game" && <GameSection />} */}
-                                    {activeMenu === "tokenomics" && <TokenomicsSection />}
-                                    {activeMenu === "collections" && <CollectionsSection />}
-                                    {activeMenu === "marketplace" && <MarketplaceSection />}
-                                    {activeMenu === "webhook" && <WebhookSection />}
-                                    {activeMenu === "api" && <APISection />}
-                                    {activeMenu === "settings" && <SettingsSection />}
+                                    {activeMenu === "tokenomics" && <TokenomicsSection selectedGame={selectedGameData}/>}
+                                    {activeMenu === "collections" && <CollectionsSection selectedGame={selectedGameData}/>}
+                                    {activeMenu === "marketplace" && <MarketplaceSection selectedGame={selectedGameData}/>}
+                                    {activeMenu === "webhook" && <WebhookSection selectedGame={selectedGameData}/>}
+                                    {activeMenu === "api" && <APISection selectedGame={selectedGameData}/>}
+                                    {activeMenu === "settings" && <SettingsSection selectedGame={selectedGameData}/>}
                                 </motion.div>
                             </div>
                         </SimpleSideBar>

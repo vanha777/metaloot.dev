@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { IoStorefrontSharp, IoSearchOutline } from "react-icons/io5";
 import Image from "next/image";
+import { GameData } from "@/app/utils/AppContext";
 
 interface MarketItem {
   id: string;
@@ -12,7 +13,7 @@ interface MarketItem {
   game: string;
 }
 
-export default function MarketplaceSection() {
+export default function MarketplaceSection({ selectedGame }: { selectedGame: GameData }) {
   const [items] = useState<MarketItem[]>([
     {
       id: "1",

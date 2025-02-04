@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
-import { FaUsers, FaWallet, FaGamepad, FaChartLine } from "react-icons/fa";
+import { FaUsers, FaWallet, FaGamepad, FaChartLine, FaCoins } from "react-icons/fa";
 import { IoStatsChart } from "react-icons/io5";
+import { MdNat } from "react-icons/md";
 import TransactionTable from './TransactionTable';
 import { Transaction } from './TransactionTable';
+import { GameData } from "@/app/utils/AppContext";
 
 interface AnalyticsData {
   playerStats: {
@@ -33,7 +35,7 @@ interface AnalyticsData {
   recentTransactions: Transaction[];
 }
 
-export default function AnalyticsSection() {
+export default function AnalyticsSection({ selectedGame }: { selectedGame: GameData }) {
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -179,134 +181,136 @@ export default function AnalyticsSection() {
   }, []);
 
   return (
-    <div className="space-y-6 p-2 md:p-8">
-      <div className="flex items-center gap-3">
-        <IoStatsChart className="text-3xl text-emerald-400" />
-        <h2 className="text-2xl font-bold text-white">Analytics Overview</h2>
+    <div className="space-y-6 p-2 md:p-8 bg-black min-h-screen">
+      <div className="flex items-center gap-3 mb-8">
+        <IoStatsChart className="text-3xl text-[#14F195]" />
+        <h2 className="text-2xl font-bold bg-gradient-to-r from-[#0CC0DF] to-[#14F195] bg-clip-text text-transparent">
+          Analytics Overview
+        </h2>
       </div>
-    {/* Skeleton Loading */}
+
       {loading ? (
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-            <div className="bg-slate-800/50 backdrop-blur-sm p-4 md:p-6 rounded-xl space-y-4">
-              <div className="h-4 md:w-20 w-20 skeleton bg-slate-400/20"></div>
-              <div className="h-5 md:w-32 w-24 skeleton bg-slate-400/20"></div>
+            <div className="bg-white/5 p-4 md:p-6 rounded-xl space-y-4">
+              <div className="h-4 md:w-20 w-20 skeleton bg-white/10"></div>
+              <div className="h-5 md:w-32 w-24 skeleton bg-white/10"></div>
             </div>
-            <div className="bg-slate-800/50 backdrop-blur-sm p-4 md:p-6 rounded-xl space-y-4">
-              <div className="h-4 md:w-20 w-20 skeleton bg-slate-400/20"></div>
-              <div className="h-5 md:w-32 w-24 skeleton bg-slate-400/20"></div>
+            <div className="bg-white/5 p-4 md:p-6 rounded-xl space-y-4">
+              <div className="h-4 md:w-20 w-20 skeleton bg-white/10"></div>
+              <div className="h-5 md:w-32 w-24 skeleton bg-white/10"></div>
             </div>
-            <div className="bg-slate-800/50 backdrop-blur-sm p-4 md:p-6 rounded-xl space-y-4">
-              <div className="h-4 md:w-20 w-20 skeleton bg-slate-400/20"></div>
-              <div className="h-5 md:w-32 w-24 skeleton bg-slate-400/20"></div>
+            <div className="bg-white/5 p-4 md:p-6 rounded-xl space-y-4">
+              <div className="h-4 md:w-20 w-20 skeleton bg-white/10"></div>
+              <div className="h-5 md:w-32 w-24 skeleton bg-white/10"></div>
             </div>
-            <div className="bg-slate-800/50 backdrop-blur-sm p-4 md:p-6 rounded-xl space-y-4">
-              <div className="h-4 md:w-20 w-20 skeleton bg-slate-400/20"></div>
-              <div className="h-5 md:w-32 w-24 skeleton bg-slate-400/20"></div>
+            <div className="bg-white/5 p-4 md:p-6 rounded-xl space-y-4">
+              <div className="h-4 md:w-20 w-20 skeleton bg-white/10"></div>
+              <div className="h-5 md:w-32 w-24 skeleton bg-white/10"></div>
             </div>
-            <div className="bg-slate-800/50 backdrop-blur-sm p-4 md:p-6 rounded-xl space-y-4 col-span-2 h-48">
-              <div className="h-4 md:w-20 w-20 skeleton bg-slate-400/20"></div>
-              <div className="h-5 md:w-32 w-24 skeleton bg-slate-400/20"></div>
+            <div className="bg-white/5 p-4 md:p-6 rounded-xl space-y-4 col-span-2 h-48">
+              <div className="h-4 md:w-20 w-20 skeleton bg-white/10"></div>
+              <div className="h-5 md:w-32 w-24 skeleton bg-white/10"></div>
             </div>
-            <div className="bg-slate-800/50 backdrop-blur-sm p-4 md:p-6 rounded-xl space-y-4 col-span-2 h-48">
-              <div className="h-4 md:w-20 w-20 skeleton bg-slate-400/20"></div>
-              <div className="h-5 md:w-32 w-24 skeleton bg-slate-400/20"></div>
+            <div className="bg-white/5 p-4 md:p-6 rounded-xl space-y-4 col-span-2 h-48">
+              <div className="h-4 md:w-20 w-20 skeleton bg-white/10"></div>
+              <div className="h-5 md:w-32 w-24 skeleton bg-white/10"></div>
             </div>
-            <div className="bg-slate-800/50 backdrop-blur-sm p-6 rounded-xl space-y-4 lg:col-span-4 col-span-2 hidden md:block h-40">
-              <div className="h-6 w-32 skeleton bg-slate-400/20"></div>
-              <div className="h-6 w-full skeleton bg-slate-400/20"></div>
-              <div className="h-6 w-full skeleton bg-slate-400/20"></div>
+            <div className="bg-white/5 p-6 rounded-xl space-y-4 lg:col-span-4 col-span-2 hidden md:block h-40">
+              <div className="h-6 w-32 skeleton bg-white/10"></div>
+              <div className="h-6 w-full skeleton bg-white/10"></div>
+              <div className="h-6 w-full skeleton bg-white/10"></div>
             </div>
         </div>
       ) : analytics ? (
-        <>
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-            <div className="bg-gradient-to-br from-slate-800/90 to-slate-800/50 backdrop-blur-sm p-4 md:p-6 rounded-xl border border-slate-700/50 hover:border-slate-600/50 transition-colors">
-              <div className="flex items-center gap-3 mb-4">
-                <FaUsers className="hidden md:block text-xl text-emerald-400" />
-                <h3 className="md:text-xl text-base text-emerald-400">Players</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Main Game Card - Spans full width */}
+          <div className="md:col-span-3 bg-white/5 p-8 rounded-2xl backdrop-blur-sm border border-white/10 hover:border-[#14F195]/30 transition-all duration-300">
+            <div className="flex items-center gap-6">
+              <div className="w-24 h-24 bg-white/5 rounded-xl flex items-center justify-center">
+                <img 
+                  src={selectedGame.photo || '/default-game-logo.png'} 
+                  alt={`${selectedGame.name} logo`}
+                  className="w-20 h-20 object-contain"
+                  onError={(e) => {
+                    e.currentTarget.src = '/default-game-logo.png'
+                  }}
+                />
               </div>
-              <p className="md:text-3xl text-2xl font-bold text-white mb-2">{analytics.playerStats.totalPlayers}</p>
-              <p className="md:text-sm text-xs text-emerald-200/70">
-                +{analytics.playerStats.newPlayersThisWeek} this week
-              </p>
-            </div>
-
-            <div className="bg-gradient-to-br from-slate-800/90 to-slate-800/50 backdrop-blur-sm p-4 md:p-6 rounded-xl border border-slate-700/50 hover:border-slate-600/50 transition-colors">
-              <div className="flex items-center gap-3 mb-4">
-                <FaWallet className="hidden md:block text-xl text-emerald-400" />
-                <h3 className="md:text-xl text-base text-emerald-400">Revenue</h3>
-              </div>
-              <p className="md:text-3xl text-2xl font-bold text-white mb-2">
-                ${analytics.revenueMetrics.revenueFromTokenSales + analytics.revenueMetrics.revenueFromNFTSales}
-              </p>
-              <p className="md:text-sm text-xs text-emerald-200/70">
-                From token & NFT sales
-              </p>
-            </div>
-
-            <div className="bg-gradient-to-br from-slate-800/90 to-slate-800/50 backdrop-blur-sm p-4 md:p-6 rounded-xl border border-slate-700/50 hover:border-slate-600/50 transition-colors">
-              <div className="flex items-center gap-3 mb-4">
-                <FaGamepad className="hidden md:block text-xl text-emerald-400" />
-                <h3 className="md:text-xl text-base text-emerald-400">Active Players</h3>
-              </div>
-              <p className="md:text-3xl text-2xl font-bold text-white mb-2">{analytics.playerStats.activePlayers}</p>
-              <p className="md:text-sm text-xs text-emerald-200/70">
-                {analytics.playerStats.retentionRate}% retention rate
-              </p>
-            </div>
-
-            <div className="bg-gradient-to-br from-slate-800/90 to-slate-800/50 backdrop-blur-sm p-4 md:p-6 rounded-xl border border-slate-700/50 hover:border-slate-600/50 transition-colors">
-              <div className="flex items-center gap-3 mb-4">
-                <FaChartLine className="hidden md:block text-xl text-emerald-400" />
-                <h3 className="md:text-xl text-base text-emerald-400">Daily Transactions</h3>
-              </div>
-              <p className="md:text-3xl text-2xl font-bold text-white mb-2">{analytics.tokenAnalytics.dailyTokenTransactions}</p>
-              <p className="md:text-sm text-xs text-emerald-200/70">
-                Avg. ${analytics.tokenAnalytics.tokenDistribution.averageTransactionValue}
-              </p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-6">
-            <div className="bg-gradient-to-br from-slate-800/90 to-slate-800/50 backdrop-blur-sm p-4 md:p-6 rounded-xl border border-slate-700/50">
-              <h3 className="md:text-xl text-base text-white mb-4">Token Analytics</h3>
-              <div className="space-y-4">
-                <div>
-                  <p className="md:text-sm text-xs text-emerald-200/70 mb-1">Total Tokens Minted</p>
-                  <p className="md:text-2xl text-xl font-bold text-white">{analytics.tokenAnalytics.totalTokensMinted}</p>
-                </div>
-                <div>
-                  <p className="md:text-sm text-xs text-emerald-200/70 mb-1">Top 10 Players Ownership</p>
-                  <p className="md:text-2xl text-xl font-bold text-white">{analytics.tokenAnalytics.tokenDistribution.top10PlayersOwnershipPercentage}%</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-gradient-to-br from-slate-800/90 to-slate-800/50 backdrop-blur-sm p-4 md:p-6 rounded-xl border border-slate-700/50">
-              <h3 className="md:text-xl text-base text-white mb-4">NFT Analytics</h3>
-              <div className="space-y-4">
-                <div>
-                  <p className="md:text-sm text-xs text-emerald-200/70 mb-1">Total NFTs Minted</p>
-                  <p className="md:text-2xl text-xl font-bold text-white">{analytics.nftAnalytics.totalNFTsMinted}</p>
-                </div>
-                <div>
-                  <p className="md:text-sm text-xs text-emerald-200/70 mb-1">Players with NFTs</p>
-                  <p className="md:text-2xl text-xl font-bold text-white">{analytics.nftAnalytics.nftOwnershipStats.totalPlayersWithNFTs}</p>
+              <div>
+                <h1 className="text-3xl font-bold text-white mb-3">{selectedGame.name}</h1>
+                <div className="flex gap-3 text-white/70">
+                  <span className="px-3 py-1 bg-white/5 rounded-full text-sm">{selectedGame.genre}</span>
+                  <span className="px-3 py-1 bg-white/5 rounded-full text-sm">{selectedGame.symbol}</span>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Recent Transactions Table */}
-          <div className="bg-gradient-to-br from-slate-800/90 to-slate-800/50 backdrop-blur-sm rounded-xl overflow-hidden mt-6 border border-slate-700/50">
-            <div className="p-4 md:p-6 border-b border-slate-700/50">
-              <h3 className="text-xl text-white">Recent Transactions</h3>
+          {/* Left Column - Publisher & Release Date */}
+          <div className="space-y-6">
+            <div className="bg-white/5 p-6 rounded-2xl backdrop-blur-sm border border-white/10 hover:border-[#14F195]/30 transition-all duration-300 h-[200px]">
+              <div className="flex items-center gap-3 mb-4">
+                <FaGamepad className="text-xl text-[#14F195]" />
+                <h3 className="text-xl bg-gradient-to-r from-[#0CC0DF] to-[#14F195] bg-clip-text text-transparent">
+                  Publisher
+                </h3>
+              </div>
+              <p className="text-2xl font-bold text-white">
+                {selectedGame.publisher || 'Unknown'}
+              </p>
             </div>
-            <TransactionTable transactions={analytics.recentTransactions} />
+            <div className="bg-white/5 p-6 rounded-2xl backdrop-blur-sm border border-white/10 hover:border-[#14F195]/30 transition-all duration-300 h-[200px]">
+              <div className="flex items-center gap-3 mb-4">
+                <FaChartLine className="text-xl text-[#14F195]" />
+                <h3 className="text-xl bg-gradient-to-r from-[#0CC0DF] to-[#14F195] bg-clip-text text-transparent">
+                  Release Date
+                </h3>
+              </div>
+              <p className="text-2xl font-bold text-white">
+                {selectedGame.releaseDate || 'TBA'}
+              </p>
+            </div>
           </div>
-        </>
+
+          {/* Center Column - Large Description Card */}
+          <div className="bg-white/5 p-6 rounded-2xl backdrop-blur-sm border border-white/10 hover:border-[#14F195]/30 transition-all duration-300">
+            <div className="flex items-center gap-3 mb-4">
+              <IoStatsChart className="text-xl text-[#14F195]" />
+              <h3 className="text-xl bg-gradient-to-r from-[#0CC0DF] to-[#14F195] bg-clip-text text-transparent">
+                Game Description
+              </h3>
+            </div>
+            <p className="text-white/80 leading-relaxed">
+              {selectedGame.description || 'No description available.'}
+            </p>
+          </div>
+
+          {/* Right Column - Player Stats */}
+          <div className="bg-white/5 p-6 rounded-2xl backdrop-blur-sm border border-white/10 hover:border-[#14F195]/30 transition-all duration-300">
+            <div className="flex items-center gap-3 mb-4">
+              <FaUsers className="text-xl text-[#14F195]" />
+              <h3 className="text-xl bg-gradient-to-r from-[#0CC0DF] to-[#14F195] bg-clip-text text-transparent">
+                Player Statistics
+              </h3>
+            </div>
+            <div className="space-y-4">
+              <div>
+                <p className="text-white/60 text-sm">Total Players</p>
+                <p className="text-2xl font-bold text-white">{analytics.playerStats.totalPlayers.toLocaleString()}</p>
+              </div>
+              <div>
+                <p className="text-white/60 text-sm">Active Players</p>
+                <p className="text-2xl font-bold text-white">{analytics.playerStats.activePlayers.toLocaleString()}</p>
+              </div>
+              <div>
+                <p className="text-white/60 text-sm">Retention Rate</p>
+                <p className="text-2xl font-bold text-white">{analytics.playerStats.retentionRate}%</p>
+              </div>
+            </div>
+          </div>
+        </div>
       ) : (
-        <div className="text-center py-8 text-emerald-200/70">
+        <div className="text-center py-8 text-white/70">
           No analytics data available.
         </div>
       )}

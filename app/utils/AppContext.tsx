@@ -9,12 +9,14 @@ export interface UserData {
 }
 
 export interface GameData {
-    id: string;
+    id?: string;
     name?: string;
     genre?: string;
     publisher?: string;
     photo?: string;
     releaseDate?: string;
+    description?: string;
+    symbol?: string;
 }
 
 export interface AuthData {

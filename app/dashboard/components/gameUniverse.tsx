@@ -152,7 +152,7 @@ const GameUniverse = ({ games, setSelectedGame }: GameUniverseProps) => {
               key={game.id}
               className={`relative flex-shrink-0 cursor-pointer transition-all duration-300
                 ${expandedGameId === game.id ? 'w-[500px] h-[700px]' : 'w-[300px] h-[450px]'}`}
-              onClick={() => setExpandedGameId(game.id)}
+              onClick={() => setExpandedGameId(game.id ?? null)}
               layout
             >
               <div className="relative h-full rounded-2xl overflow-hidden 

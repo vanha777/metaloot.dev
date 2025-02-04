@@ -2,8 +2,9 @@ import { useState } from "react";
 import { IoSettingsSharp } from "react-icons/io5";
 import { FaSave, FaUser, FaEnvelope, FaDiscord, FaTwitter, FaGithub } from "react-icons/fa";
 import Alert from "@/components/Alert";
+import { GameData } from "@/app/utils/AppContext";
 
-export default function SettingsSection() {
+export default function SettingsSection({ selectedGame }: { selectedGame: GameData }) {
   const [formData, setFormData] = useState({
     username: '',
     email: '',

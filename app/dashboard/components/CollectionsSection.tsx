@@ -2,6 +2,7 @@ import { useState } from "react";
 import { IoImagesSharp } from "react-icons/io5";
 import { FaPlus, FaUpload, FaImage } from "react-icons/fa";
 import Alert from "@/components/Alert";
+import { GameData } from "@/app/utils/AppContext";
 
 interface CollectionForm {
   name: string;
@@ -18,7 +19,7 @@ interface NFTForm {
   attributes: { trait_type: string; value: string }[];
 }
 
-export default function CollectionsSection() {
+export default function CollectionsSection({ selectedGame }: { selectedGame: GameData }) {
   const [collectionForm, setCollectionForm] = useState<CollectionForm>({
     name: '',
     symbol: '',

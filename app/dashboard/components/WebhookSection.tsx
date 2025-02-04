@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { MdWebhook } from "react-icons/md";
 import { FaPlus, FaTimes, FaGhost, FaPencilAlt, FaTrash } from "react-icons/fa";
 import Alert from "@/components/Alert";
+import { GameData } from "@/app/utils/AppContext";
 
 interface Webhook {
   id: string;
@@ -11,7 +12,7 @@ interface Webhook {
   createdAt: string;
 }
 
-export default function WebhookSection() {
+export default function WebhookSection({ selectedGame }: { selectedGame: GameData }) {
   const [webhooks, setWebhooks] = useState<Webhook[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedWebhook, setSelectedWebhook] = useState<Webhook | null>(null);
