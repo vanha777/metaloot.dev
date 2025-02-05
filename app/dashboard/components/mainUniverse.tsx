@@ -36,12 +36,12 @@ export default function MainUniverse() {
     const { auth, setTokens, setUser, setGame, logout } = useAppContext();
     const [selectedGameData, setSelectedGameData] = useState<GameData | null>(null);
 
-    // useEffect(() => {
-    //     console.log("this is auth", auth.accessToken);
-    //     // if (!auth.accessToken) {
-    //     //     window.location.href = '/dashboard/login';
-    //     // }
-    // }, [auth.accessToken]);
+    useEffect(() => {
+        console.log("this is auth", auth);
+        if (auth.userData == null) {
+            window.location.href = '/dashboard/login';
+        }
+    }, [auth.userData]);
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -140,8 +140,8 @@ export default function MainUniverse() {
     return (
         <>
             {!selectedGameData ? (
-                <GameUniverse 
-                    games={auth.gameData ?? []} 
+                <GameUniverse
+                    games={auth.gameData ?? []}
                     setSelectedGame={setSelectedGameData}
                 />
             ) : (
@@ -157,7 +157,7 @@ export default function MainUniverse() {
 
                             {/* Main Content */}
                             <div className="flex-1 h-[calc(100vh-4rem)]">
-                                <DashboardHeader 
+                                <DashboardHeader
                                     selectedGameData={selectedGameData}
                                     setSelectedGameData={setSelectedGameData}
                                 />
@@ -167,14 +167,14 @@ export default function MainUniverse() {
                                     animate="visible"
                                     className=" h-full p-6 backdrop-blur-xl overflow-y-auto"
                                 >
-                                    {activeMenu === "analytics" && <AnalyticsSection selectedGame={selectedGameData}/>}
+                                    {activeMenu === "analytics" && <AnalyticsSection selectedGame={selectedGameData} />}
                                     {/* {activeMenu === "game" && <GameSection />} */}
-                                    {activeMenu === "tokenomics" && <TokenomicsSection selectedGame={selectedGameData}/>}
-                                    {activeMenu === "collections" && <CollectionsSection selectedGame={selectedGameData}/>}
-                                    {activeMenu === "marketplace" && <MarketplaceSection selectedGame={selectedGameData}/>}
-                                    {activeMenu === "webhook" && <WebhookSection selectedGame={selectedGameData}/>}
-                                    {activeMenu === "api" && <APISection selectedGame={selectedGameData}/>}
-                                    {activeMenu === "settings" && <SettingsSection selectedGame={selectedGameData}/>}
+                                    {activeMenu === "tokenomics" && <TokenomicsSection selectedGame={selectedGameData} />}
+                                    {activeMenu === "collections" && <CollectionsSection selectedGame={selectedGameData} />}
+                                    {activeMenu === "marketplace" && <MarketplaceSection selectedGame={selectedGameData} />}
+                                    {activeMenu === "webhook" && <WebhookSection selectedGame={selectedGameData} />}
+                                    {activeMenu === "api" && <APISection selectedGame={selectedGameData} />}
+                                    {activeMenu === "settings" && <SettingsSection selectedGame={selectedGameData} />}
                                 </motion.div>
                             </div>
                         </SimpleSideBar>

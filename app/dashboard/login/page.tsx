@@ -2,12 +2,11 @@
 import { FcGoogle } from 'react-icons/fc';
 import { BsApple } from 'react-icons/bs';
 import { AppProvider, useAppContext } from "@/app/utils/AppContext";
-
+import { Db ,Server} from '@/app/utils/db'
 const SSOLogin = () => {
   const handleSSOLogin = async (provider: string) => {
-    if (provider === 'google') {
-      window.location.href = 'https://metaloot-cloud-d4ec.shuttle.app/v1/api/player/oauth/google?redirect_uri=http://localhost:3000/dashboard/oauth/callback';
-    }
+    window.location.href = `https://metaloot-cloud-d4ec.shuttle.app/v1/api/player/oauth/${provider}?redirect_uri=http://localhost:3000/dashboard/oauth/callback`;
+
     //     setTokens('test-access-token', 'test-refresh-token');
     //     setUser({
     //       id: 'test-id',

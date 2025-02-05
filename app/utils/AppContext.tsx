@@ -20,11 +20,19 @@ export interface GameData {
     symbol?: string;
 }
 
+export interface TokenData {
+    address?: string;
+    token_image?: string;
+    token_name?: string;
+    token_symbol?: string;
+}
+
 export interface AuthData {
     accessToken: string | null;
     refreshToken: string | null;
     userData: UserData | null;
     gameData: GameData[] | null;
+    tokenData: TokenData | null;
     isAuthenticated: boolean;
 }
 
@@ -33,6 +41,7 @@ export interface AppContextData {
     setTokens: (accessToken: string, refreshToken: string) => void;
     setUser: (userData: UserData) => void;
     setGame: (gameData: GameData[]) => void;
+    setTokenData: (tokenData: TokenData) => void;
     logout: () => void;
 }
 
@@ -48,6 +57,7 @@ export function AppProvider({ children }: AppProviderProps) {
         refreshToken: null,
         userData: null,
         gameData: null,
+        tokenData: null,
         isAuthenticated: false,
     });
 
@@ -74,12 +84,20 @@ export function AppProvider({ children }: AppProviderProps) {
         }));
     }, []);
 
+    const setTokenData = useCallback((tokenData: TokenData) => {
+        setAuth(prev => ({
+            ...prev,
+            tokenData,
+        }));
+    }, []);
+
     const logout = useCallback(() => {
         setAuth({
             accessToken: null,
             refreshToken: null,
             userData: null,
             gameData: null,
+            tokenData: null,
             isAuthenticated: false,
         });
     }, []);
@@ -89,6 +107,7 @@ export function AppProvider({ children }: AppProviderProps) {
         setTokens,
         setUser,
         setGame,
+        setTokenData,
         logout
     };
 
