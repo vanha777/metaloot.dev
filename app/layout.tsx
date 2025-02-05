@@ -5,6 +5,7 @@ import Head from 'next/head';
 import { Analytics } from "@vercel/analytics/react"
 import { config } from '@fortawesome/fontawesome-svg-core'
 import '@fortawesome/fontawesome-svg-core/styles.css'
+import { AppProvider } from './utils/AppContext';
 config.autoAddCss = false
 const inter = Inter({ subsets: ['latin'] })
 
@@ -76,7 +77,9 @@ export default function RootLayout({
         <meta property="og:type" content="website" />
       </Head>
       <body suppressHydrationWarning={true} className={inter.className}>
-        {children}
+        <AppProvider>
+          {children}
+        </AppProvider>
         <Analytics />
       </body>
     </html>

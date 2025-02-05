@@ -34,10 +34,10 @@ export default function NavBar() {
                         <Link href="pricing" className="text-gray-300 hover:text-white transition-colors">
                             Pricing
                         </Link>
-                        <Link 
+                        <Link
                             href="https://documenter.getpostman.com/view/29604463/2sAYQXnsMR"
                             target="_blank"
-                            rel="noopener noreferrer" 
+                            rel="noopener noreferrer"
                             className="text-gray-300 hover:text-white transition-colors"
                         >
                             Docs
@@ -50,7 +50,7 @@ export default function NavBar() {
                     {/* CTA Button */}
                     <div>
                         <Link
-                            href="https://documenter.getpostman.com/view/29604463/2sAYQXnsMR"
+                            href="/dashboard"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="bg-gradient-to-r from-[#0CC0DF] to-[#14F195] text-white px-6 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity"

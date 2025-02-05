@@ -30,15 +30,18 @@ import SimpleSideBar from "@/components/simpleSideBar";
 import SimpleSupport from "@/components/simpleSupport";
 import { authStorage, GameData, UserData } from '@/app/utils/storage'
 import GameUniverse from "@/app/dashboard/components/gameUniverse";
-import SSOLogin from "@/app/dashboard/components/ssoLogin";
 import { AppProvider, useAppContext } from "@/app/utils/AppContext";
 
 export default function MainUniverse() {
     const { auth, setTokens, setUser, setGame, logout } = useAppContext();
-    // const [isAuthenticated, setIsAuthenticated] = useState(true);
-    // const [userData, setUserData] = useState<UserData | null>(null);
-    // const [gameData, setGameData] = useState<GameData[] | null>(null);
     const [selectedGameData, setSelectedGameData] = useState<GameData | null>(null);
+
+    // useEffect(() => {
+    //     console.log("this is auth", auth.accessToken);
+    //     // if (!auth.accessToken) {
+    //     //     window.location.href = '/dashboard/login';
+    //     // }
+    // }, [auth.accessToken]);
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -136,11 +139,7 @@ export default function MainUniverse() {
 
     return (
         <>
-            {!auth.isAuthenticated ? (
-                <div className="bg-black/90 overflow-hidden flex items-center justify-center min-h-screen">
-                    <SSOLogin />
-                </div>
-            ) : !selectedGameData ? (
+            {!selectedGameData ? (
                 <GameUniverse 
                     games={auth.gameData ?? []} 
                     setSelectedGame={setSelectedGameData}

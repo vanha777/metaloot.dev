@@ -1,3 +1,4 @@
+'use client';
 import { createContext, useContext, ReactNode, useState, useCallback } from 'react';
 
 export interface UserData {
