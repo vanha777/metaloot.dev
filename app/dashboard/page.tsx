@@ -29,18 +29,18 @@ export default function Dashboard() {
         console.log("this is data", userData);
 
         // Fetch game data nad token_data from database
-        const { data: tokenData, error: tokenError } = await Db.from('tokens').select('*').eq('user_id', userData.id).single();
-        const { data: gameData, error: gameError } = await Db.from('games').select('*').eq('user_id', userData.id);
+        // const { data: tokenData, error: tokenError } = await Db.from('tokens').select('*').eq('user_id', userData.id).single();
+        const { data: gameData, error: gameError } = await Db.from('game_registries').select('*').eq('user_id', userData.id);
+        // Add a timeout to ensure loading animation plays for at least 3 seconds
+        await new Promise(resolve => setTimeout(resolve, 3000));
         setUser(userData);
-        setTokenData(tokenData);
+        // setTokenData(tokenData);
         setGame(gameData ?? []);
         // if (tokenError || gameError) {
         //   console.error('Error fetching data:', tokenError || gameError);
         //   router.push("/dashboard/login");
         //   return;
         // }
-
-
 
 
       } catch (error) {
