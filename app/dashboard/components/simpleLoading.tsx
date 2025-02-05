@@ -10,7 +10,7 @@ export default function SimpleLoading() {
     useEffect(() => {
         // Start progress animation
         const startTime = Date.now()
-        const minLoadTime = 3000 // 3 seconds minimum
+        const minLoadTime = 8000 // 3 seconds minimum
 
         const timer = setInterval(() => {
             const elapsed = Date.now() - startTime
@@ -46,7 +46,7 @@ export default function SimpleLoading() {
                 {/* Player 1 style sync rings */}
                 <div className="absolute inset-0 rounded-full border-4 border-[#0CC0DF]/20" />
                 <motion.div
-                    className="absolute inset-0 rounded-full border-4 border-[#0CC0DF] border-t-transparent"
+                    className="absolute inset-0 rounded-full border-4 border-gradient-to-r from-[#0CC0DF] to-[#14F195] border-t-transparent"
                     style={{
                         filter: "drop-shadow(0 0 8px #0CC0DF)"
                     }}
@@ -62,7 +62,7 @@ export default function SimpleLoading() {
                     }}
                 />
                 <motion.div
-                    className="absolute inset-2 rounded-full border-4 border-[#0CC0DF]/40 border-t-transparent"
+                    className="absolute inset-2 rounded-full border-4 border-[#14F195]/40 border-t-transparent"
                     animate={{
                         rotate: -360
                     }}
@@ -74,9 +74,9 @@ export default function SimpleLoading() {
                 />
                 <div className="absolute inset-0 flex items-center justify-center">
                     <motion.div
-                        className="w-16 h-16 bg-[#0CC0DF]/10 rounded-full"
+                        className="w-16 h-16 bg-gradient-to-r from-[#0CC0DF]/10 to-[#14F195]/10 rounded-full"
                         style={{
-                            boxShadow: "0 0 20px #0CC0DF"
+                            boxShadow: "0 0 20px #14F195"
                         }}
                         animate={{
                             scale: [1, 1.2, 1],
@@ -92,15 +92,15 @@ export default function SimpleLoading() {
             </motion.div>
 
             {/* Progress bar with glow effect */}
-            <div className="w-64 h-2 bg-[#0CC0DF]/20 rounded-full overflow-hidden"
+            <div className="w-64 h-2 bg-gradient-to-r from-[#0CC0DF]/20 to-[#14F195]/20 rounded-full overflow-hidden"
                 style={{
-                    boxShadow: "0 0 10px rgba(12, 192, 223, 0.3)"
+                    boxShadow: "0 0 10px rgba(20, 241, 149, 0.3)"
                 }}>
                 <motion.div
-                    className="h-full bg-[#0CC0DF]"
+                    className="h-full bg-gradient-to-r from-[#0CC0DF] to-[#14F195]"
                     style={{
                         width: `${progress}%`,
-                        boxShadow: "0 0 10px #0CC0DF"
+                        boxShadow: "0 0 10px #14F195"
                     }}
                     animate={{
                         opacity: [0.8, 1, 0.8]
@@ -114,7 +114,7 @@ export default function SimpleLoading() {
 
             {/* Syncing text */}
             <motion.div
-                className="text-[#0CC0DF] font-medium"
+                className="text-transparent bg-gradient-to-r from-[#0CC0DF] to-[#14F195] bg-clip-text font-medium"
                 animate={{
                     opacity: [0.7, 1, 0.7]
                 }}

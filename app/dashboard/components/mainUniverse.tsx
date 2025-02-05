@@ -28,7 +28,7 @@ import WebhookSection from "@/app/dashboard/components/WebhookSection";
 import MarketplaceSection from "@/app/dashboard/components/MarketplaceSection";
 import SimpleSideBar from "@/components/simpleSideBar";
 import SimpleSupport from "@/components/simpleSupport";
-import { authStorage, GameData, UserData } from '@/app/utils/storage'
+import { GameData } from '@/app/utils/AppContext'
 import GameUniverse from "@/app/dashboard/components/gameUniverse";
 import { AppProvider, useAppContext } from "@/app/utils/AppContext";
 
@@ -141,7 +141,6 @@ export default function MainUniverse() {
         <>
             {!selectedGameData ? (
                 <GameUniverse
-                    games={auth.gameData ?? []}
                     setSelectedGame={setSelectedGameData}
                 />
             ) : (

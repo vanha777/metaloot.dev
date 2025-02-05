@@ -31,18 +31,44 @@ export default function Dashboard() {
         // Fetch game data nad token_data from database
         // const { data: tokenData, error: tokenError } = await Db.from('tokens').select('*').eq('user_id', userData.id).single();
         const { data: gameData, error: gameError } = await Db.from('game_registries').select('*').eq('user_id', userData.id);
+        if (gameData != null && gameData.length != 0) {
+          // Fetch and parse URI data for each game
+          const gameDataWithDetails = await Promise.all(gameData.map(async (game) => {
+            try {
+              const response = await fetch(game.game_uri);
+              const uriData = await response.json();
+              return {
+                ...game,
+                ...uriData
+              };
+            } catch (error) {
+              console.error(`Error fetching URI data for game ${game.game_id}:`, error);
+              return game;
+            }
+          }));
+          console.log("gameDataWithDetails", gameDataWithDetails);
+          const mappedGameData = gameDataWithDetails.map(game => ({
+            id: game.game_id,
+            name: game.name,
+            photo: game.image || '',
+            description: game.description || '',
+            symbol: game.symbol || '',
+            genre: game.attributes.find((attr: { trait_type: string; }) => attr.trait_type === 'genre')?.value || '',
+            publisher: game.attributes.find((attr: { trait_type: string; }) => attr.trait_type === 'publisher')?.value || '',
+            releaseDate: game.attributes.find((attr: { trait_type: string; }) => attr.trait_type === 'released_date')?.value || '',
+            address: game.address
+          }));
+          setGame(mappedGameData);
+        }
         // Add a timeout to ensure loading animation plays for at least 3 seconds
-        await new Promise(resolve => setTimeout(resolve, 3000));
+        // await new Promise(resolve => setTimeout(resolve, 3000));
         setUser(userData);
         // setTokenData(tokenData);
-        setGame(gameData ?? []);
         // if (tokenError || gameError) {
         //   console.error('Error fetching data:', tokenError || gameError);
         //   router.push("/dashboard/login");
         //   return;
         // }
-
-
       } catch (error) {
         console.error('Error fetching data:', error);
         router.push("/dashboard/login");

@@ -18,6 +18,7 @@ export interface GameData {
     releaseDate?: string;
     description?: string;
     symbol?: string;
+    address?: string;
 }
 
 export interface TokenData {
