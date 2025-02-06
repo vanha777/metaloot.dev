@@ -31,16 +31,52 @@ import SimpleSupport from "@/components/simpleSupport";
 import { GameData } from '@/app/utils/AppContext'
 import GameUniverse from "@/app/dashboard/components/gameUniverse";
 import { AppProvider, useAppContext } from "@/app/utils/AppContext";
-
+import { Db } from "@/app/utils/db";
 export default function MainUniverse() {
-    const { auth, setTokens, setUser, setGame, logout } = useAppContext();
+    const { auth, setTokenData, setUser, setGame, logout } = useAppContext();
     const [selectedGameData, setSelectedGameData] = useState<GameData | null>(null);
+
+    const selectGame = async (game: GameData) => {
+        try {
+            console.log("fetch token for selected game");
+            // fetch token data for selected game
+            const { data: tokens, error } = await Db.from('tokens').select('*').eq('game_id', game.id).limit(1).single();
+            if (error) {
+                console.error('Error fetching tokens:', error);
+                setSelectedGameData(game);
+                // scenario whther user haven't created token yet
+            } else {
+                let uri = tokens.token_uri;
+                let token_data = auth.tokenData;
+                if (token_data == null) {
+                    // Fetch and parse URI data for each game
+                    const tokenDataWithDetails = await fetch(uri);
+                    const uriData = await tokenDataWithDetails.json();
+                    console.log("tokenDataWithDetails", uriData);
+                    setTokenData({
+                        name: uriData.name,
+                        symbol: uriData.symbol,
+                        uri: uri,
+                        image: uriData.image,
+                        description: uriData.description,
+                    });
+                }
+            }
+            setSelectedGameData(game);
+        } catch (error) {
+            console.error('Error fetching tokens:', error);
+            window.location.href = '/dashboard/login';
+        }
+
+
+    };
 
     useEffect(() => {
         console.log("this is auth", auth);
         if (auth.userData == null) {
             window.location.href = '/dashboard/login';
         }
+        // fetch token data for selected game
     }, [auth.userData]);
 
     const containerVariants = {
@@ -141,7 +177,7 @@ export default function MainUniverse() {
         <>
             {!selectedGameData ? (
                 <GameUniverse
-                    setSelectedGame={setSelectedGameData}
+                    setSelectedGame={selectGame}
                 />
             ) : (
                 <div className="bg-black/90 overflow-hidden">

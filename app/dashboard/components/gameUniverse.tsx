@@ -17,7 +17,7 @@ const GameUniverse = ({setSelectedGame }: GameUniverseProps) => {
 
   // useEffect(() => {
 
-  // }, [games])
+  // }, [])
 
 
   return (

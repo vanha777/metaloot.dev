@@ -23,9 +23,11 @@ export interface GameData {
 
 export interface TokenData {
     address?: string;
-    token_image?: string;
-    token_name?: string;
-    token_symbol?: string;
+    image?: string;
+    name?: string;
+    symbol?: string;
+    description?: string;
+    uri?: string;
 }
 
 export interface AuthData {
