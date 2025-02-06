@@ -43,25 +43,24 @@ export default function MainUniverse() {
             const { data: tokens, error } = await Db.from('tokens').select('*').eq('game_id', game.id).limit(1).single();
             if (error) {
                 console.error('Error fetching tokens:', error);
+                setTokenData(null);
                 setSelectedGameData(game);
-                // scenario whther user haven't created token yet
-            } else {
-                let uri = tokens.token_uri;
-                let token_data = auth.tokenData;
-                if (token_data == null) {
-                    // Fetch and parse URI data for each game
-                    const tokenDataWithDetails = await fetch(uri);
-                    const uriData = await tokenDataWithDetails.json();
-                    console.log("tokenDataWithDetails", uriData);
-                    setTokenData({
-                        name: uriData.name,
-                        symbol: uriData.symbol,
-                        uri: uri,
-                        image: uriData.image,
-                        description: uriData.description,
-                    });
-                }
+                return;
             }
+            let uri = tokens.token_uri;
+            let token_data = auth.tokenData;
+            // Fetch and parse URI data for each game
+            const tokenDataWithDetails = await fetch(uri);
+            const uriData = await tokenDataWithDetails.json();
+            console.log("tokenDataWithDetails", uriData);
+            setTokenData({
+                name: uriData.name,
+                symbol: uriData.symbol,
+                uri: uri,
+                image: uriData.image,
+                description: uriData.description,
+            });
+
             setSelectedGameData(game);
         } catch (error) {
             console.error('Error fetching tokens:', error);

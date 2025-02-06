@@ -82,9 +82,10 @@ export default function CreateGameForm({ setIsCreateOverlayOpen }: CreateGameFor
                 //  Handle photo upload to Supabase storage
                 let photoUrl = "";
                 if (formData.photo) {
+                    let upload_name = `photo/game-${Date.now()}-${formData.name.toLowerCase().replace(/[^a-z0-9]/g, '')}`;
                     const { data: uploadData, error: uploadError } = await Db.storage
                         .from('metaloot')
-                        .upload(`photo/game-${Date.now()}-${formData.name}`, formData.photo);
+                        .upload(upload_name, formData.photo);
 
                     if (uploadError) {
                         console.error('Error uploading photo:', uploadError);
@@ -142,10 +143,10 @@ export default function CreateGameForm({ setIsCreateOverlayOpen }: CreateGameFor
                 const metadataBlob = new Blob([JSON.stringify(metadata)], {
                     type: 'application/json'
                 });
-
+                let metadata_name = `metadata/game-${Date.now()}-${formData.name.toLowerCase().replace(/[^a-z0-9]/g, '')}`;
                 const { data: uploadData, error: uploadError } = await Db.storage
                     .from('metaloot')
-                    .upload(`metadata/game-${Date.now()}-${formData.name}`, metadataBlob);
+                    .upload(metadata_name, metadataBlob);
 
                 if (uploadError) {
                     console.error('Error uploading photo:', uploadError);
@@ -158,7 +159,7 @@ export default function CreateGameForm({ setIsCreateOverlayOpen }: CreateGameFor
                     .getPublicUrl(uploadData.path);
 
                 console.log("metadata", publicUrl)
-                let uniqueId = formData.name.toLowerCase().replace(/ /g, '');
+                let uniqueId = formData.name.toLowerCase().replace(/ /g, '').replace(/[^a-z0-9]/g, '');
 
 
                 const response = await fetch('https://metaloot-cloud-d4ec.shuttle.app/v1/api/game', {
@@ -214,7 +215,7 @@ export default function CreateGameForm({ setIsCreateOverlayOpen }: CreateGameFor
             setIsLoading(false)
             setIsCreateOverlayOpen(false)
             console.log("Create game Successfully");
-         
+
         }
 
     }
@@ -231,9 +232,9 @@ export default function CreateGameForm({ setIsCreateOverlayOpen }: CreateGameFor
                             <div className="w-32 h-32 mx-auto bg-black border border-white/10 rounded-full 
                                         flex items-center justify-center relative z-10">
                                 {formData.photo ? (
-                                    <img 
-                                        src={URL.createObjectURL(formData.photo)} 
-                                        alt="Game preview" 
+                                    <img
+                                        src={URL.createObjectURL(formData.photo)}
+                                        alt="Game preview"
                                         className="w-full h-full object-cover rounded-full"
                                     />
                                 ) : (
@@ -257,13 +258,12 @@ export default function CreateGameForm({ setIsCreateOverlayOpen }: CreateGameFor
                         {/* Form Steps */}
                         <div className="mt-8 flex justify-center gap-2">
                             {[1, 2, 3].map((step) => (
-                                <div 
+                                <div
                                     key={step}
-                                    className={`w-2 h-2 rounded-full ${
-                                        currentStep >= step 
-                                            ? 'bg-[#0CC0DF]' 
-                                            : 'bg-white/10'
-                                    }`}
+                                    className={`w-2 h-2 rounded-full ${currentStep >= step
+                                        ? 'bg-[#0CC0DF]'
+                                        : 'bg-white/10'
+                                        }`}
                                 />
                             ))}
                         </div>
@@ -366,7 +366,7 @@ export default function CreateGameForm({ setIsCreateOverlayOpen }: CreateGameFor
                     </div>
 
                     {/* Close Button */}
-                    <button 
+                    <button
                         onClick={() => setIsCreateOverlayOpen(false)}
                         className="absolute top-4 right-4 text-white/40 hover:text-white text-2xl"
                     >

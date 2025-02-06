@@ -44,7 +44,7 @@ export interface AppContextData {
     setTokens: (accessToken: string, refreshToken: string) => void;
     setUser: (userData: UserData) => void;
     setGame: (gameData: GameData[]) => void;
-    setTokenData: (tokenData: TokenData) => void;
+    setTokenData: (tokenData: TokenData | null) => void;
     logout: () => void;
 }
 
@@ -87,7 +87,7 @@ export function AppProvider({ children }: AppProviderProps) {
         }));
     }, []);
 
-    const setTokenData = useCallback((tokenData: TokenData) => {
+    const setTokenData = useCallback((tokenData: TokenData | null) => {
         setAuth(prev => ({
             ...prev,
             tokenData,

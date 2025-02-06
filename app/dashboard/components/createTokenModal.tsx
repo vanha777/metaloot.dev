@@ -85,22 +85,18 @@ export default function CreateTokenModal({ setShowCreateForm, selectedGame }: Cr
                     console.log("update exsiting tokens")
                     // edit token metadatajson
                     let token_uri = auth.tokenData.uri;
-                    let data = {
-                        name: formData.name,
-                        symbol: formData.symbol,
-                        uri: token_uri
-                    };
-                    console.log("data", data)
-
                     // overwrite photo to supabase storage
-                    let photoUrl = "";
                     if (formData.photo) {
-                        // Use existing photo path for overwriting
-                        const photoPath = auth.tokenData?.image || "";
+                        // Extract just the path portion, not the full URL
+                        const photoPath = auth.tokenData?.image?.replace(
+                            'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/metaloot/',
+                            ''
+                        );
+                        console.log("photoPath", photoPath)
                         const { data: uploadData, error: uploadError } = await Db.storage
                             .from('metaloot')
-                            .update(photoPath, formData.photo, {
-                                upsert: true // Creates the file if it doesn't exist
+                            .update(photoPath ?? '', formData.photo, {
+                                upsert: true
                             });
                         if (uploadError) {
                             console.error('Error uploading photo:', uploadError);
@@ -110,15 +106,14 @@ export default function CreateTokenModal({ setShowCreateForm, selectedGame }: Cr
                         const { data: { publicUrl } } = Db.storage
                             .from('metaloot')
                             .getPublicUrl(uploadData.path);
-                        console.log("uploadData", uploadData);
-                        photoUrl = publicUrl;
+                        console.log("uploadData", publicUrl);
                     }
                     // overwrite token metadata
                     const metadata = {
                         name: formData.name,
                         symbol: formData.symbol,
                         description: formData.description,
-                        image: photoUrl,
+                        image: auth.tokenData?.image,
                         attributes: [],
                         properties: {
                             category: "token",
@@ -133,22 +128,38 @@ export default function CreateTokenModal({ setShowCreateForm, selectedGame }: Cr
                     const metadataBlob = new Blob([JSON.stringify(metadata)], {
                         type: 'application/json'
                     });
-                    let old_path = auth.tokenData.uri || "";
-                    const { data: uploadData, error: uploadError } = await Db.storage
+                    const old_path = auth.tokenData?.uri?.replace(
+                        'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/metaloot/',
+                        ''
+                    );
+                    console.log("old_path", old_path)
+                    const { data: newUploadData, error: newUploadError } = await Db.storage
                         .from('metaloot')
-                        .update(old_path, metadataBlob, {
-                            upsert: true // Creates the file if it doesn't exist
+                        .update(old_path ?? '', metadataBlob, {
+                            upsert: true
                         });
-                    console.log("updateData", uploadData?.path)
-                    console.log("Update token Successfully");
+                    if (newUploadError) {
+                        console.error('Error uploading photo:', newUploadError);
+                        return;
+                    }
+                    console.log("Update token Successfully", newUploadData.path);
+
+                    setTokenData({
+                        name: formData.name,
+                        symbol: formData.symbol,
+                        uri: auth.tokenData?.uri,
+                        image: auth.tokenData?.image,
+                        description: formData.description,
+                    });
                 } else {
                     console.log("create new token")
                     //  Handle photo upload to Supabase storage
                     let photoUrl = "";
                     if (formData.photo) {
+                        let upload_name = `photo/token-${Date.now()}-${formData.name.toLowerCase().replace(/[^a-z0-9]/g, '')}`;
                         const { data: uploadData, error: uploadError } = await Db.storage
                             .from('metaloot')
-                            .upload(`photo/token-${Date.now()}-${formData.name}`, formData.photo);
+                            .upload(upload_name, formData.photo);
 
                         if (uploadError) {
                             console.error('Error uploading photo:', uploadError);
@@ -183,10 +194,10 @@ export default function CreateTokenModal({ setShowCreateForm, selectedGame }: Cr
                     const metadataBlob = new Blob([JSON.stringify(metadata)], {
                         type: 'application/json'
                     });
-
+                    let metadata_name = `metadata/token-${Date.now()}-${formData.name.toLowerCase().replace(/[^a-z0-9]/g, '')}`;
                     const { data: uploadData, error: uploadError } = await Db.storage
                         .from('metaloot')
-                        .upload(`metadata/token-${Date.now()}-${formData.name}`, metadataBlob);
+                        .upload(metadata_name, metadataBlob);
 
                     if (uploadError) {
                         console.error('Error uploading photo:', uploadError);
@@ -361,8 +372,8 @@ export default function CreateTokenModal({ setShowCreateForm, selectedGame }: Cr
                                     className="flex-1 px-6 py-3 bg-gradient-to-r from-[#0CC0DF] to-[#14F195] 
                            rounded-lg text-black font-medium hover:opacity-90 transition-opacity"
                                 >
-                                    {currentStep === 2 
-                                        ? (auth.tokenData ? 'Edit Token' : 'Create Token') 
+                                    {currentStep === 2
+                                        ? (auth.tokenData ? 'Edit Token' : 'Create Token')
                                         : 'Next'}
                                 </button>
                             </div>
