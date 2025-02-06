@@ -8,7 +8,7 @@ import SimpleLoading from "./components/simpleLoading";
 import { set } from "date-fns";
 
 export default function Dashboard() {
-  const { auth, setTokens, setUser, setGame, setTokenData, logout } = useAppContext();
+  const { auth, setAccessToken, setUser, setGame, setTokenData, logout } = useAppContext();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(true);
@@ -27,9 +27,7 @@ export default function Dashboard() {
         setIsLoading(true);
         const userData = JSON.parse(user);
         console.log("this is data", userData);
-
-        // Fetch game data nad token_data from database
-        // const { data: tokenData, error: tokenError } = await Db.from('tokens').select('*').eq('user_id', userData.id).single();
+        // Fetch game data
         const { data: gameData, error: gameError } = await Db.from('game_registries').select('*').eq('user_id', userData.id);
         if (gameData != null && gameData.length != 0) {
           // Fetch and parse URI data for each game
@@ -60,15 +58,7 @@ export default function Dashboard() {
           }));
           setGame(mappedGameData);
         }
-        // Add a timeout to ensure loading animation plays for at least 3 seconds
-        // await new Promise(resolve => setTimeout(resolve, 3000));
         setUser(userData);
-        // setTokenData(tokenData);
-        // if (tokenError || gameError) {
-        //   console.error('Error fetching data:', tokenError || gameError);
-        //   router.push("/dashboard/login");
-        //   return;
-        // }
       } catch (error) {
         console.error('Error fetching data:', error);
         router.push("/dashboard/login");
@@ -78,7 +68,7 @@ export default function Dashboard() {
     };
 
     fetchData();
-  }, [router, searchParams, setTokens, setUser, setGame]);
+  }, [router, searchParams]);
 
   if (isLoading) {
     return <SimpleLoading />;

@@ -28,27 +28,57 @@ import WebhookSection from "@/app/dashboard/components/WebhookSection";
 import MarketplaceSection from "@/app/dashboard/components/MarketplaceSection";
 import SimpleSideBar from "@/components/simpleSideBar";
 import SimpleSupport from "@/components/simpleSupport";
-import { GameData } from '@/app/utils/AppContext'
+import { CollectionData, GameData } from '@/app/utils/AppContext'
 import GameUniverse from "@/app/dashboard/components/gameUniverse";
 import { AppProvider, useAppContext } from "@/app/utils/AppContext";
 import { Db } from "@/app/utils/db";
+import SimpleLoading from "./simpleLoading";
 export default function MainUniverse() {
-    const { auth, setTokenData, setUser, setGame, logout } = useAppContext();
+    const { auth, setTokenData, setAccessToken, setCollectionData, setUser, setGame, logout } = useAppContext();
+    const [activeMenu, setActiveMenu] = useState("analytics");
     const [selectedGameData, setSelectedGameData] = useState<GameData | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     const selectGame = async (game: GameData) => {
         try {
-            console.log("fetch token for selected game");
-            // fetch token data for selected game
-            const { data: tokens, error } = await Db.from('tokens').select('*').eq('game_id', game.id).limit(1).single();
-            if (error) {
-                console.error('Error fetching tokens:', error);
-                setTokenData(null);
-                setSelectedGameData(game);
+            setIsLoading(true);
+            // get access_token from server
+            const response = await fetch('https://metaloot-cloud-d4ec.shuttle.app/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    client_id: game.id,
+                    client_secret: "metalootfreetier"
+                })
+            });
+            if (!response.ok) {
+                // throw new Error('Failed to fetch access token');
+                window.location.href = '/dashboard/login';
                 return;
             }
-            let uri = tokens.token_uri;
-            let token_data = auth.tokenData;
+            const data = await response.json();
+            setAccessToken(data.access_token);
+            console.log("get access_token successfully");
+
+            // get game_data from server
+            const response_game = await fetch(`https://metaloot-cloud-d4ec.shuttle.app/v1/api/game/${game.id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${data.access_token}`
+                }
+            });
+            if (!response.ok) {
+                // throw new Error('Failed to fetch access token');
+                window.location.href = '/dashboard/login';
+                return;
+            }
+            const game_data = await response_game.json();
+            let uri = game_data.account.data.token_uri;
+            console.log("get game data successfully", game_data);
+
             // Fetch and parse URI data for each game
             const tokenDataWithDetails = await fetch(uri);
             const uriData = await tokenDataWithDetails.json();
@@ -59,15 +89,33 @@ export default function MainUniverse() {
                 uri: uri,
                 image: uriData.image,
                 description: uriData.description,
+                address: game_data.native_token,
             });
 
+
+            // get collection_data from server
+            const collection_uris: CollectionData[] = await Promise.all(game_data.account.data.nft_collection.map(async (collection: any) => {
+                const uri = collection.uri;
+                const collectionDataWithDetails = await fetch(uri);
+                const collectionUriData = await collectionDataWithDetails.json();
+                return {
+                    name: collectionUriData.name,
+                    symbol: collectionUriData.symbol,
+                    size: collectionUriData.size || 0,
+                    uri: uri,
+                    description: collectionUriData.description,
+                    address: collection.address,
+                    image: collectionUriData.image,
+                } as CollectionData;
+            }));
+            console.log("get collection data successfully");
+            setCollectionData(collection_uris);
             setSelectedGameData(game);
+            setIsLoading(false);
         } catch (error) {
             console.error('Error fetching tokens:', error);
             window.location.href = '/dashboard/login';
         }
-
-
     };
 
     useEffect(() => {
@@ -89,37 +137,6 @@ export default function MainUniverse() {
         },
     };
 
-    const itemVariants = {
-        hidden: { opacity: 0, y: 50, scale: 0.8 },
-        visible: {
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            transition: {
-                type: "spring",
-                stiffness: 100,
-                damping: 10,
-            },
-        },
-    };
-
-    const teamMembers = [
-        {
-            name: "Patrick Ha",
-            role: "Saturnors",
-            image: "/founder11.jpeg",
-            linkedin: "https://x.com/patricksaturnor",
-        },
-        {
-            name: "Roman Lobanov",
-            role: "Saturnors",
-            image: "/founder2.jpeg",
-            linkedin: "https://x.com/ComplexiaSC",
-        },
-    ];
-
-    const [activeMenu, setActiveMenu] = useState("analytics");
-
     const menuItems = [
         {
             id: "analytics",
@@ -127,12 +144,6 @@ export default function MainUniverse() {
             icon: IoStatsChartOutline,
             selectedIcon: IoStatsChartSharp
         },
-        // {
-        //     id: "game",
-        //     label: "Game Management",
-        //     icon: IoGameControllerOutline,
-        //     selectedIcon: IoGameControllerSharp
-        // },
         {
             id: "tokenomics",
             label: "Tokenomics",
@@ -145,12 +156,6 @@ export default function MainUniverse() {
             icon: IoStorefrontOutline,
             selectedIcon: IoImagesSharp
         },
-        // {
-        //     id: "marketplace",
-        //     label: "Marketplace",
-        //     icon: IoStorefrontOutline,
-        //     selectedIcon: IoStorefrontSharp
-        // },
         {
             id: "webhook",
             label: "Webhooks",
@@ -171,17 +176,17 @@ export default function MainUniverse() {
         }
     ];
 
-
     return (
         <>
-            {!selectedGameData ? (
+            {isLoading ? (
+                <SimpleLoading />
+            ) : !selectedGameData ? (
                 <GameUniverse
                     setSelectedGame={selectGame}
                 />
             ) : (
                 <div className="bg-black/90 overflow-hidden">
                     <SimpleSupport />
-
                     <div className="flex min-h-[calc(100vh-4rem)] backdrop-blur-xl">
                         <SimpleSideBar
                             onContentChange={setActiveMenu}

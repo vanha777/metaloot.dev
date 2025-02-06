@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaPlus, FaCopy, FaCoins } from "react-icons/fa";
 import Alert from "@/components/Alert";
 import { MdGeneratingTokens } from "react-icons/md";
@@ -15,7 +15,12 @@ interface TokenForm {
 }
 
 export default function TokenomicsSection({ selectedGame }: { selectedGame: GameData }) {
+
   const { auth } = useAppContext();
+
+  useEffect(() => {
+    console.log("re render tokenomics section");
+  }, [auth.tokenData]);
 
   const [showCreateForm, setShowCreateForm] = useState(false);
 
@@ -27,9 +32,9 @@ export default function TokenomicsSection({ selectedGame }: { selectedGame: Game
           <div className="w-32 h-32 mx-auto bg-black border border-white/10 rounded-full 
                         flex items-center justify-center relative z-10">
             {auth.tokenData?.image ? (
-              <img 
-                src={auth.tokenData.image} 
-                alt={auth.tokenData?.name || 'Token'} 
+              <img
+                src={auth.tokenData.image}
+                alt={auth.tokenData?.name || 'Token'}
                 className="w-24 h-24 object-cover rounded-full"
               />
             ) : (
@@ -71,8 +76,8 @@ export default function TokenomicsSection({ selectedGame }: { selectedGame: Game
 
       {/* Create Token Modal */}
       {showCreateForm && (
-        <CreateTokenModal 
-          setShowCreateForm={setShowCreateForm} 
+        <CreateTokenModal
+          setShowCreateForm={setShowCreateForm}
           selectedGame={selectedGame}
         />
       )}
@@ -105,7 +110,7 @@ export default function TokenomicsSection({ selectedGame }: { selectedGame: Game
           </div>
         </div>
       </div>
-{/* 
+      {/* 
       <Alert
         isOpen={alert.show}
         message={alert.message}

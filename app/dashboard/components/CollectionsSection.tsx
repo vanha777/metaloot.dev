@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaPlus, FaImage } from "react-icons/fa";
 import Alert from "@/components/Alert";
 import { GameData } from "@/app/utils/AppContext";
-
+import CreateCollectionForm from "./createCollectionForm";
+import { useAppContext } from "@/app/utils/AppContext";
 interface CollectionForm {
   name: string;
   symbol: string;
@@ -18,12 +19,11 @@ interface NFTForm {
 }
 
 export default function CollectionsSection({ selectedGame }: { selectedGame: GameData }) {
-  const [collectionForm, setCollectionForm] = useState<CollectionForm>({
-    name: '',
-    symbol: '',
-    description: '',
-    image: null,
-  });
+  const [isLoading, setIsLoading] = useState(false);
+  const { auth, setCollectionData } = useAppContext();
+  useEffect(() => {
+    console.log("re render collections section");
+  }, [auth.collectionData]);
 
   const [nftForm, setNftForm] = useState<NFTForm>({
     name: '',
@@ -41,63 +41,7 @@ export default function CollectionsSection({ selectedGame }: { selectedGame: Gam
 
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showMintForm, setShowMintForm] = useState(false);
-
-  // Add new states for collections and NFTs
-  const [collections, setCollections] = useState([
-    { id: '1', name: 'Collection 1', symbol: 'COL1', image: null, nfts: [] },
-    { id: '2', name: 'Collection 2', symbol: 'COL2', image: null, nfts: [] },
-  ]);
-
-  const handleCollectionChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setCollectionForm(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, form: 'collection' | 'nft') => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (form === 'collection') {
-        setCollectionForm(prev => ({
-          ...prev,
-          [e.target.name]: file
-        }));
-      } else {
-        setNftForm(prev => ({
-          ...prev,
-          [e.target.name]: file
-        }));
-      }
-    }
-  };
-
-  const createCollection = async () => {
-    if (!collectionForm.name || !collectionForm.symbol) {
-      setAlert({
-        show: true,
-        message: 'Please fill in all required fields',
-        type: 'error'
-      });
-      return;
-    }
-
-    try {
-      console.log('Creating collection with data:', collectionForm);
-      setAlert({
-        show: true,
-        message: 'Collection created successfully!',
-        type: 'success'
-      });
-    } catch (error) {
-      setAlert({
-        show: true,
-        message: 'Failed to create collection: ' + error,
-        type: 'error'
-      });
-    }
-  };
+  const collections = auth.collectionData;
 
   const mintNFT = async () => {
     if (!nftForm.name || !nftForm.image) {
@@ -143,30 +87,23 @@ export default function CollectionsSection({ selectedGame }: { selectedGame: Gam
           </button>
 
           {/* Collection Cards */}
-          {collections.map((collection) => (
+          {collections && collections.map((collection) => (
             <div
-              key={collection.id}
-              onClick={() => setSelectedCollection(collection.id)}
+              key={collection.address}
+              onClick={() => setSelectedCollection(collection.address || null)}
               className={`min-w-[200px] h-[260px] border rounded-xl p-4 cursor-pointer 
-                         transition-all duration-300 ${
-                           selectedCollection === collection.id
-                             ? 'border-[#14F195] bg-white/5'
-                             : 'border-white/10 hover:border-white/30'
-                         }`}
+                         transition-all duration-300 ${selectedCollection === collection.address
+                  ? 'border-[#14F195] bg-white/5'
+                  : 'border-white/10 hover:border-white/30'
+                }`}
             >
               <div className="w-24 h-24 mx-auto bg-black border border-white/10 rounded-full 
                             flex items-center justify-center mb-4">
-                {collection.image ? (
-                  <img
-                    src={URL.createObjectURL(collection.image)}
-                    alt={collection.name}
-                    className="w-full h-full object-cover rounded-full"
-                  />
-                ) : (
-                  <span className="text-white text-2xl font-bold">
-                    {collection.symbol[0]}
-                  </span>
-                )}
+                <img
+                  src={collection.image}
+                  alt={collection.name}
+                  className="w-full h-full object-cover rounded-full"
+                />
               </div>
               <div className="text-center">
                 <h3 className="text-white font-light text-lg mb-1">{collection.name}</h3>
@@ -182,7 +119,7 @@ export default function CollectionsSection({ selectedGame }: { selectedGame: Gam
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-white/60 text-xl">
             {selectedCollection
-              ? `NFTs in ${collections.find(c => c.id === selectedCollection)?.name}`
+              ? `NFTs in ${collections?.find(c => c.address === selectedCollection)?.name}`
               : 'Select a Collection'}
           </h2>
           {selectedCollection && (
@@ -239,78 +176,7 @@ export default function CollectionsSection({ selectedGame }: { selectedGame: Gam
 
       {/* Create Collection Modal */}
       {showCreateForm && (
-        <div className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-black/80 border border-white/10 p-8 rounded-2xl w-[480px] relative">
-            <button 
-              onClick={() => setShowCreateForm(false)}
-              className="absolute top-4 right-4 text-white/40 hover:text-white"
-            >
-              ×
-            </button>
-
-            <div className="space-y-6">
-              <h2 className="text-2xl text-white font-light">Create Collection</h2>
-              
-              {/* Collection Form Fields */}
-              <div className="space-y-4">
-                <div>
-                  <h3 className="text-gray-400 mb-2 flex items-start gap-1">Collection Name <span className="opacity-50 text-xs">*required</span></h3>
-                  <input
-                    type="text"
-                    name="name"
-                    value={collectionForm.name}
-                    onChange={handleCollectionChange}
-                    className="w-full bg-slate-900/90 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green border border-slate-700/50"
-                    placeholder="Enter collection name"
-                  />
-                </div>
-                <div>
-                  <h3 className="text-gray-400 mb-2 flex items-start gap-1">Symbol <span className="opacity-50 text-xs">*required</span></h3>
-                  <input
-                    type="text"
-                    name="symbol"
-                    value={collectionForm.symbol}
-                    onChange={handleCollectionChange}
-                    className="w-full bg-slate-900/90 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green border border-slate-700/50"
-                    placeholder="Enter collection symbol"
-                  />
-                </div>
-                <div>
-                  <h3 className="text-gray-400 mb-2">Description</h3>
-                  <textarea
-                    name="description"
-                    value={collectionForm.description}
-                    onChange={handleCollectionChange}
-                    className="w-full bg-slate-900/90 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green border border-slate-700/50 h-24 resize-none"
-                    placeholder="Enter collection description"
-                  />
-                </div>
-                <div>
-                  <h3 className="text-gray-400 mb-2">Collection Image</h3>
-                  <label className="flex items-center gap-2 bg-slate-900/90 text-white rounded-lg px-4 py-2 cursor-pointer hover:bg-slate-800/90 border border-slate-700/50">
-                    <FaImage className="text-green" />
-                    <span>{collectionForm.image ? collectionForm.image.name : 'Upload collection image'}</span>
-                    <input
-                      type="file"
-                      name="image"
-                      accept="image/*"
-                      onChange={(e) => handleFileChange(e, 'collection')}
-                      className="hidden"
-                    />
-                  </label>
-                </div>
-              </div>
-
-              <button
-                onClick={createCollection}
-                className="w-full mt-6 px-6 py-3 bg-gradient-to-r from-[#0CC0DF] to-[#14F195] 
-                         rounded-lg text-black font-medium hover:opacity-90 transition-opacity"
-              >
-                Create Collection
-              </button>
-            </div>
-          </div>
-        </div>
+        <CreateCollectionForm setShowCreateForm={setShowCreateForm} selectedGame={selectedGame} />
       )}
 
       <Alert

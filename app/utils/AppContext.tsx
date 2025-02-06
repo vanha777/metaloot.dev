@@ -9,6 +9,16 @@ export interface UserData {
     [key: string]: any;
 }
 
+export interface CollectionData {
+    name?: string;
+    symbol?: string;
+    size?: number;
+    uri?: string;
+    description?: string;
+    address?: string;
+    image?: string;
+}
+
 export interface GameData {
     id?: string;
     name?: string;
@@ -36,15 +46,17 @@ export interface AuthData {
     userData: UserData | null;
     gameData: GameData[] | null;
     tokenData: TokenData | null;
+    collectionData: CollectionData[] | null;
     isAuthenticated: boolean;
 }
 
 export interface AppContextData {
     auth: AuthData;
-    setTokens: (accessToken: string, refreshToken: string) => void;
+    setAccessToken: (accessToken: string) => void;
     setUser: (userData: UserData) => void;
     setGame: (gameData: GameData[]) => void;
     setTokenData: (tokenData: TokenData | null) => void;
+    setCollectionData: (collectionData: CollectionData[] | null) => void;
     logout: () => void;
 }
 
@@ -61,14 +73,15 @@ export function AppProvider({ children }: AppProviderProps) {
         userData: null,
         gameData: null,
         tokenData: null,
+        collectionData: null,
         isAuthenticated: false,
+
     });
 
-    const setTokens = useCallback((accessToken: string, refreshToken: string) => {
+    const setAccessToken = useCallback((accessToken: string) => {
         setAuth(prev => ({
             ...prev,
             accessToken,
-            refreshToken,
             isAuthenticated: true,
         }));
     }, []);
@@ -94,6 +107,12 @@ export function AppProvider({ children }: AppProviderProps) {
         }));
     }, []);
 
+    const setCollectionData = useCallback((collectionData: CollectionData[] | null) => {
+        setAuth(prev => ({
+            ...prev,
+            collectionData,
+        }));
+    }, []);
     const logout = useCallback(() => {
         setAuth({
             accessToken: null,
@@ -101,16 +120,18 @@ export function AppProvider({ children }: AppProviderProps) {
             userData: null,
             gameData: null,
             tokenData: null,
+            collectionData: null,
             isAuthenticated: false,
         });
     }, []);
 
     const value: AppContextData = {
         auth,
-        setTokens,
+        setAccessToken,
         setUser,
         setGame,
         setTokenData,
+        setCollectionData,
         logout
     };
 

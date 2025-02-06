@@ -54,24 +54,6 @@ export default function CreateTokenModal({ setShowCreateForm, selectedGame }: Cr
     const nextStep = () => setCurrentStep(prev => Math.min(prev + 1, 2));
     const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, 1));
 
-    //   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    //     e.preventDefault();
-    //     if (currentStep !== 2) {
-    //       nextStep();
-    //       return;
-    //     }
-
-    //     setIsLoading(true);
-    //     try {
-    //       // TODO: Implement token creation logic similar to game creation
-    //       console.log('Creating token with:', formData);
-    //     } catch (error) {
-    //       console.error('Error creating token:', error);
-    //     }
-    //     setIsLoading(false);
-    //     setShowCreateForm(false);
-    //   };
-
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (currentStep !== 2) {
@@ -86,13 +68,13 @@ export default function CreateTokenModal({ setShowCreateForm, selectedGame }: Cr
                     // edit token metadatajson
                     let token_uri = auth.tokenData.uri;
                     // overwrite photo to supabase storage
+                    let photoUrl = "";
                     if (formData.photo) {
                         // Extract just the path portion, not the full URL
                         const photoPath = auth.tokenData?.image?.replace(
                             'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/metaloot/',
                             ''
                         );
-                        console.log("photoPath", photoPath)
                         const { data: uploadData, error: uploadError } = await Db.storage
                             .from('metaloot')
                             .update(photoPath ?? '', formData.photo, {
@@ -106,14 +88,15 @@ export default function CreateTokenModal({ setShowCreateForm, selectedGame }: Cr
                         const { data: { publicUrl } } = Db.storage
                             .from('metaloot')
                             .getPublicUrl(uploadData.path);
-                        console.log("uploadData", publicUrl);
+                        photoUrl = publicUrl;
+                        console.log("uploadedData", publicUrl);
                     }
                     // overwrite token metadata
                     const metadata = {
                         name: formData.name,
                         symbol: formData.symbol,
                         description: formData.description,
-                        image: auth.tokenData?.image,
+                        image: photoUrl,
                         attributes: [],
                         properties: {
                             category: "token",
@@ -148,15 +131,16 @@ export default function CreateTokenModal({ setShowCreateForm, selectedGame }: Cr
                         name: formData.name,
                         symbol: formData.symbol,
                         uri: auth.tokenData?.uri,
-                        image: auth.tokenData?.image,
+                        image: photoUrl,
                         description: formData.description,
+                        address: auth.tokenData?.address,
                     });
                 } else {
                     console.log("create new token")
                     //  Handle photo upload to Supabase storage
                     let photoUrl = "";
                     if (formData.photo) {
-                        let upload_name = `photo/token-${Date.now()}-${formData.name.toLowerCase().replace(/[^a-z0-9]/g, '')}`;
+                        const upload_name = `photo/token-${Date.now()}-${formData.name.toLowerCase().replace(/[^a-z0-9]/g, '')}`;
                         const { data: uploadData, error: uploadError } = await Db.storage
                             .from('metaloot')
                             .upload(upload_name, formData.photo);
@@ -194,7 +178,7 @@ export default function CreateTokenModal({ setShowCreateForm, selectedGame }: Cr
                     const metadataBlob = new Blob([JSON.stringify(metadata)], {
                         type: 'application/json'
                     });
-                    let metadata_name = `metadata/token-${Date.now()}-${formData.name.toLowerCase().replace(/[^a-z0-9]/g, '')}`;
+                    const metadata_name = `metadata/token-${Date.now()}-${formData.name.toLowerCase().replace(/[^a-z0-9]/g, '')}`;
                     const { data: uploadData, error: uploadError } = await Db.storage
                         .from('metaloot')
                         .upload(metadata_name, metadataBlob);
@@ -214,7 +198,8 @@ export default function CreateTokenModal({ setShowCreateForm, selectedGame }: Cr
                     const response = await fetch('https://metaloot-cloud-d4ec.shuttle.app/v1/api/token/create', {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json'
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${auth.accessToken}`
                         },
                         body: JSON.stringify(
                             {
@@ -236,20 +221,21 @@ export default function CreateTokenModal({ setShowCreateForm, selectedGame }: Cr
                     const data = await response.json();
                     let token_address = data.address;
 
-                    //update game_registries table
-                    const { data: gameRegistryData, error: gameRegistryError } = await Db.from('tokens').insert({
-                        game_id: selectedGame.id,
-                        token_uri: publicUrl,
-                        address: token_address,
-                    });
+                    // //update game_registries table
+                    // const { data: gameRegistryData, error: gameRegistryError } = await Db.from('tokens').insert({
+                    //     game_id: selectedGame.id,
+                    //     token_uri: publicUrl,
+                    //     address: token_address,
+                    // });
+                    // console.log("gameRegistryData", gameRegistryData)
 
-                    console.log("gameRegistryData", gameRegistryData)
                     setTokenData({
                         name: formData.name,
                         symbol: formData.symbol,
                         uri: publicUrl,
                         image: photoUrl,
                         description: formData.description,
+                        address: token_address,
                     });
                     console.log("Create token Successfully");
                 }
