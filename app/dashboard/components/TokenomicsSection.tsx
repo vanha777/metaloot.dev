@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FaPlus, FaCopy } from "react-icons/fa";
+import { FaPlus, FaCopy, FaCoins } from "react-icons/fa";
 import Alert from "@/components/Alert";
 import { MdGeneratingTokens } from "react-icons/md";
 import { GameData } from "@/app/utils/AppContext";
@@ -27,6 +27,7 @@ export default function TokenomicsSection({ selectedGame }: { selectedGame: Game
     message: '',
     type: 'info' as 'success' | 'error' | 'info'
   });
+  const [showCreateForm, setShowCreateForm] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -63,96 +64,135 @@ export default function TokenomicsSection({ selectedGame }: { selectedGame: Game
   };
 
   return (
-    <div className="flex flex-col gap-6 p-2 md:p-8 min-h-full">
-      <div className="flex items-center gap-3">
-        <MdGeneratingTokens className="text-3xl text-green" />
-        <h2 className="text-2xl font-bold text-white">Token Management</h2>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Token Creation Form */}
-        <div className="space-y-4 bg-slate-800/80 p-6 rounded-lg">
-          <h3 className="text-xl text-white mb-6">Create New Token</h3>
-          <div className="space-y-4">
-            <div>
-              <h3 className="text-gray-400 mb-2 flex items-start gap-1">Token Name <span className="opacity-50 text-xs">*required</span></h3>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                className="w-full bg-slate-900/90 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green border border-slate-700/50"
-                placeholder="Enter token name"
-              />
-            </div>
-
-            <div>
-              <h3 className="text-gray-400 mb-2 flex items-start gap-1">Symbol <span className="opacity-50 text-xs">*required</span></h3>
-              <input
-                type="text"
-                name="symbol"
-                value={formData.symbol}
-                onChange={handleChange}
-                className="w-full bg-slate-900/90 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green border border-slate-700/50"
-                placeholder="Enter token symbol"
-              />
-            </div>
-
-            <div>
-              <h3 className="text-gray-400 mb-2 flex items-start gap-1">URI <span className="opacity-50 text-xs">*required</span></h3>
-              <input
-                type="text"
-                name="uri"
-                value={formData.uri}
-                onChange={handleChange}
-                className="w-full bg-slate-900/90 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green border border-slate-700/50"
-                placeholder="Enter URI"
-              />
-            </div>
-
-            <button
-              onClick={createToken}
-              className="w-full bg-green hover:bg-green/90 text-white px-6 py-3 rounded-lg font-medium flex items-center justify-center gap-2 mt-6"
-            >
-              <FaPlus className="text-sm" />
-              <span>Create Token</span>
-            </button>
+    <div className="h-screen flex flex-col items-center justify-center bg-black relative">
+      {/* Minimalist Token Display */}
+      <div className="text-center space-y-8 mb-32">
+        <div className="relative">
+          <div className="w-32 h-32 mx-auto bg-black border border-white/10 rounded-full 
+                        flex items-center justify-center relative z-10">
+            <span className="text-white text-4xl font-bold">
+              {formData.symbol?.[0] || '?'}
+            </span>
           </div>
+          {/* Glowing effect behind the circle */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0CC0DF]/20 to-[#14F195]/20 
+                        blur-xl rounded-full transform scale-150 -z-0"></div>
         </div>
 
-        {/* Token List */}
-        <div className="space-y-4 bg-slate-800/80 p-6 rounded-lg">
-          <h3 className="text-xl text-white mb-6">Your Tokens</h3>
-          <div className="space-y-4">
-            <div className="bg-slate-900/90 p-4 rounded-lg border border-slate-700/50">
-              <div className="flex justify-between items-start mb-2">
+        <div className="space-y-2">
+          <h2 className="text-white/60 text-sm tracking-wider">MONETA KEY</h2>
+          <h1 className="text-white text-5xl font-light tracking-wider">
+            {formData.name || 'Crypto Project'}
+          </h1>
+          <p className="text-white/40 text-xl">2024</p>
+        </div>
+
+        <button
+          onClick={() => setShowCreateForm(true)}
+          className="mt-8 px-6 py-3 border border-white/10 rounded-full text-white/60 
+                   hover:text-white hover:border-white/30 transition-all duration-300"
+        >
+          Create Token
+        </button>
+      </div>
+
+      {/* Floating Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-[20%] left-[15%] text-white/20">BTC</div>
+        <div className="absolute top-[30%] right-[20%] text-white/20">ETH</div>
+        <div className="absolute bottom-[25%] left-[25%] text-white/20">SOL</div>
+      </div>
+
+      {/* Create Token Modal */}
+      {showCreateForm && (
+        <div className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-black/80 border border-white/10 p-8 rounded-2xl w-[480px] relative">
+            {/* Close button */}
+            <button 
+              onClick={() => setShowCreateForm(false)}
+              className="absolute top-4 right-4 text-white/40 hover:text-white"
+            >
+              ×
+            </button>
+
+            <div className="space-y-6">
+              <h2 className="text-2xl text-white font-light">Create Token</h2>
+              
+              <div className="space-y-4">
                 <div>
-                  <h4 className="text-white font-medium">AWG</h4>
-                  <p className="text-gray-400 text-sm">Awesome Game 101</p>
-                  <p className="text-gray-400 text-sm">GA4jV9ESNBwjxQKs6HgoSebTFTMztacZPCYv8NCs8y8J</p>
+                  <label className="block text-white/60 text-sm mb-2">Token Name</label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-2 text-white"
+                    placeholder="e.g., My Game Token"
+                  />
                 </div>
-                <button 
-                  className="text-gray-400 hover:text-white"
-                  onClick={() => {
-                    navigator.clipboard.writeText("token_address_here");
-                    setAlert({
-                      show: true,
-                      message: 'Address copied to clipboard',
-                      type: 'info'
-                    });
-                  }}
-                >
-                  <FaCopy />
-                </button>
-              </div>
-              <div className="flex justify-between text-sm">
-                <div className="flex items-center gap-2">
-                  <label className="text-gray-400">Supply: </label>
-                  <input className="bg-transparent w-20 border-b border-slate-700/50 focus:outline-none text-white" type="number" value="100000" />
+
+                <div>
+                  <label className="block text-white/60 text-sm mb-2">Token Symbol</label>
+                  <input
+                    type="text"
+                    name="symbol"
+                    value={formData.symbol}
+                    onChange={handleChange}
+                    className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-2 text-white"
+                    placeholder="e.g., MGT"
+                  />
                 </div>
-                <button className="text-green hover:text-green/90">Mint</button>
+
+                <div>
+                  <label className="block text-white/60 text-sm mb-2">Token URI</label>
+                  <input
+                    type="text"
+                    name="uri"
+                    value={formData.uri}
+                    onChange={handleChange}
+                    className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-2 text-white"
+                    placeholder="https://..."
+                  />
+                </div>
               </div>
+
+              <button
+                onClick={createToken}
+                className="w-full mt-6 px-6 py-3 bg-gradient-to-r from-[#0CC0DF] to-[#14F195] 
+                         rounded-lg text-black font-medium hover:opacity-90 transition-opacity"
+              >
+                Create Token
+              </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Token Stats Grid */}
+      <div className="absolute bottom-32 w-full bg-black/40 backdrop-blur-sm border-t border-white/10 p-8">
+        <div className="max-w-6xl mx-auto grid grid-cols-4 gap-6">
+          <div className="stat-card">
+            <div className="text-white/60 text-sm">Market Cap</div>
+            <div className="text-2xl text-white font-light">$0.00</div>
+            <div className="text-green-400 text-sm">+0.00%</div>
+          </div>
+
+          <div className="stat-card">
+            <div className="text-white/60 text-sm">Total Supply</div>
+            <div className="text-2xl text-white font-light">0</div>
+            <div className="text-white/40 text-sm">Tokens</div>
+          </div>
+
+          <div className="stat-card">
+            <div className="text-white/60 text-sm">Circulating Supply</div>
+            <div className="text-2xl text-white font-light">0</div>
+            <div className="text-white/40 text-sm">Tokens</div>
+          </div>
+
+          <div className="stat-card">
+            <div className="text-white/60 text-sm">Holders</div>
+            <div className="text-2xl text-white font-light">0</div>
+            <div className="text-white/40 text-sm">Addresses</div>
           </div>
         </div>
       </div>

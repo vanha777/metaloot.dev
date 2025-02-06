@@ -14,10 +14,7 @@ interface Webhook {
 
 export default function WebhookSection({ selectedGame }: { selectedGame: GameData }) {
   const [webhooks, setWebhooks] = useState<Webhook[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedWebhook, setSelectedWebhook] = useState<Webhook | null>(null);
-  const [showModal, setShowModal] = useState(false);
-  const [showAddModal, setShowAddModal] = useState(false);
+  const [showCreateForm, setShowCreateForm] = useState(false);
   const [formData, setFormData] = useState({
     url: '',
     events: [] as string[],
@@ -30,7 +27,6 @@ export default function WebhookSection({ selectedGame }: { selectedGame: GameDat
 
   useEffect(() => {
     const fetchWebhooks = async () => {
-      setLoading(true);
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
       
@@ -50,82 +46,127 @@ export default function WebhookSection({ selectedGame }: { selectedGame: GameDat
           createdAt: '2024-03-19'
         }
       ]);
-      setLoading(false);
     };
 
     fetchWebhooks();
   }, []);
 
   return (
-    <div className="space-y-6 p-2 md:p-8">
-      <div className="flex justify-between items-center">
-        <div className="flex items-center gap-3">
-          <MdWebhook className="text-3xl text-green" />
-          <h2 className="text-2xl font-bold text-white">Webhooks</h2>
-        </div>
-        <div className="flex gap-4">
+    <div className="min-h-screen bg-black p-8">
+      {/* Compact Header */}
+      <div className="max-w-6xl mx-auto mb-8">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-black border border-white/10 rounded-full flex items-center justify-center">
+              <MdWebhook className="text-2xl text-[#0CC0DF]" />
+            </div>
+            <div>
+              <h1 className="text-white text-2xl font-light">Notifications</h1>
+              <p className="text-white/40 text-sm">{webhooks.length} active connections</p>
+            </div>
+          </div>
           <button
-            onClick={() => setShowAddModal(true)}
-            className="bg-green/90 group hover:bg-green border-green text-white px-4 py-2 rounded-full font-medium flex items-center gap-2 transition-all"
+            onClick={() => setShowCreateForm(true)}
+            className="px-4 py-2 bg-[#0CC0DF]/10 border border-[#0CC0DF]/20 rounded-lg text-[#0CC0DF] 
+                     hover:bg-[#0CC0DF]/20 transition-all duration-300 flex items-center gap-2"
           >
-            <FaPlus className="text-sm text-white" />
-            <span className="text-sm">New Webhook</span>
+            <FaPlus className="text-sm" />
+            Add Connection
           </button>
         </div>
       </div>
 
-      <div className="space-y-4 bg-slate-800/80 p-6 rounded-lg">
-        {loading ? (
-          <div className="space-y-2">
-            {[1, 2].map((index) => (
-              <div key={index} className="grid grid-cols-3 gap-4 p-4">
-                <div className="h-4 w-20 skeleton bg-slate-400/10"></div>
-                <div className="h-4 w-32 skeleton bg-slate-400/10"></div>
-                <div className="h-4 w-24 skeleton bg-slate-400/10"></div>
+      {/* Simplified Table */}
+      <div className="max-w-6xl mx-auto">
+        <div className="rounded-xl overflow-hidden">
+          {/* Table Header */}
+          <div className="grid grid-cols-12 gap-4 p-6 bg-white/5 text-white/60 text-sm">
+            <div className="col-span-5">Who To Call</div>
+            <div className="col-span-4">What Happened</div>
+            <div className="col-span-3 text-right">What To Send</div>
+          </div>
+          
+          {/* Table Body */}
+          <div className="divide-y divide-white/[0.06]">
+            {webhooks.map(webhook => (
+              <div key={webhook.id} 
+                   className="grid grid-cols-12 gap-4 p-6 hover:bg-white/[0.02] group transition-all duration-200">
+                <div className="col-span-4">
+                  <div className="flex flex-wrap gap-2">
+                    {webhook.events.map(event => (
+                      <span key={event} 
+                            className="px-2.5 py-1 bg-[#0CC0DF]/10 rounded-full text-[#0CC0DF] text-xs font-medium">
+                        {event}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <div className="col-span-5">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center">
+                      <MdWebhook className="text-[#0CC0DF]" />
+                    </div>
+                    <div>
+                      <div className="text-white/80 font-light break-all">
+                        {webhook.url}
+                      </div>
+                      <div className="text-white/40 text-xs mt-1">
+                        Created {new Date(webhook.createdAt).toLocaleDateString()}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-span-3 flex items-center justify-end gap-4">
+                  <span className={`px-3 py-1 rounded-full text-xs ${
+                    webhook.status === 'active' 
+                      ? 'bg-[#14F195]/10 text-[#14F195]' 
+                      : 'bg-white/[0.03] text-white/40'
+                  }`}>
+                    {webhook.status}
+                  </span>
+                  <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button className="p-1.5 hover:bg-white/10 rounded-lg transition-all">
+                      <FaPencilAlt className="text-white/60 hover:text-white text-xs" />
+                    </button>
+                    <button className="p-1.5 hover:bg-white/10 rounded-lg transition-all">
+                      <FaTrash className="text-white/60 hover:text-white text-xs" />
+                    </button>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
-        ) : webhooks.length > 0 ? (
-          <div className="space-y-2">
-            {webhooks.map((webhook, index) => (
-              <>
-                <div
-                  key={webhook.id}
-                  onClick={() => setSelectedWebhook(webhook)}
-                  className="grid grid-cols-3 gap-4 cursor-pointer hover:bg-slate-700/50 p-4 rounded-lg transition-colors"
-                >
-                  <div>
-                    <h3 className="text-gray-300 text-sm">Endpoint URL</h3>
-                    <p className="text-white font-medium truncate">{webhook.url}</p>
-                  </div>
-                  <div>
-                    <h3 className="text-gray-300 text-sm">Events</h3>
-                    <p className="text-white font-medium">{webhook.events.join(', ')}</p>
-                  </div>
-                  <div>
-                    <h3 className="text-gray-300 text-sm">Status</h3>
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                      webhook.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
-                    }`}>
-                      {webhook.status}
-                    </span>
-                  </div>
-                </div>
-                {index < webhooks.length - 1 && (
-                  <hr className="my-2 border-t border-white/20 w-full" />
-                )}
-              </>
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-8 text-gray-300 flex flex-col items-center justify-center">
-            <FaGhost className="text-[#0CC0DF] text-4xl mb-2" />
-            <p>No webhooks configured. Add a new webhook to get started.</p>
+        </div>
+
+        {/* Empty State - Updated styling */}
+        {webhooks.length === 0 && (
+          <div className="text-center py-16 bg-white/[0.02] rounded-xl border border-white/[0.06]">
+            <FaGhost className="text-white/10 text-5xl mx-auto mb-4" />
+            <p className="text-white/40 font-light">No webhook connections yet</p>
+            <button
+              onClick={() => setShowCreateForm(true)}
+              className="mt-4 px-4 py-2 bg-[#0CC0DF]/10 border border-[#0CC0DF]/20 rounded-lg text-[#0CC0DF] 
+                       hover:bg-[#0CC0DF]/20 transition-all duration-300 text-sm"
+            >
+              Add your first webhook
+            </button>
           </div>
         )}
       </div>
 
-      {/* Add modals and alert components similar to the game section */}
+      {/* Create Webhook Modal */}
+      {showCreateForm && (
+        <div className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-50">
+          {/* ... Similar modal structure as TokenomicsSection ... */}
+        </div>
+      )}
+
+      <Alert
+        isOpen={alert.show}
+        message={alert.message}
+        type={alert.type}
+        onClose={() => setAlert(prev => ({ ...prev, show: false }))}
+      />
     </div>
   );
 } 

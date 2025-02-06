@@ -1,11 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { IoSettings, IoServer, IoShare, IoSettingsSharp, IoShapesSharp } from "react-icons/io5"
-import Image from 'next/image'
-import Link from 'next/link'
+import { IoLogOutOutline } from "react-icons/io5"
 import { motion } from 'framer-motion'
-import { GameData } from '@/app/utils/storage'
+import { GameData } from "@/app/utils/AppContext"
 import { useAppContext } from '@/app/utils/AppContext'
 // import { useAuthStore, useIntegrationPartnerStore } from '@/store/store'
 // import SettingsPage from '../settings/settings-page'
@@ -16,7 +14,7 @@ interface DashboardHeaderProps {
 }
 
 export default function DashboardHeader({ selectedGameData, setSelectedGameData }: DashboardHeaderProps) {
-    const { auth, setTokens, setUser, setGame, logout } = useAppContext();
+    const { auth, logout } = useAppContext();
     // const { integrationPartner, setIntegrationPartner } = useIntegrationPartnerStore()
     // const { loginResponse, clearAuth } = useAuthStore()
 
@@ -41,48 +39,35 @@ export default function DashboardHeader({ selectedGameData, setSelectedGameData 
         <motion.nav
             initial={{ y: -100 }}
             animate={{ y: 0 }}
-            className="sticky top-0 w-full z-50 bg-transparent"
+            className="sticky top-0 w-full z-50 bg-black/80 backdrop-blur-sm border-b border-white/10"
         >
-            <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between items-center h-16">
-                    {/* Left side with user info and game info */}
-                    <div className="flex items-center gap-4">
-                        {loginResponse?.access_token && (
-                            <div className="bg-base-200 rounded-full px-6 py-2 shadow-lg flex items-center gap-4">
-                                <div className="text-lg font-semibold">
-                                    <span className="text-white">{selectedGameData?.name || "No Game Selected"}</span>
-                                </div>
-
-                                <button
-                                    className="btn btn-ghost btn-sm"
-                                    onClick={() => setSelectedGameData(null)}
-                                >
-                                    Change Game
-                                </button>
+            <div className="max-w-full mx-auto px-8">
+                <div className="flex justify-center items-center h-16">
+                    {loginResponse?.access_token && (
+                        <div className="flex items-center gap-2 bg-white/5 rounded-lg p-1 relative">
+                            <div className="absolute inset-0 bg-white/10 rounded-lg" 
+                                 style={{ clipPath: 'polygon(0 0, 100% 0, 98% 100%, 2% 100%)' }}>
                             </div>
-                        )}
-                    </div>
-
-                    {/* Right side with settings and sign out */}
-                    <div className="flex items-center gap-4">
-                        {/* <SettingsPage>
-                            <button className="btn btn-ghost text-white">
-                                <IoSettings className="h-6 w-6" />
-                                Settings
+                            
+                            <button
+                                className="relative px-4 py-2 text-white/60 hover:text-white transition-colors duration-300 border-r border-white/20"
+                                onClick={() => setSelectedGameData(null)}
+                            >
+                                Change Game
                             </button>
-                        </SettingsPage> */}
 
-                        {loginResponse?.access_token && (
-                            <div className="bg-base-200 rounded-full px-6 py-2 shadow-lg flex items-center gap-4">
-                                <button
-                                    className="text-red-500 flex items-center gap-2"
-                                    onClick={handleSignOut}
-                                >
+                            <button
+                                onClick={handleSignOut}
+                                className="relative flex items-center gap-2 px-4 py-2 text-white/60 hover:text-white transition-colors duration-300"
+                                title="Sign Out"
+                            >
+                                <IoLogOutOutline className="h-5 w-5" />
+                                <span className="text-sm font-medium">
                                     Sign Out
-                                </button>
-                            </div>
-                        )}
-                    </div>
+                                </span>
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
         </motion.nav>

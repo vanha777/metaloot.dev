@@ -107,15 +107,15 @@ export default function MainUniverse() {
         {
             id: "collections",
             label: "Collections",
-            icon: IoImagesOutline,
+            icon: IoStorefrontOutline,
             selectedIcon: IoImagesSharp
         },
-        {
-            id: "marketplace",
-            label: "Marketplace",
-            icon: IoStorefrontOutline,
-            selectedIcon: IoStorefrontSharp
-        },
+        // {
+        //     id: "marketplace",
+        //     label: "Marketplace",
+        //     icon: IoStorefrontOutline,
+        //     selectedIcon: IoStorefrontSharp
+        // },
         {
             id: "webhook",
             label: "Webhooks",
@@ -170,7 +170,7 @@ export default function MainUniverse() {
                                     {/* {activeMenu === "game" && <GameSection />} */}
                                     {activeMenu === "tokenomics" && <TokenomicsSection selectedGame={selectedGameData} />}
                                     {activeMenu === "collections" && <CollectionsSection selectedGame={selectedGameData} />}
-                                    {activeMenu === "marketplace" && <MarketplaceSection selectedGame={selectedGameData} />}
+                                    {/* {activeMenu === "marketplace" && <MarketplaceSection selectedGame={selectedGameData} />} */}
                                     {activeMenu === "webhook" && <WebhookSection selectedGame={selectedGameData} />}
                                     {activeMenu === "api" && <APISection selectedGame={selectedGameData} />}
                                     {activeMenu === "settings" && <SettingsSection selectedGame={selectedGameData} />}

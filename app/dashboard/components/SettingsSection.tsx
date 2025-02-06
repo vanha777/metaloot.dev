@@ -1,167 +1,137 @@
 import { useState } from "react";
 import { IoSettingsSharp } from "react-icons/io5";
-import { FaSave, FaUser, FaEnvelope, FaDiscord, FaTwitter, FaGithub } from "react-icons/fa";
+import { FaCrown, FaRegCreditCard } from "react-icons/fa";
 import Alert from "@/components/Alert";
 import { GameData } from "@/app/utils/AppContext";
 
 export default function SettingsSection({ selectedGame }: { selectedGame: GameData }) {
-  const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    discord: '',
-    twitter: '',
-    github: '',
-    bio: ''
+  const [currentPlan, setCurrentPlan] = useState('free');
+  const [userInfo, setUserInfo] = useState({
+    name: 'John Doe',
+    email: 'john@example.com',
+    walletAddress: '0x1234...5678',
+    joinedDate: 'January 2024'
   });
-
   const [alert, setAlert] = useState({
     show: false,
     message: '',
     type: 'info' as 'success' | 'error' | 'info'
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
+  const plans = [
+    {
+      name: 'Free',
+      price: '$0',
+      features: ['Basic Analytics', 'Limited Transactions', 'Community Support'],
+      id: 'free'
+    },
+    {
+      name: 'Pro',
+      price: '$29/month',
+      features: ['Advanced Analytics', 'Unlimited Transactions', 'Priority Support', 'Custom Branding'],
+      id: 'pro'
+    }
+  ];
 
-  const handleSubmit = () => {
-    if (!formData.username || !formData.email) {
+  const handleUpgrade = (planId: string) => {
+    if (planId === currentPlan) {
       setAlert({
         show: true,
-        message: 'Username and email are required',
-        type: 'error'
+        message: 'You are already subscribed to this plan',
+        type: 'info'
       });
       return;
     }
 
-    console.log('Saving profile:', formData);
     setAlert({
       show: true,
-      message: 'Profile updated successfully!',
+      message: 'Subscription updated successfully!',
       type: 'success'
     });
+    setCurrentPlan(planId);
   };
 
   return (
-    <div className="space-y-6 p-2 md:p-8">
-      <div className="flex items-center gap-3">
-        <IoSettingsSharp className="text-3xl text-green" />
-        <h2 className="text-2xl font-bold text-white">Settings</h2>
+    <div className="h-screen flex flex-col bg-black relative p-8">
+      {/* Header Section */}
+      <div className="text-center space-y-8 mb-16">
+        <div className="relative">
+          <div className="w-32 h-32 mx-auto bg-black border border-white/10 rounded-full 
+                        flex items-center justify-center relative z-10">
+            <IoSettingsSharp className="text-4xl text-white/60" />
+          </div>
+          {/* Glowing effect */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0CC0DF]/20 to-[#14F195]/20 
+                        blur-xl rounded-full transform scale-150 -z-0"></div>
+        </div>
+
+        <div className="space-y-2">
+          <h2 className="text-white/60 text-sm tracking-wider">ACCOUNT SETTINGS</h2>
+          <h1 className="text-white text-5xl font-light tracking-wider">
+            User Profile
+          </h1>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="md:col-span-2 space-y-6 bg-slate-800/80 p-6 rounded-lg">
+      <div className="max-w-6xl mx-auto w-full">
+        {/* User Information */}
+        <div className="bg-black/80 border border-white/10 p-6 rounded-2xl mb-8">
+          <h3 className="text-xl text-white font-light mb-6">User Information</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <h3 className="text-gray-400 mb-2 flex items-start gap-1">Username <span className="opacity-50 text-xs">*required</span></h3>
-              <div className="relative">
-                <FaUser className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                <input
-                  type="text"
-                  name="username"
-                  value={formData.username}
-                  onChange={handleChange}
-                  className="w-full bg-slate-900/90 text-white rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-green border border-slate-700/50"
-                  placeholder="Enter username"
-                />
+            {Object.entries(userInfo).map(([key, value]) => (
+              <div key={key} className="space-y-2">
+                <p className="text-white/60 text-sm">{key.charAt(0).toUpperCase() + key.slice(1)}</p>
+                <p className="text-white text-lg font-light">{value}</p>
               </div>
-            </div>
-            <div>
-              <h3 className="text-gray-400 mb-2 flex items-start gap-1">Email <span className="opacity-50 text-xs">*required</span></h3>
-              <div className="relative">
-                <FaEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="w-full bg-slate-900/90 text-white rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-green border border-slate-700/50"
-                  placeholder="Enter email"
-                />
-              </div>
-            </div>
-            <div>
-              <h3 className="text-gray-400 mb-2">Discord</h3>
-              <div className="relative">
-                <FaDiscord className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                <input
-                  type="text"
-                  name="discord"
-                  value={formData.discord}
-                  onChange={handleChange}
-                  className="w-full bg-slate-900/90 text-white rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-green border border-slate-700/50"
-                  placeholder="Discord username"
-                />
-              </div>
-            </div>
-            <div>
-              <h3 className="text-gray-400 mb-2">Twitter</h3>
-              <div className="relative">
-                <FaTwitter className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                <input
-                  type="text"
-                  name="twitter"
-                  value={formData.twitter}
-                  onChange={handleChange}
-                  className="w-full bg-slate-900/90 text-white rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-green border border-slate-700/50"
-                  placeholder="Twitter handle"
-                />
-              </div>
-            </div>
-            <div>
-              <h3 className="text-gray-400 mb-2">GitHub</h3>
-              <div className="relative">
-                <FaGithub className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                <input
-                  type="text"
-                  name="github"
-                  value={formData.github}
-                  onChange={handleChange}
-                  className="w-full bg-slate-900/90 text-white rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-green border border-slate-700/50"
-                  placeholder="GitHub username"
-                />
-              </div>
-            </div>
-            <div className="md:col-span-2">
-              <h3 className="text-gray-400 mb-2">Bio</h3>
-              <textarea
-                name="bio"
-                value={formData.bio}
-                onChange={handleChange}
-                className="w-full bg-slate-900/90 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green border border-slate-700/50 h-32 resize-none"
-                placeholder="Tell us about yourself..."
-              />
-            </div>
-          </div>
-
-          <div className="flex justify-end pt-6 border-t border-slate-700">
-            <button
-              onClick={handleSubmit}
-              className="bg-green hover:bg-green/90 text-white px-6 py-3 rounded-lg font-medium flex items-center gap-2"
-            >
-              <FaSave className="text-lg" />
-              <span>Save Changes</span>
-            </button>
+            ))}
           </div>
         </div>
 
-        <div className="bg-slate-800/80 p-6 rounded-lg h-fit">
-          <h3 className="text-xl font-bold text-white mb-4">Profile Preview</h3>
-          <div className="space-y-4">
-            <div className="w-32 h-32 bg-slate-700 rounded-full mx-auto"></div>
-            <div className="text-center">
-              <h4 className="text-lg font-medium text-white">{formData.username || 'Username'}</h4>
-              <p className="text-gray-400">{formData.email || 'email@example.com'}</p>
-            </div>
-            <div className="space-y-2 pt-4 border-t border-slate-700">
-              <p className="text-gray-300 text-sm">{formData.bio || 'No bio provided'}</p>
-            </div>
+        {/* Subscription Plans */}
+        <div className="bg-black/80 border border-white/10 p-6 rounded-2xl">
+          <h3 className="text-xl text-white font-light mb-6">Subscription Plans</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {plans.map((plan) => (
+              <div key={plan.id} 
+                   className="bg-black/80 border border-white/10 p-6 rounded-xl">
+                <div className="flex items-center gap-3 mb-4">
+                  <FaCrown className={`text-2xl ${
+                    plan.id === 'pro' ? 'text-[#14F195]' : 'text-white/40'
+                  }`} />
+                  <h3 className="text-xl text-white font-light">{plan.name}</h3>
+                </div>
+                
+                <p className="text-3xl text-white font-light mb-4">{plan.price}</p>
+                <ul className="space-y-3 mb-6">
+                  {plan.features.map((feature, index) => (
+                    <li key={index} className="text-white/60 flex items-center gap-2">
+                      <span className="text-[#14F195]">✓</span> {feature}
+                    </li>
+                  ))}
+                </ul>
+
+                <button
+                  onClick={() => handleUpgrade(plan.id)}
+                  className={`w-full py-3 rounded-lg font-light flex items-center justify-center gap-2
+                    ${currentPlan === plan.id 
+                      ? 'bg-white/10 text-white/60 cursor-not-allowed'
+                      : 'bg-gradient-to-r from-[#0CC0DF] to-[#14F195] text-white hover:opacity-90'
+                    }`}
+                >
+                  <FaRegCreditCard />
+                  <span>{currentPlan === plan.id ? 'Current Plan' : 'Select Plan'}</span>
+                </button>
+              </div>
+            ))}
           </div>
         </div>
+      </div>
+
+      {/* Floating Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-[20%] left-[15%] text-white/10">SETTINGS</div>
+        <div className="absolute top-[30%] right-[20%] text-white/10">PROFILE</div>
+        <div className="absolute bottom-[25%] left-[25%] text-white/10">PLANS</div>
       </div>
 
       <Alert

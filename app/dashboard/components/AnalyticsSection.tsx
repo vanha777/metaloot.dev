@@ -181,12 +181,33 @@ export default function AnalyticsSection({ selectedGame }: { selectedGame: GameD
   }, []);
 
   return (
-    <div className="space-y-6 p-2 md:p-8 bg-black min-h-screen">
-      <div className="flex items-center gap-3 mb-8">
-        <IoStatsChart className="text-3xl text-[#14F195]" />
-        <h2 className="text-2xl font-bold bg-gradient-to-r from-[#0CC0DF] to-[#14F195] bg-clip-text text-transparent">
-          Analytics Overview
-        </h2>
+    <div className="h-screen flex flex-col bg-black relative p-8">
+      {/* Header Section */}
+      <div className="text-center space-y-8 mb-16">
+        <div className="relative">
+          <div className="w-32 h-32 mx-auto bg-black border border-white/10 rounded-full 
+                        flex items-center justify-center relative z-10">
+            <img 
+              src={selectedGame.photo || '/default-game-logo.png'} 
+              alt={`${selectedGame.name} logo`}
+              className="w-24 h-24 object-contain rounded-full"
+              onError={(e) => {
+                e.currentTarget.src = '/default-game-logo.png'
+              }}
+            />
+          </div>
+          {/* Glowing effect */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0CC0DF]/20 to-[#14F195]/20 
+                        blur-xl rounded-full transform scale-150 -z-0"></div>
+        </div>
+
+        <div className="space-y-2">
+          <h2 className="text-white/60 text-sm tracking-wider">ANALYTICS DASHBOARD</h2>
+          <h1 className="text-white text-5xl font-light tracking-wider">
+            {selectedGame.name}
+          </h1>
+          <p className="text-white/40 text-xl">{selectedGame.genre}</p>
+        </div>
       </div>
 
       {loading ? (
@@ -222,91 +243,51 @@ export default function AnalyticsSection({ selectedGame }: { selectedGame: GameD
             </div>
         </div>
       ) : analytics ? (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Main Game Card - Spans full width */}
-          <div className="md:col-span-3 bg-white/5 p-8 rounded-2xl backdrop-blur-sm border border-white/10 hover:border-[#14F195]/30 transition-all duration-300">
-            <div className="flex items-center gap-6">
-              <div className="w-24 h-24 bg-white/5 rounded-xl flex items-center justify-center">
-                <img 
-                  src={selectedGame.photo || '/default-game-logo.png'} 
-                  alt={`${selectedGame.name} logo`}
-                  className="w-20 h-20 object-contain"
-                  onError={(e) => {
-                    e.currentTarget.src = '/default-game-logo.png'
-                  }}
-                />
+        <div className="max-w-6xl mx-auto w-full">
+          {/* Stats Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+            <div className="bg-black/80 border border-white/10 p-6 rounded-2xl">
+              <div className="text-white/60 text-sm">Total Players</div>
+              <div className="text-2xl text-white font-light mt-2">
+                {analytics.playerStats.totalPlayers.toLocaleString()}
               </div>
-              <div>
-                <h1 className="text-3xl font-bold text-white mb-3">{selectedGame.name}</h1>
-                <div className="flex gap-3 text-white/70">
-                  <span className="px-3 py-1 bg-white/5 rounded-full text-sm">{selectedGame.genre}</span>
-                  <span className="px-3 py-1 bg-white/5 rounded-full text-sm">{selectedGame.symbol}</span>
-                </div>
+              <div className="text-green-400 text-sm mt-1">
+                +{analytics.playerStats.newPlayersThisWeek} this week
               </div>
+            </div>
+
+            <div className="bg-black/80 border border-white/10 p-6 rounded-2xl">
+              <div className="text-white/60 text-sm">Active Players</div>
+              <div className="text-2xl text-white font-light mt-2">
+                {analytics.playerStats.activePlayers.toLocaleString()}
+              </div>
+              <div className="text-white/40 text-sm mt-1">
+                {analytics.playerStats.retentionRate}% retention
+              </div>
+            </div>
+
+            <div className="bg-black/80 border border-white/10 p-6 rounded-2xl">
+              <div className="text-white/60 text-sm">Total Revenue</div>
+              <div className="text-2xl text-white font-light mt-2">
+                ${(analytics.revenueMetrics.revenueFromTokenSales + 
+                   analytics.revenueMetrics.revenueFromNFTSales).toLocaleString()}
+              </div>
+              <div className="text-white/40 text-sm mt-1">Combined sales</div>
+            </div>
+
+            <div className="bg-black/80 border border-white/10 p-6 rounded-2xl">
+              <div className="text-white/60 text-sm">NFT Holders</div>
+              <div className="text-2xl text-white font-light mt-2">
+                {analytics.nftAnalytics.nftOwnershipStats.totalPlayersWithNFTs.toLocaleString()}
+              </div>
+              <div className="text-white/40 text-sm mt-1">Active wallets</div>
             </div>
           </div>
 
-          {/* Left Column - Publisher & Release Date */}
-          <div className="space-y-6">
-            <div className="bg-white/5 p-6 rounded-2xl backdrop-blur-sm border border-white/10 hover:border-[#14F195]/30 transition-all duration-300 h-[200px]">
-              <div className="flex items-center gap-3 mb-4">
-                <FaGamepad className="text-xl text-[#14F195]" />
-                <h3 className="text-xl bg-gradient-to-r from-[#0CC0DF] to-[#14F195] bg-clip-text text-transparent">
-                  Publisher
-                </h3>
-              </div>
-              <p className="text-2xl font-bold text-white">
-                {selectedGame.publisher || 'Unknown'}
-              </p>
-            </div>
-            <div className="bg-white/5 p-6 rounded-2xl backdrop-blur-sm border border-white/10 hover:border-[#14F195]/30 transition-all duration-300 h-[200px]">
-              <div className="flex items-center gap-3 mb-4">
-                <FaChartLine className="text-xl text-[#14F195]" />
-                <h3 className="text-xl bg-gradient-to-r from-[#0CC0DF] to-[#14F195] bg-clip-text text-transparent">
-                  Release Date
-                </h3>
-              </div>
-              <p className="text-2xl font-bold text-white">
-                {selectedGame.releaseDate || 'TBA'}
-              </p>
-            </div>
-          </div>
-
-          {/* Center Column - Large Description Card */}
-          <div className="bg-white/5 p-6 rounded-2xl backdrop-blur-sm border border-white/10 hover:border-[#14F195]/30 transition-all duration-300">
-            <div className="flex items-center gap-3 mb-4">
-              <IoStatsChart className="text-xl text-[#14F195]" />
-              <h3 className="text-xl bg-gradient-to-r from-[#0CC0DF] to-[#14F195] bg-clip-text text-transparent">
-                Game Description
-              </h3>
-            </div>
-            <p className="text-white/80 leading-relaxed">
-              {selectedGame.description || 'No description available.'}
-            </p>
-          </div>
-
-          {/* Right Column - Player Stats */}
-          <div className="bg-white/5 p-6 rounded-2xl backdrop-blur-sm border border-white/10 hover:border-[#14F195]/30 transition-all duration-300">
-            <div className="flex items-center gap-3 mb-4">
-              <FaUsers className="text-xl text-[#14F195]" />
-              <h3 className="text-xl bg-gradient-to-r from-[#0CC0DF] to-[#14F195] bg-clip-text text-transparent">
-                Player Statistics
-              </h3>
-            </div>
-            <div className="space-y-4">
-              <div>
-                <p className="text-white/60 text-sm">Total Players</p>
-                <p className="text-2xl font-bold text-white">{analytics.playerStats.totalPlayers.toLocaleString()}</p>
-              </div>
-              <div>
-                <p className="text-white/60 text-sm">Active Players</p>
-                <p className="text-2xl font-bold text-white">{analytics.playerStats.activePlayers.toLocaleString()}</p>
-              </div>
-              <div>
-                <p className="text-white/60 text-sm">Retention Rate</p>
-                <p className="text-2xl font-bold text-white">{analytics.playerStats.retentionRate}%</p>
-              </div>
-            </div>
+          {/* Transactions Table */}
+          <div className="bg-black/80 border border-white/10 p-6 rounded-2xl">
+            <h3 className="text-xl text-white font-light mb-6">Recent Transactions</h3>
+            <TransactionTable transactions={analytics.recentTransactions} />
           </div>
         </div>
       ) : (
@@ -314,6 +295,13 @@ export default function AnalyticsSection({ selectedGame }: { selectedGame: GameD
           No analytics data available.
         </div>
       )}
+
+      {/* Floating Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-[20%] left-[15%] text-white/10">STATS</div>
+        <div className="absolute top-[30%] right-[20%] text-white/10">DATA</div>
+        <div className="absolute bottom-[25%] left-[25%] text-white/10">METRICS</div>
+      </div>
     </div>
   );
 } 

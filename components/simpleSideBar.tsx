@@ -25,12 +25,12 @@ const SimpleSideBar: React.FC<SimpleSideBarProps> = ({
 
             {/* Drawer content */}
             <div className="drawer-content flex flex-col">
-                <label htmlFor="sidebar" className="btn btn-square btn-ghost drawer-button lg:hidden">
+                <label htmlFor="sidebar" className="btn btn-square btn-ghost drawer-button lg:hidden text-white/60 hover:text-white">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-5 h-5 stroke-current">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
                 </label>
-              
+
                 <div className="p-4">
                     {children}
                 </div>
@@ -39,34 +39,31 @@ const SimpleSideBar: React.FC<SimpleSideBarProps> = ({
             {/* Sidebar Content */}
             <div className="drawer-side">
                 <label htmlFor="sidebar" aria-label="close sidebar" className="drawer-overlay"></label>
-                <ul className="menu p-4 w-48 min-h-full bg-black text-base-content flex flex-col items-center gap-4">
-                    <li className="mb-4">
-                        <div className="rounded-full bg-transparent p-2 shadow-lg hover:shadow-xl transition-shadow duration-300 flex items-center justify-center">
-                            <img
-                                src="/transLogo.png"
-                                alt="MetaLoot Logo"
-                                width={92}
-                                height={92}
-                                className="rotate-12 hover:rotate-0 transition-transform duration-300"
-                            />
-                        </div>
-                    </li>
+                <ul className="menu p-8 w-48 min-h-full bg-black/80 backdrop-blur-sm border-r border-white/10 text-base-content flex flex-col items-center gap-6 items-center justify-center">
                     {menuItems.map((item) => {
                         const Icon = content === item.id ? item.selectedIcon : item.icon;
                         return (
-                            <li key={item.id} className="flex justify-center">
+                            <li key={item.id} className="flex justify-center relative group">
                                 <div
                                     onClick={() => onContentChange?.(item.id)}
-                                    className={`rounded-full ${
-                                        content === item.id 
-                                            ? "bg-base-100 p-[2px] bg-gradient-to-r from-[#0CC0DF] to-[#14F195]" 
-                                            : "bg-base-100"
-                                    } shadow-lg hover:ring-2 hover:ring-gradient-to-r hover:ring-[#0CC0DF]/50 transition-all duration-300 flex items-center justify-center cursor-pointer`}
+                                    className={`relative rounded-lg ${
+                                        content === item.id
+                                            ? "bg-gradient-to-r from-[#0CC0DF] to-[#14F195] p-[1px]"
+                                            : "hover:bg-white/5"
+                                        }`}
                                     title={item.label}
                                 >
-                                    <div className={`${content === item.id ? 'bg-base-100 rounded-full' : ''} p-3`}>
-                                        <Icon className={`h-10 w-10 ${content === item.id ? 'text-white' : 'text-gray-400'}`} />
+                                    <div className={`p-3 rounded-lg ${
+                                        content === item.id ? 'bg-black' : ''
+                                    }`}>
+                                        <Icon className={`h-6 w-6 ${
+                                            content === item.id ? 'text-white' : 'text-white/40 group-hover:text-white/60'
+                                        } transition-colors duration-300`} />
                                     </div>
+                                    {/* Glowing effect for active item */}
+                                    {content === item.id && (
+                                        <div className="absolute inset-0 bg-gradient-to-r from-[#0CC0DF]/20 to-[#14F195]/20 blur-xl rounded-lg -z-10"></div>
+                                    )}
                                 </div>
                             </li>
                         );
