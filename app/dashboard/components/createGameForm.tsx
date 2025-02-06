@@ -220,155 +220,160 @@ export default function CreateGameForm({ setIsCreateOverlayOpen }: CreateGameFor
     }
 
     return (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center">
+        <div className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center">
             {isLoading ? (
                 <SimpleLoading />
             ) : (
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="bg-gray-900 rounded-2xl p-8 max-w-2xl w-full mx-4 border border-[#0CC0DF]/20"
-                >
-                    <div className="flex justify-between items-center mb-6">
-                        <h2 className="text-2xl font-bold bg-gradient-to-r from-[#0CC0DF] to-[#14F195] bg-clip-text text-transparent">
-                            Create New Game
-                        </h2>
-                        <button
-                            onClick={() => setIsCreateOverlayOpen(false)}
-                            className="text-gray-400 hover:text-white"
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
-                    </div>
+                <div className="h-screen flex flex-col items-center justify-center relative w-full">
+                    {/* Game Preview Display */}
+                    <div className="text-center space-y-8 mb-32">
+                        <div className="relative">
+                            <div className="w-32 h-32 mx-auto bg-black border border-white/10 rounded-full 
+                                        flex items-center justify-center relative z-10">
+                                {formData.photo ? (
+                                    <img 
+                                        src={URL.createObjectURL(formData.photo)} 
+                                        alt="Game preview" 
+                                        className="w-full h-full object-cover rounded-full"
+                                    />
+                                ) : (
+                                    <span className="text-white text-4xl font-bold">
+                                        {formData.name?.[0] || '?'}
+                                    </span>
+                                )}
+                            </div>
+                            <div className="absolute inset-0 bg-gradient-to-r from-[#0CC0DF]/20 to-[#14F195]/20 
+                                        blur-xl rounded-full transform scale-150 -z-0"></div>
+                        </div>
 
-                    <ul className="steps steps-horizontal w-full mb-6">
-                        <li className={`step ${currentStep >= 1 ? 'step-primary' : ''}`}>Info</li>
-                        <li className={`step ${currentStep >= 2 ? 'step-primary' : ''}`}>Media</li>
-                        <li className={`step ${currentStep >= 3 ? 'step-primary' : ''}`}>Description</li>
-                    </ul>
+                        <div className="space-y-2">
+                            <h2 className="text-white/60 text-sm tracking-wider">GAME KEY</h2>
+                            <h1 className="text-white text-5xl font-light tracking-wider">
+                                {formData.name || 'New Game'}
+                            </h1>
+                            <p className="text-white/40 text-xl">{formData.releaseDate || '2024'}</p>
+                        </div>
 
-                    <form className="space-y-4" onSubmit={handleSubmit}>
-                        {currentStep === 1 && (
-                            <div className="space-y-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-300 mb-1">Game Name</label>
+                        {/* Form Steps */}
+                        <div className="mt-8 flex justify-center gap-2">
+                            {[1, 2, 3].map((step) => (
+                                <div 
+                                    key={step}
+                                    className={`w-2 h-2 rounded-full ${
+                                        currentStep >= step 
+                                            ? 'bg-[#0CC0DF]' 
+                                            : 'bg-white/10'
+                                    }`}
+                                />
+                            ))}
+                        </div>
+
+                        {/* Form Content */}
+                        <form onSubmit={handleSubmit} className="mt-8 w-[480px] mx-auto">
+                            {currentStep === 1 && (
+                                <div className="space-y-4">
                                     <input
                                         type="text"
                                         name="name"
                                         value={formData.name}
                                         onChange={handleInputChange}
-                                        className="w-full bg-gray-800 rounded-lg border border-gray-700 px-4 py-2 text-white focus:border-[#0CC0DF] focus:ring-1 focus:ring-[#0CC0DF] outline-none"
+                                        placeholder="Game Name"
+                                        className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-2 text-white"
                                         required
                                     />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-300 mb-1">Genre</label>
                                     <input
                                         type="text"
                                         name="genre"
                                         value={formData.genre}
                                         onChange={handleInputChange}
-                                        className="w-full bg-gray-800 rounded-lg border border-gray-700 px-4 py-2 text-white focus:border-[#0CC0DF] focus:ring-1 focus:ring-[#0CC0DF] outline-none"
+                                        placeholder="Genre"
+                                        className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-2 text-white"
                                         required
                                     />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-300 mb-1">Publisher</label>
                                     <input
                                         type="text"
                                         name="publisher"
                                         value={formData.publisher}
                                         onChange={handleInputChange}
-                                        className="w-full bg-gray-800 rounded-lg border border-gray-700 px-4 py-2 text-white focus:border-[#0CC0DF] focus:ring-1 focus:ring-[#0CC0DF] outline-none"
+                                        placeholder="Publisher"
+                                        className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-2 text-white"
                                         required
                                     />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-300 mb-1">Release Date</label>
                                     <input
                                         type="date"
                                         name="releaseDate"
                                         value={formData.releaseDate}
                                         onChange={handleInputChange}
-                                        className="w-full bg-gray-800 rounded-lg border border-gray-700 px-4 py-2 text-white focus:border-[#0CC0DF] focus:ring-1 focus:ring-[#0CC0DF] outline-none"
+                                        className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-2 text-white"
                                         required
                                     />
                                 </div>
-                            </div>
-                        )}
+                            )}
 
-                        {currentStep === 2 && (
-                            <div className="space-y-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-300 mb-1">Game Cover Image (Max 10MB)</label>
+                            {currentStep === 2 && (
+                                <div className="space-y-4">
                                     <input
                                         type="file"
                                         name="photo"
                                         accept="image/*"
-                                        onChange={(e) => {
-                                            const file = e.target.files?.[0];
-                                            if (file && file.size > 10 * 1024 * 1024) {
-                                                alert('File size must be less than 10MB');
-                                                e.target.value = '';
-                                                return;
-                                            }
-                                            handleInputChange(e);
-                                        }}
-                                        className="file-input file-input-bordered w-full bg-gray-800 border-gray-700 text-white focus:border-[#0CC0DF] focus:ring-1 focus:ring-[#0CC0DF]"
+                                        onChange={handleInputChange}
+                                        className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-2 text-white"
                                         required
                                     />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-300 mb-1">Game On-Chain Symbol</label>
                                     <input
                                         type="text"
                                         name="symbol"
                                         value={formData.symbol}
                                         onChange={handleInputChange}
-                                        className="w-full bg-gray-800 rounded-lg border border-gray-700 px-4 py-2 text-white focus:border-[#0CC0DF] focus:ring-1 focus:ring-[#0CC0DF] outline-none"
+                                        placeholder="Game Symbol"
+                                        className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-2 text-white"
                                         required
                                     />
                                 </div>
-                            </div>
-                        )}
+                            )}
 
-                        {currentStep === 3 && (
-                            <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-1">Game Description</label>
+                            {currentStep === 3 && (
                                 <textarea
                                     name="description"
                                     value={formData.description}
                                     onChange={handleInputChange}
-                                    className="w-full bg-gray-800 rounded-lg border border-gray-700 px-4 py-2 text-white focus:border-[#0CC0DF] focus:ring-1 focus:ring-[#0CC0DF] outline-none h-32"
+                                    placeholder="Game Description"
+                                    className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-2 text-white h-32"
                                     required
                                 />
-                            </div>
-                        )}
-
-                        <div className="flex justify-between gap-4">
-                            {currentStep > 1 && (
-                                <button
-                                    type="button"
-                                    onClick={prevStep}
-                                    className="flex-1 bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-xl 
-                  transition-all duration-200"
-                                >
-                                    Previous
-                                </button>
                             )}
-                            <button
-                                type="submit"
-                                className="flex-1 bg-[#0CC0DF] hover:bg-[#0AA0BF] text-white font-bold py-3 px-6 rounded-xl 
-                shadow-lg shadow-[#0CC0DF]/30 transition-all duration-200"
-                            >
-                                {currentStep === 3 ? 'Create Game' : 'Next'}
-                            </button>
-                        </div>
-                    </form>
-                </motion.div>
+
+                            <div className="flex gap-4 mt-6">
+                                {currentStep > 1 && (
+                                    <button
+                                        type="button"
+                                        onClick={prevStep}
+                                        className="flex-1 px-6 py-3 border border-white/10 rounded-lg text-white/60 
+                                                 hover:text-white hover:border-white/30 transition-all duration-300"
+                                    >
+                                        Back
+                                    </button>
+                                )}
+                                <button
+                                    type="submit"
+                                    className="flex-1 px-6 py-3 bg-gradient-to-r from-[#0CC0DF] to-[#14F195] 
+                                             rounded-lg text-black font-medium hover:opacity-90 transition-opacity"
+                                >
+                                    {currentStep === 3 ? 'Create Game' : 'Next'}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    {/* Close Button */}
+                    <button 
+                        onClick={() => setIsCreateOverlayOpen(false)}
+                        className="absolute top-4 right-4 text-white/40 hover:text-white text-2xl"
+                    >
+                        ×
+                    </button>
+                </div>
             )}
         </div>
-    )
+    );
 }

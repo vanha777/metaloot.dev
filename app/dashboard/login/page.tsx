@@ -2,10 +2,16 @@
 import { FcGoogle } from 'react-icons/fc';
 import { BsApple } from 'react-icons/bs';
 import { AppProvider, useAppContext } from "@/app/utils/AppContext";
-import { Db ,Server} from '@/app/utils/db'
+import { Db, Server } from '@/app/utils/db'
+import { useState } from 'react';
+
 const SSOLogin = () => {
+  const [isSpinning, setIsSpinning] = useState(false);
+
   const handleSSOLogin = async (provider: string) => {
-    window.location.href = `https://metaloot-cloud-d4ec.shuttle.app/v1/api/player/oauth/${provider}?redirect_uri=http://localhost:3000/dashboard/oauth/callback`;
+    setIsSpinning(true);
+    const redirectUri = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    window.location.href = `https://metaloot-cloud-d4ec.shuttle.app/v1/api/player/oauth/${provider}?redirect_uri=${redirectUri}/dashboard/oauth/callback`;
 
     //     setTokens('test-access-token', 'test-refresh-token');
     //     setUser({
@@ -48,40 +54,56 @@ const SSOLogin = () => {
   };
 
   return (
-    <div className="bg-black/90 overflow-hidden flex items-center justify-center min-h-screen">
-      <div className="flex flex-col gap-6 w-full max-w-sm p-8 bg-gradient-to-b from-gray-900 to-black rounded-xl border border-gray-800 shadow-2xl relative overflow-hidden">
-        {/* Decorative blockchain-inspired elements */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="animate-pulse absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#0CC0DF] via-[#14F195] to-[#0CC0DF]"></div>
-          <div className="absolute -left-20 top-10 w-40 h-40 bg-[#0CC0DF]/10 rounded-full blur-3xl"></div>
-          <div className="absolute -right-20 bottom-10 w-40 h-40 bg-[#14F195]/10 rounded-full blur-3xl"></div>
+    <div className="h-screen flex flex-col items-center justify-center bg-black">
+      <div className="text-center space-y-8">
+        {/* Logo Circle with Glow Effect */}
+        <div className="relative">
+          <div className="w-32 h-32 mx-auto bg-black border border-white/10 rounded-full 
+                        flex items-center justify-center relative z-10">
+            <img 
+              src="/transLogo.png" 
+              alt="MetaLoot Logo" 
+              className={`w-20 h-20 ${isSpinning ? 'animate-spin' : ''}`} 
+            />
+          </div>
+          {/* Glowing effect behind the circle */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0CC0DF]/20 to-[#14F195]/20 
+                        blur-xl rounded-full transform scale-150 -z-0"></div>
         </div>
 
-        <h2 className="text-2xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-[#0CC0DF] to-[#14F195]">
-          Secure Authentication Portal
-        </h2>
+        <div className="space-y-2">
+          <h2 className="text-white/60 text-sm tracking-wider">Blockchain API for</h2>
+          <h1 className="text-white text-5xl font-light tracking-wider">Gaming</h1>
+          <p className="text-white/40 text-xl">Secure Authentication</p>
+        </div>
 
-        <button
-          onClick={() => handleSSOLogin('google')}
-          className="flex items-center justify-center gap-3 w-full py-3 px-4 bg-gray-800/50 border border-gray-700 rounded-lg hover:bg-gray-800 hover:border-[#0CC0DF]/50 transition-all duration-300 text-gray-200 backdrop-blur-sm"
-        >
-          <FcGoogle className="text-2xl" />
-          <span>Access via Google</span>
-        </button>
+        <div className="space-y-4 w-80">
+          <button
+            onClick={() => handleSSOLogin('google')}
+            className="w-full px-6 py-3 bg-black/50 border border-white/10 rounded-lg
+                     text-white/60 hover:text-white hover:border-white/30 
+                     transition-all duration-300 flex items-center justify-center gap-3"
+          >
+            <FcGoogle className="text-xl" />
+            <span>Continue with Google</span>
+          </button>
 
-        <button
-          onClick={() => handleSSOLogin('apple')}
-          className="flex items-center justify-center gap-3 w-full py-3 px-4 bg-gray-800/50 border border-gray-700 rounded-lg hover:bg-gray-800 hover:border-[#14F195]/50 transition-all duration-300 text-gray-200 backdrop-blur-sm"
-        >
-          <BsApple className="text-2xl" />
-          <span>Access via Apple</span>
-        </button>
+          <button
+            onClick={() => handleSSOLogin('apple')}
+            className="w-full px-6 py-3 bg-black/50 border border-white/10 rounded-lg
+                     text-white/60 hover:text-white hover:border-white/30 
+                     transition-all duration-300 flex items-center justify-center gap-3"
+          >
+            <BsApple className="text-xl" />
+            <span>Continue with Apple</span>
+          </button>
+        </div>
 
-        <div className="text-sm text-gray-400 text-center mt-2 px-4">
-          By proceeding, you acknowledge our{' '}
-          <span className="text-[#0CC0DF] hover:text-[#14F195] cursor-pointer">Protocol Terms</span>{' '}
-          and{' '}
-          <span className="text-[#0CC0DF] hover:text-[#14F195] cursor-pointer">Security Policy</span>
+        <div className="text-sm text-white/40 mt-8">
+          By proceeding, you agree to our{' '}
+          <span className="text-white/60 hover:text-white cursor-pointer transition-colors">Terms</span>{' '}
+          &{' '}
+          <span className="text-white/60 hover:text-white cursor-pointer transition-colors">Privacy</span>
         </div>
       </div>
     </div>

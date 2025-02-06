@@ -83,7 +83,7 @@ export default function APISection({ selectedGame }: { selectedGame: GameData })
               <FaKey className="text-2xl text-[#0CC0DF]" />
             </div>
             <div>
-              <h1 className="text-white text-2xl font-light">{selectedGame?.name || 'Game Project'}</h1>
+              <h1 className="text-white text-2xl font-light">API Keys</h1>
               <p className="text-white/40 text-sm">{apis.length} active keys</p>
             </div>
           </div>

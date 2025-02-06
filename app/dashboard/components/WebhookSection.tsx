@@ -61,7 +61,7 @@ export default function WebhookSection({ selectedGame }: { selectedGame: GameDat
               <MdWebhook className="text-2xl text-[#0CC0DF]" />
             </div>
             <div>
-              <h1 className="text-white text-2xl font-light">Notifications</h1>
+              <h1 className="text-white text-2xl font-light">Webhooks</h1>
               <p className="text-white/40 text-sm">{webhooks.length} active connections</p>
             </div>
           </div>

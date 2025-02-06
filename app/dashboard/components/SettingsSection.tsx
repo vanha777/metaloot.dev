@@ -68,7 +68,7 @@ export default function SettingsSection({ selectedGame }: { selectedGame: GameDa
         <div className="space-y-2">
           <h2 className="text-white/60 text-sm tracking-wider">ACCOUNT SETTINGS</h2>
           <h1 className="text-white text-5xl font-light tracking-wider">
-            User Profile
+            Developer Profile
           </h1>
         </div>
       </div>

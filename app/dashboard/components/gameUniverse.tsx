@@ -47,23 +47,28 @@ const GameUniverse = ({setSelectedGame }: GameUniverseProps) => {
                 <img
                   src={game.photo}
                   alt={game.name}
-                  className="absolute inset-0 w-full h-full object-cover opacity-80"
+                  className={`absolute inset-0 w-full h-full object-cover 
+                    ${expandedGameId === game.id ? 'opacity-90' : 'opacity-40'}`}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                <div className={`absolute inset-0 bg-gradient-to-t 
+                  ${expandedGameId === game.id 
+                    ? 'from-black/70 via-transparent to-transparent' 
+                    : 'from-black/90 via-black/50 to-transparent'
+                  }`} />
 
                 <div className="absolute bottom-0 w-full p-8">
-                  <h2 className="text-xl font-bold bg-gradient-to-r from-[#0CC0DF] to-[#14F195] bg-clip-text text-transparent mb-2">
+                  <h2 className="text-xl text-white font-light tracking-wider mb-2">
                     {game.name}
                   </h2>
-                  <div className="space-y-1 text-gray-200">
+                  <div className="space-y-1">
                     <p className="text-sm">
-                      <span className="font-semibold text-[#0CC0DF]">Genre:</span> {game.genre}
+                      <span className="text-white/60">Genre:</span> <span className="text-white">{game.genre}</span>
                     </p>
                     <p className="text-sm">
-                      <span className="font-semibold text-[#0CC0DF]">Publisher:</span> {game.publisher}
+                      <span className="text-white/60">Publisher:</span> <span className="text-white">{game.publisher}</span>
                     </p>
                     <p className="text-sm">
-                      <span className="font-semibold text-[#0CC0DF]">Release:</span> {game.releaseDate}
+                      <span className="text-white/60">Release:</span> <span className="text-white">{game.releaseDate}</span>
                     </p>
                   </div>
 
@@ -73,9 +78,9 @@ const GameUniverse = ({setSelectedGame }: GameUniverseProps) => {
                       animate={{ opacity: 1 }}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      className="w-full bg-[#0CC0DF] hover:bg-[#0AA0BF] text-white 
-                        font-bold py-4 px-6 rounded-xl flex items-center justify-center gap-3
-                        shadow-lg shadow-[#0CC0DF]/30 text-lg mt-4"
+                      className="w-full bg-black/80 border border-white/10 text-white 
+                        font-light py-4 px-6 rounded-xl flex items-center justify-center gap-3
+                        text-lg mt-6 hover:bg-white/10 transition-colors"
                       onClick={(e) => {
                         e.stopPropagation();
                         setSelectedGame(game);
