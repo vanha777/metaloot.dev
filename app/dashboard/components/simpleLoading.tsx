@@ -1,44 +1,20 @@
 'use client'
-import { useEffect, useState, Suspense } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 
 export default function SimpleLoading() {
-    const [progress, setProgress] = useState(0)
-    const [showContent, setShowContent] = useState(false)
-
-    useEffect(() => {
-        // Start progress animation
-        const startTime = Date.now()
-        const minLoadTime = 8000 // 3 seconds minimum
-
-        const timer = setInterval(() => {
-            const elapsed = Date.now() - startTime
-            const progressValue = Math.min((elapsed / minLoadTime) * 100, 100)
-            setProgress(progressValue)
-
-            if (elapsed >= minLoadTime) {
-                clearInterval(timer)
-                setShowContent(true)
-            }
-        }, 50)
-
-        return () => clearInterval(timer)
-    }, [])
-
-    if (showContent) {
-        return null
-    }
+    const [opacity, setOpacity] = useState(1)
 
     return (
-        <div className="min-h-screen bg-[#020309] flex flex-col items-center justify-center gap-8">
+        <div className="min-h-screen bg-[#020309] flex flex-col items-center justify-center gap-8"
+            style={{ opacity: opacity }}>
             <motion.div
                 className="relative w-32 h-32"
                 animate={{
                     rotate: 360
                 }}
                 transition={{
-                    duration: 2,
+                    duration: 4,
                     repeat: Infinity,
                     ease: "linear"
                 }}
@@ -56,7 +32,7 @@ export default function SimpleLoading() {
                         rotate: 360
                     }}
                     transition={{
-                        duration: 1.5,
+                        duration: 3,
                         repeat: Infinity,
                         ease: "easeInOut"
                     }}
@@ -67,7 +43,7 @@ export default function SimpleLoading() {
                         rotate: -360
                     }}
                     transition={{
-                        duration: 3,
+                        duration: 6,
                         repeat: Infinity,
                         ease: "linear"
                     }}
@@ -91,40 +67,19 @@ export default function SimpleLoading() {
                 </div>
             </motion.div>
 
-            {/* Progress bar with glow effect */}
-            <div className="w-64 h-2 bg-gradient-to-r from-[#0CC0DF]/20 to-[#14F195]/20 rounded-full overflow-hidden"
-                style={{
-                    boxShadow: "0 0 10px rgba(20, 241, 149, 0.3)"
-                }}>
-                <motion.div
-                    className="h-full bg-gradient-to-r from-[#0CC0DF] to-[#14F195]"
-                    style={{
-                        width: `${progress}%`,
-                        boxShadow: "0 0 10px #14F195"
-                    }}
-                    animate={{
-                        opacity: [0.8, 1, 0.8]
-                    }}
-                    transition={{
-                        duration: 1.5,
-                        repeat: Infinity
-                    }}
-                />
-            </div>
-
             {/* Syncing text */}
-            <motion.div
+            {/* <motion.div
                 className="text-transparent bg-gradient-to-r from-[#0CC0DF] to-[#14F195] bg-clip-text font-medium"
                 animate={{
                     opacity: [0.7, 1, 0.7]
                 }}
                 transition={{
-                    duration: 1.5,
+                    duration: 3,
                     repeat: Infinity
                 }}
             >
-                Syncing into Sources... {Math.round(progress)}%
-            </motion.div>
+                Syncing into Sources...
+            </motion.div> */}
         </div>
     )
 }

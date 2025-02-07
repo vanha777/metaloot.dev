@@ -40,6 +40,7 @@ export default function MainUniverse() {
     const [isLoading, setIsLoading] = useState(false);
 
     const selectGame = async (game: GameData) => {
+        console.log("debug here 0");
         try {
             setIsLoading(true);
             // get access_token from server
@@ -53,11 +54,13 @@ export default function MainUniverse() {
                     client_secret: "metalootfreetier"
                 })
             });
+            console.log("debug here 1");
             if (!response.ok) {
                 // throw new Error('Failed to fetch access token');
                 window.location.href = '/dashboard/login';
                 return;
             }
+            console.log("debug here 2");
             const data = await response.json();
             setAccessToken(data.access_token);
             console.log("get access_token successfully");
@@ -75,11 +78,13 @@ export default function MainUniverse() {
                 window.location.href = '/dashboard/login';
                 return;
             }
+            console.log("debug here 3");
             const game_data = await response_game.json();
-            let uri = game_data.account.data.token_uri;
             console.log("get game data successfully", game_data);
+            setSelectedGameData(game);
 
             // Fetch and parse URI data for each game
+            const uri = game_data.account.data.token_uri;
             const tokenDataWithDetails = await fetch(uri);
             const uriData = await tokenDataWithDetails.json();
             console.log("tokenDataWithDetails", uriData);
@@ -91,7 +96,7 @@ export default function MainUniverse() {
                 description: uriData.description,
                 address: game_data.native_token,
             });
-
+            console.log("debug here 4");
 
             // get collection_data from server
             const collection_uris: CollectionData[] = await Promise.all(game_data.account.data.nft_collection.map(async (collection: any) => {
@@ -110,11 +115,12 @@ export default function MainUniverse() {
             }));
             console.log("get collection data successfully");
             setCollectionData(collection_uris);
-            setSelectedGameData(game);
+ 
             setIsLoading(false);
         } catch (error) {
             console.error('Error fetching tokens:', error);
-            window.location.href = '/dashboard/login';
+            setIsLoading(false);
+            // window.location.href = '/dashboard/login';
         }
     };
 
