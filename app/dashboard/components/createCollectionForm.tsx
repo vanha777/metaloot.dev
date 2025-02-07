@@ -127,7 +127,7 @@ export default function CreateCollectionForm({ setShowCreateForm, selectedGame }
 
             console.log("metadata", publicUrl)
 
-            const response = await fetch('http://localhost:8000/v1/api/collection', {
+            const response = await fetch('https://metaloot-cloud-d4ec.shuttle.app/v1/api/collection', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${auth.accessToken}`,
