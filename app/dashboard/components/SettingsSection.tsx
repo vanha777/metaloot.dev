@@ -1,17 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoSettingsSharp } from "react-icons/io5";
 import { FaCrown, FaRegCreditCard } from "react-icons/fa";
 import Alert from "@/components/Alert";
-import { GameData } from "@/app/utils/AppContext";
+import { GameData, useAppContext } from "@/app/utils/AppContext";
 
 export default function SettingsSection({ selectedGame }: { selectedGame: GameData }) {
+  const [isLoading, setIsLoading] = useState(false);
+  const { auth } = useAppContext();
+
+  useEffect(() => {
+    console.log("Re-render SettingsSection");
+  }, [auth.userData]);
+
   const [currentPlan, setCurrentPlan] = useState('free');
-  const [userInfo, setUserInfo] = useState({
-    name: 'John Doe',
-    email: 'john@example.com',
-    walletAddress: '0x1234...5678',
-    joinedDate: 'January 2024'
-  });
+  const userInfo = auth.userData;
   const [alert, setAlert] = useState({
     show: false,
     message: '',
@@ -58,7 +60,15 @@ export default function SettingsSection({ selectedGame }: { selectedGame: GameDa
         <div className="relative">
           <div className="w-32 h-32 mx-auto bg-black border border-white/10 rounded-full 
                         flex items-center justify-center relative z-10">
-            <IoSettingsSharp className="text-4xl text-white/60" />
+            {userInfo?.photo ? (
+              <img 
+                src={userInfo.photo}
+                alt="User avatar"
+                className="w-full h-full object-cover rounded-full"
+              />
+            ) : (
+              <IoSettingsSharp className="text-4xl text-white/60" />
+            )}
           </div>
           {/* Glowing effect */}
           <div className="absolute inset-0 bg-gradient-to-r from-[#0CC0DF]/20 to-[#14F195]/20 
@@ -68,7 +78,7 @@ export default function SettingsSection({ selectedGame }: { selectedGame: GameDa
         <div className="space-y-2">
           <h2 className="text-white/60 text-sm tracking-wider">ACCOUNT SETTINGS</h2>
           <h1 className="text-white text-5xl font-light tracking-wider">
-            Developer Profile
+            {userInfo?.name}
           </h1>
         </div>
       </div>
@@ -78,12 +88,14 @@ export default function SettingsSection({ selectedGame }: { selectedGame: GameDa
         <div className="bg-black/80 border border-white/10 p-6 rounded-2xl mb-8">
           <h3 className="text-xl text-white font-light mb-6">User Information</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {Object.entries(userInfo).map(([key, value]) => (
-              <div key={key} className="space-y-2">
-                <p className="text-white/60 text-sm">{key.charAt(0).toUpperCase() + key.slice(1)}</p>
-                <p className="text-white text-lg font-light">{value}</p>
-              </div>
-            ))}
+            {userInfo && Object.entries(userInfo)
+              .filter(([key]) => !['id', 'photo', 'referal', 'favourite_game', 'type','studio_name'].includes(key.toLowerCase()))
+              .map(([key, value]) => (
+                <div key={key} className="space-y-2">
+                  <p className="text-white/60 text-sm">{key.charAt(0).toUpperCase() + key.slice(1)}</p>
+                  <p className="text-white text-lg font-light">{value}</p>
+                </div>
+              ))}
           </div>
         </div>
 

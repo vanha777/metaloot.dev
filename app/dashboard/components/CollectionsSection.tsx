@@ -25,14 +25,14 @@ export default function CollectionsSection({ selectedGame }: { selectedGame: Gam
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showMintForm, setShowMintForm] = useState(false);
   const [showCreateNFTForm, setShowCreateNFTForm] = useState(false);
+
+  const [selectedCollection, setSelectedCollection] = useState<string | null>(null);
+  const [collectionNFTs, setCollectionNFTs] = useState<NFTData[]>([]);
+  const [selectedNFTs, setSelectedNFTs] = useState<NFTData | null>(null);
+
   useEffect(() => {
     console.log("re render collections section");
   }, [auth.collectionData]);
-
-  const [selectedCollection, setSelectedCollection] = useState<string | null>(null);
-
-  // Add new state for NFTs
-  const [collectionNFTs, setCollectionNFTs] = useState<NFTData[]>([]);
 
   const selectCollection = async (collection: CollectionData) => {
     console.log("selecting collection", collection);
@@ -135,7 +135,7 @@ export default function CollectionsSection({ selectedGame }: { selectedGame: Gam
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
           {selectedCollection && (
-            <div 
+            <div
               onClick={() => setShowCreateNFTForm(true)}
               className="aspect-square border border-white/10 rounded-xl p-4 
                           hover:border-white/30 transition-all duration-300 cursor-pointer">
@@ -146,8 +146,15 @@ export default function CollectionsSection({ selectedGame }: { selectedGame: Gam
             </div>
           )}
           {collectionNFTs.map((nft) => (
-            <div key={nft.address} className="aspect-square border border-white/10 rounded-xl p-4 
-                                hover:border-white/30 transition-all duration-300">
+            <div 
+              key={nft.address} 
+              className={`aspect-square border rounded-xl p-4 
+                         hover:border-white/30 transition-all duration-300
+                         ${selectedNFTs?.address === nft.address 
+                           ? 'border-[#14F195] bg-white/5' 
+                           : 'border-white/10'}`}
+              onClick={() => setSelectedNFTs(nft)}
+            >
               <div className="w-full h-full rounded-lg overflow-hidden">
                 <img
                   src={nft.image}
@@ -167,7 +174,7 @@ export default function CollectionsSection({ selectedGame }: { selectedGame: Gam
       <div className="grid grid-cols-4 gap-6 mt-12 border-t border-white/10 pt-8">
         <div className="stat-card">
           <div className="text-white/60 text-sm">Total NFTs</div>
-          <div className="text-2xl text-white font-light">0</div>
+          <div className="text-2xl text-white font-light">{selectedNFTs?.supply}</div>
           <div className="text-white/40 text-sm">Minted</div>
         </div>
 
@@ -185,7 +192,18 @@ export default function CollectionsSection({ selectedGame }: { selectedGame: Gam
 
         <div className="stat-card">
           <div className="text-white/60 text-sm">Holders</div>
-          <div className="text-2xl text-white font-light">0</div>
+          <div className="text-2xl text-white font-light">
+            {selectedNFTs?.owner && (
+              <a 
+                href={`https://solscan.io/account/${selectedNFTs.owner}?cluster=devnet`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-[#14F195] transition-colors"
+              >
+                {`${selectedNFTs.owner.slice(0,4)}...${selectedNFTs.owner.slice(-4)}`}
+              </a>
+            )}
+          </div>
           <div className="text-white/40 text-sm">Unique</div>
         </div>
       </div>
@@ -196,7 +214,7 @@ export default function CollectionsSection({ selectedGame }: { selectedGame: Gam
       )}
 
       {showCreateNFTForm && (
-        <CreateNftForm 
+        <CreateNftForm
           setShowCreateForm={setShowCreateNFTForm}
           selectedCollection={selectedCollection || ''}
           collectionNFTs={collectionNFTs}

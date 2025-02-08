@@ -23,6 +23,23 @@ export async function GET(request: Request) {
       .eq('email', profileData.email)
       .single()
     let subscriber = data;
+    
+    // Update photo if it has changed
+    if (subscriber && profileData.picture !== subscriber.photo) {
+      console.log("updating user photo")
+      const { data: updatedData, error: updateError } = await database
+        .from('subscribers')
+        .update({ photo: profileData.picture })
+        .eq('id', subscriber.id)
+        .select()
+        .single()
+      
+      if (!updateError) {
+        subscriber = updatedData
+        console.log("updated user photo", subscriber)
+      }
+    }
+
     if (data == null) {
       // Create new subscriber
       const { data, error } = await Db.from('subscribers').insert([

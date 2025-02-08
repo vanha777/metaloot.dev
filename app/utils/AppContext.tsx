@@ -39,6 +39,8 @@ export interface NFTData {
     image: string;
     external_link: string;
     owner: string;
+    supply?: number;
+    decimals?: number;
 }
 
 export interface TokenData {
