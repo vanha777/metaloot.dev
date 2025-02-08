@@ -31,6 +31,16 @@ export interface GameData {
     address?: string;
 }
 
+export interface NFTData {
+    address: string;
+    name: string;
+    description: string;
+    symbol: string;
+    image: string;
+    external_link: string;
+    owner: string;
+}
+
 export interface TokenData {
     address?: string;
     image?: string;

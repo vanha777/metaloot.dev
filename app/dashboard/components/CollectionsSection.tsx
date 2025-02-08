@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { FaPlus, FaImage } from "react-icons/fa";
 import Alert from "@/components/Alert";
-import { GameData } from "@/app/utils/AppContext";
+import { CollectionData, GameData, NFTData } from "@/app/utils/AppContext";
 import CreateCollectionForm from "./createCollectionForm";
 import { useAppContext } from "@/app/utils/AppContext";
+import CreateNftForm from "./createNftForm";
 interface CollectionForm {
   name: string;
   symbol: string;
@@ -21,53 +22,52 @@ interface NFTForm {
 export default function CollectionsSection({ selectedGame }: { selectedGame: GameData }) {
   const [isLoading, setIsLoading] = useState(false);
   const { auth, setCollectionData } = useAppContext();
+  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [showMintForm, setShowMintForm] = useState(false);
+  const [showCreateNFTForm, setShowCreateNFTForm] = useState(false);
   useEffect(() => {
     console.log("re render collections section");
   }, [auth.collectionData]);
 
-  const [nftForm, setNftForm] = useState<NFTForm>({
-    name: '',
-    description: '',
-    image: null,
-    attributes: []
-  });
-
   const [selectedCollection, setSelectedCollection] = useState<string | null>(null);
+
+  // Add new state for NFTs
+  const [collectionNFTs, setCollectionNFTs] = useState<NFTData[]>([]);
+
+  const selectCollection = async (collection: CollectionData) => {
+    console.log("selecting collection", collection);
+    setSelectedCollection(collection.address || null);
+    if (collection.address) {
+      try {
+        setIsLoading(true);
+        // You'll need to implement this function in your API/backend
+        const response = await fetch(`https://metaloot-cloud-d4ec.shuttle.app/v1/api/collection/${collection.address}/nfts`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${auth.accessToken}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        const array_nfts = await response.json();
+        setCollectionNFTs(array_nfts);
+      } catch (error) {
+        console.error("Failed to fetch NFTs:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    } else {
+      setCollectionNFTs([]);
+    }
+  }
+
   const [alert, setAlert] = useState({
     show: false,
     message: '',
     type: 'info' as 'success' | 'error' | 'info'
   });
 
-  const [showCreateForm, setShowCreateForm] = useState(false);
-  const [showMintForm, setShowMintForm] = useState(false);
+
   const collections = auth.collectionData;
-
-  const mintNFT = async () => {
-    if (!nftForm.name || !nftForm.image) {
-      setAlert({
-        show: true,
-        message: 'Please fill in all required fields',
-        type: 'error'
-      });
-      return;
-    }
-
-    try {
-      console.log('Minting NFT with data:', nftForm);
-      setAlert({
-        show: true,
-        message: 'NFT minted successfully!',
-        type: 'success'
-      });
-    } catch (error) {
-      setAlert({
-        show: true,
-        message: 'Failed to mint NFT: ' + error,
-        type: 'error'
-      });
-    }
-  };
 
   return (
     <div className="min-h-screen bg-black relative p-8">
@@ -90,7 +90,7 @@ export default function CollectionsSection({ selectedGame }: { selectedGame: Gam
           {collections && collections.map((collection) => (
             <div
               key={collection.address}
-              onClick={() => setSelectedCollection(collection.address || null)}
+              onClick={() => selectCollection(collection)}
               className={`min-w-[200px] h-[260px] border rounded-xl p-4 cursor-pointer 
                          transition-all duration-300 ${selectedCollection === collection.address
                   ? 'border-[#14F195] bg-white/5'
@@ -135,7 +135,9 @@ export default function CollectionsSection({ selectedGame }: { selectedGame: Gam
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
           {selectedCollection && (
-            <div className="aspect-square border border-white/10 rounded-xl p-4 
+            <div 
+              onClick={() => setShowCreateNFTForm(true)}
+              className="aspect-square border border-white/10 rounded-xl p-4 
                           hover:border-white/30 transition-all duration-300 cursor-pointer">
               <div className="w-full h-full bg-white/5 rounded-lg flex items-center 
                             justify-center">
@@ -143,7 +145,21 @@ export default function CollectionsSection({ selectedGame }: { selectedGame: Gam
               </div>
             </div>
           )}
-          {/* NFT cards would be mapped here */}
+          {collectionNFTs.map((nft) => (
+            <div key={nft.address} className="aspect-square border border-white/10 rounded-xl p-4 
+                                hover:border-white/30 transition-all duration-300">
+              <div className="w-full h-full rounded-lg overflow-hidden">
+                <img
+                  src={nft.image}
+                  alt={nft.name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="mt-2">
+                <h3 className="text-white text-sm">{nft.name}</h3>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -177,6 +193,15 @@ export default function CollectionsSection({ selectedGame }: { selectedGame: Gam
       {/* Create Collection Modal */}
       {showCreateForm && (
         <CreateCollectionForm setShowCreateForm={setShowCreateForm} selectedGame={selectedGame} />
+      )}
+
+      {showCreateNFTForm && (
+        <CreateNftForm 
+          setShowCreateForm={setShowCreateNFTForm}
+          selectedCollection={selectedCollection || ''}
+          collectionNFTs={collectionNFTs}
+          setCollectionNFTs={setCollectionNFTs}
+        />
       )}
 
       <Alert
