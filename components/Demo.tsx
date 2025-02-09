@@ -70,8 +70,11 @@ export default function Demo() {
                 Experience the future of blockchain gaming with our interactive demo. 
                 Features NFT integration, real-time transactions, and seamless wallet connectivity.
               </p>
-              <a href="https://hex-gl-clone.vercel.app" target="_blank" className="bg-gradient-to-r from-[#0CC0DF] to-[#14F195] text-white font-bold py-3 px-8 rounded-lg hover:opacity-90 transition-opacity w-fit">
-                Play Now
+              <a 
+              // href="https://hex-gl-clone.vercel.app" 
+              target="_blank" className="bg-gradient-to-r from-[#0CC0DF] to-[#14F195] text-white font-bold py-3 px-8 rounded-lg hover:opacity-90 transition-opacity w-fit">
+                {/* Play Now */}
+                Coming Soon
               </a>
             </div>
           </div>
