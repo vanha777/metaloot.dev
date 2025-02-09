@@ -12,11 +12,12 @@ export async function GET(request: Request) {
     if (!encodedToken) {
       return NextResponse.json({ error: 'No token provided' }, { status: 400 })
     }
-
+    
     // Decode the token data
     const decodedToken = decodeURIComponent(encodedToken)
+    console.log("this is raw user",decodedToken)
     const profileData = JSON.parse(decodedToken) as GoogleProfile
-    console.log("this is profileData", profileData)
+  
     // Check if user exists in Supabase or create new user)
     let { data, error } = await database.from('subscribers')
       .select('*')
