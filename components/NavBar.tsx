@@ -56,7 +56,7 @@ export default function NavBar() {
                             className="bg-gradient-to-r from-[#0CC0DF] to-[#14F195] text-white px-6 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity"
                         >
                             {/* Let&apos;s Build */}
-                            Sign Up
+                            Beta Access
                         </Link>
                     </div>
                 </div>
