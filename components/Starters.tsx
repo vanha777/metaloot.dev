@@ -56,7 +56,7 @@ export default function Starters() {
       image: "/starter1.jpeg"
     },
     {
-      title: "NFT Marketplace Setup",
+      title: "Create your own first items",
       description: "Create your own NFT marketplace with our comprehensive starter kit. Includes minting, listing, and trading functionality.",
       steps: [
         "Set up smart contracts",
@@ -67,7 +67,7 @@ export default function Starters() {
       image: "/starter2.jpg"
     },
     {
-      title: "Token Gating Implementation",
+      title: "Distribute your items",
       description: "Learn how to implement token gating for exclusive content and features in your dApp.",
       steps: [
         "Install token gating package",

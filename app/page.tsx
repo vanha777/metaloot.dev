@@ -43,7 +43,7 @@ export default function Home() {
                 <path d="M425.53 153.42a16.61 16.61 0 00-11.75-4.86H8.33a8.31 8.31 0 00-5.88 14.18l80.1 80.09a16.6 16.6 0 0011.75 4.86h405.45a8.3 8.3 0 005.87-14.18l-80.09-80.09z" fill="url(#solana-gradient)" />
               </svg>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0CC0DF] to-[#14F195] font-bold">
-                Built on Solana
+                Powered By Solana
               </span>
             </div>
           </div>
@@ -62,7 +62,7 @@ export default function Home() {
           <Starters />
           {/* <Coin /> */}
           {/* <Roadmap /> */}
-          <WhatNew/>
+          <WhatNew />
         </div>
         <Footer />
       </main>

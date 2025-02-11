@@ -45,22 +45,22 @@ export default function Statements() {
   const cards = [
     {
       title: "Save Development Time",
-      description: "Developers spend an average of 6–12 months integrating blockchain from scratch. With our API, you can get your game on-chain in as little as 7 days, letting you focus on gameplay instead of infrastructure.",
+      description: "Our dashboard lets you create, manage, and distribute game assets—then deliver via APIs anytime. Focus on building great games, not infrastructure.",
       icon: FaRocket,
     },
     {
       title: "Cut Costs Significantly",
-      description: "Building and maintaining blockchain infrastructure requires expensive DevOps teams and constant upgrades. Our managed services save you up to 70% in operational costs.",
+      description: "Our managed service slashes DevOps costs by up to 70% and removes database hassles—so you can focus on creating an amazing game.",
       icon: FaPiggyBank,
     },
     {
       title: "Ensure Reliable Performance",
-      description: "Our infrastructure is built to handle millions of transactions daily with low latency and high reliability. Whether it's player trades or on-chain rewards, scale confidently without disruptions.",
+      description: "Powered by Solana’s battle-hardened infrastructure, our platform effortlessly handles millions of daily transactions with near-zero disruptions.",
       icon: FaChartLine,
     },
     {
       title: "Stay Ahead with Future-Proof Tech",
-      description: "Blockchain technology evolves rapidly. Our system ensures compatibility with emerging standards, so your game remains secure, scalable, and compatible with new Web3 advancements.",
+      description: "Web3 gaming is booming—and evolving fast. Our platform is built to keep you on the cutting edge, ensuring security, scalability, and seamless compatibility with new standards and breakthroughs.",
       icon: FaShieldAlt,
     },
     {
@@ -70,7 +70,7 @@ export default function Statements() {
     },
     {
       title: "Simple Integration, Immediate Results",
-      description: "Our SDKs and step-by-step documentation make blockchain integration as easy as connecting to a traditional API. No need for Web3 expertise—get started in hours, not months.",
+      description: "Our SDKs and APIs make game asset integration as easy as logging in with Google. No database hassles, no Web3 expertise needed—start in hours, not months.",
       icon: FaBolt,
     },
   ];

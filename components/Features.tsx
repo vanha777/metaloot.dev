@@ -49,33 +49,33 @@ export default function Features() {
 
   const cards = [
     {
-      title: "Simple Player Login",
-      description: "Let your players log in using Google or Apple accounts—no wallets, no seed phrases, no friction. A Web2-like onboarding experience powered by Web3 technology.",
+      title: "Simple Player Ownership",
+      description: "Let players own in-game items as easily as logging in with Google or Apple—no wallets, no seed phrases, no friction.",
       image: "/login.jpeg"
     },
     {
-      title: "One-Click Asset Minting",
-      description: "Mint NFTs, game items, and tokens effortlessly with a single API call. No need for smart contract development or blockchain expertise—our API handles it all.",
+      title: "One-Click Asset Distribution",
+      description: "Create, manage, and distribute game assets with a single dashboard click—or instantly via API in real time.",
       image: "/rewards.jpeg",
     },
     {
-      title: "Custom Tokenomics in Minutes",
-      description: "Define your game’s economy and create in-game currencies or rewards systems with a few API calls. Build tokenomics tailored to your game’s unique vision without writing blockchain code.",
+      title: "Custom In-game currency",
+      description: "Create in-game currencies and rewards from our dashboard—no coding, no databases. Distribute them in real time with a simple API call. Design tokenomics tailored to your game’s vision, hassle-free.",
       image: "/tokenomic.jpeg"
     },
     {
       title: "Launch a Branded Marketplace",
-      description: "Create your own fully-branded, decentralized marketplace. Publicly accessible on the Solana blockchain, enabling players to trade assets seamlessly and securely.",
+      description: "Enable players to buy, sell, and trade items in your very own marketplace—fully branded, seamlessly integrated.",
       image: "/marketplaces.jpeg",
     },
     {
-      title: "No Blockchain Expertise Needed",
-      description: "Focus on building amazing gameplay. We provide all the tools—minting, transactions, token management—through an intuitive API, so you never need to worry about blockchain intricacies.",
+      title: "No Database or Expertise Required",
+      description: "Leave the complex setup to us—focus on building great games, not managing infrastructure.",
       image: "/zeroknowledge.png",
     },
     {
-      title: "True On-Chain Ownership",
-      description: "Every asset is real, on-chain, and belongs to the player. They can withdraw items or tokens to their personal wallets anytime, ensuring transparency and true ownership.",
+      title: "True items Ownership",
+      description: "Every asset is backed by blockchain, belonging to both studios and players. They can withdraw items or tokens to personal wallets anytime—ensuring genuine ownership and trust.",
       image: "/ownership.jpeg",
     },
   ];
