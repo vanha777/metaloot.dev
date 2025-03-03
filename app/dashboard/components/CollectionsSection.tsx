@@ -146,13 +146,13 @@ export default function CollectionsSection({ selectedGame }: { selectedGame: Gam
             </div>
           )}
           {collectionNFTs.map((nft) => (
-            <div 
-              key={nft.address} 
+            <div
+              key={nft.address}
               className={`aspect-square border rounded-xl p-4 
                          hover:border-white/30 transition-all duration-300
-                         ${selectedNFTs?.address === nft.address 
-                           ? 'border-[#14F195] bg-white/5' 
-                           : 'border-white/10'}`}
+                         ${selectedNFTs?.address === nft.address
+                  ? 'border-[#14F195] bg-white/5'
+                  : 'border-white/10'}`}
               onClick={() => setSelectedNFTs(nft)}
             >
               <div className="w-full h-full rounded-lg overflow-hidden">
@@ -172,6 +172,19 @@ export default function CollectionsSection({ selectedGame }: { selectedGame: Gam
 
       {/* Stats Section */}
       <div className="grid grid-cols-4 gap-6 mt-12 border-t border-white/10 pt-8">
+
+        {/* <div className="stat-card">
+          <div className="text-white/60 text-sm">Floor Price</div>
+          <div className="text-2xl text-white font-light">0.00</div>
+          <div className="text-white/40 text-sm">SOL</div>
+        </div> */}
+
+        {/* <div className="stat-card">
+          <div className="text-white/60 text-sm">Volume</div>
+          <div className="text-2xl text-white font-light">0.00</div>
+          <div className="text-white/40 text-sm">SOL</div>
+        </div> */}
+
         <div className="stat-card">
           <div className="text-white/60 text-sm">Total NFTs</div>
           <div className="text-2xl text-white font-light">{selectedNFTs?.supply}</div>
@@ -179,28 +192,39 @@ export default function CollectionsSection({ selectedGame }: { selectedGame: Gam
         </div>
 
         <div className="stat-card">
-          <div className="text-white/60 text-sm">Floor Price</div>
-          <div className="text-2xl text-white font-light">0.00</div>
-          <div className="text-white/40 text-sm">SOL</div>
+          <div className="text-white/60 text-sm">Symbol</div>
+          <div className="text-2xl text-white font-light">{selectedNFTs?.symbol}</div>
+          <div className="text-white/40 text-sm">Unique</div>
         </div>
 
         <div className="stat-card">
-          <div className="text-white/60 text-sm">Volume</div>
-          <div className="text-2xl text-white font-light">0.00</div>
-          <div className="text-white/40 text-sm">SOL</div>
-        </div>
-
-        <div className="stat-card">
-          <div className="text-white/60 text-sm">Holders</div>
+          <div className="text-white/60 text-sm">Owner</div>
           <div className="text-2xl text-white font-light">
             {selectedNFTs?.owner && (
-              <a 
-                href={`https://solscan.io/account/${selectedNFTs.owner}?cluster=devnet`}
+              <a
+                href={`https://solscan.io/account/${selectedNFTs.address}?cluster=devnet`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-[#14F195] transition-colors"
               >
-                {`${selectedNFTs.owner.slice(0,4)}...${selectedNFTs.owner.slice(-4)}`}
+                {`${selectedNFTs.owner.slice(0, 4)}...${selectedNFTs.owner.slice(-4)}`}
+              </a>
+            )}
+          </div>
+          <div className="text-white/40 text-sm">Unique</div>
+        </div>
+
+        <div className="stat-card">
+          <div className="text-white/60 text-sm">Onchain</div>
+          <div className="text-2xl text-white font-light">
+            {selectedNFTs?.address && (
+              <a
+                href={`https://solscan.io/account/${selectedNFTs.address}?cluster=devnet`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-[#14F195] transition-colors"
+              >
+                {`${selectedNFTs.address.slice(0, 4)}...${selectedNFTs.address.slice(-4)}`}
               </a>
             )}
           </div>
