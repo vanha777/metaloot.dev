@@ -10,16 +10,16 @@ config.autoAddCss = false
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'MetaLoot - Blockchain API For Gaming',
-  description: 'Ship faster, cheaper and better with our API.',
+  title: 'Pixel Perfect - Creative Marketing Agency',
+  description: 'Innovative marketing solutions for modern businesses.',
   openGraph: {
-    title: 'MetaLoot - Blockchain API For Gaming',
-    description: 'Ship faster, cheaper and better with our API.',
-    url: 'https://www.metaloot.dev/',
+    title: 'Pixel Perfect - Creative Marketing Agency',
+    description: 'Innovative marketing solutions for modern businesses.',
+    url: 'https://www.pixelperfect.agency/',
     images: [
       {
         url: 'https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/banner.png',
-        alt: 'MetaLoot blockchain API For Gaming',
+        alt: 'Pixel Perfect Creative Marketing Agency',
       },
     ],
   },
@@ -40,40 +40,40 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" data-theme="metaloot">
+    <html lang="en" data-theme="marketing">
       <Head>
         {/* General Meta Tags */}
-        <meta name="title" content="MetaLoot - Gaming Digital Asset Register" />
-        <meta name="description" content="Ship faster, cheaper and better with our API." />
+        <meta name="title" content="Pixel Perfect - Creative Marketing Agency" />
+        <meta name="description" content="Innovative marketing solutions for modern businesses." />
 
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.metaloot.dev/" />
-        <meta property="og:title" content="MetaLoot - Gaming Digital Asset Register" />
-        <meta property="og:description" content="Ship faster, cheaper and better with our API." />
-        <meta property="og:image" content="https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/metaloot/webmetadata/metaloot.png" />
-        <meta property="og:image:alt" content="A stunning preview of MetaLoot's multiverse gaming platform" />
+        <meta property="og:url" content="https://www.pixelperfect.agency/" />
+        <meta property="og:title" content="Pixel Perfect - Creative Marketing Agency" />
+        <meta property="og:description" content="Innovative marketing solutions for modern businesses." />
+        <meta property="og:image" content="https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/banner.png" />
+        <meta property="og:image:alt" content="A showcase of Pixel Perfect's creative marketing solutions" />
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content="https://www.metaloot.dev/" />
-        <meta name="twitter:title" content="MetaLoot - Gaming Digital Asset Register" />
-        <meta name="twitter:description" content="Ship faster, cheaper and better with our API." />
-        <meta name="twitter:image" content="https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/metaloot/webmetadata/metaloot.png" />
-        <meta name="twitter:image:alt" content="A stunning preview of MetaLoot's multiverse gaming platform" />
-        <meta name="twitter:site" content="@playmetaloot" />
-        <meta name="twitter:creator" content="@playmetaloot" />
+        <meta name="twitter:url" content="https://www.pixelperfect.agency/" />
+        <meta name="twitter:title" content="Pixel Perfect - Creative Marketing Agency" />
+        <meta name="twitter:description" content="Innovative marketing solutions for modern businesses." />
+        <meta name="twitter:image" content="https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/banner.png" />
+        <meta name="twitter:image:alt" content="A showcase of Pixel Perfect's creative marketing solutions" />
+        <meta name="twitter:site" content="@pixelperfectagency" />
+        <meta name="twitter:creator" content="@pixelperfectagency" />
 
         {/* Telegram */}
-        <meta property="og:title" content="MetaLoot - Gaming Digital Asset Register" />
-        <meta property="og:description" content="Ship faster, cheaper and better with our API." />
-        <meta property="og:image" content="https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/metaloot/webmetadata/metaloot.png" />
-        <meta property="og:url" content="https://www.metaloot.dev/" />
+        <meta property="og:title" content="Pixel Perfect - Creative Marketing Agency" />
+        <meta property="og:description" content="Innovative marketing solutions for modern businesses." />
+        <meta property="og:image" content="https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/banner.png" />
+        <meta property="og:url" content="https://www.pixelperfect.agency/" />
 
         {/* Discord */}
-        <meta property="og:title" content="MetaLoot - Gaming Digital Asset Register" />
-        <meta property="og:description" content="Ship faster, cheaper and better with our API." />
-        <meta property="og:image" content="https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/metaloot/webmetadata/metaloot.png" />
+        <meta property="og:title" content="Pixel Perfect - Creative Marketing Agency" />
+        <meta property="og:description" content="Innovative marketing solutions for modern businesses." />
+        <meta property="og:image" content="https://tzqzzuafkobkhygtccse.supabase.co/storage/v1/object/public/biz_touch/banner.png" />
         <meta property="og:type" content="website" />
       </Head>
       <body suppressHydrationWarning={true} className={inter.className}>

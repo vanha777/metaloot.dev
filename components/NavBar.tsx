@@ -9,54 +9,47 @@ export default function NavBar() {
         <motion.nav
             initial={{ y: -100 }}
             animate={{ y: 0 }}
-            className="sticky top-0 w-full z-50 bg-black/80 backdrop-blur-md shadow-lg"
+            className="sticky top-0 w-full z-50 bg-white shadow-md"
         >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between items-center h-16">
+                <div className="flex justify-between items-center h-20">
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-2">
                         <Image
                             src="/transLogo.png"
-                            alt="MetaLoot Logo"
-                            width={32}
-                            height={32}
+                            alt="Pixel Perfect Logo"
+                            width={36}
+                            height={36}
+                            className="rounded-md"
                         />
-                        <span className="text-xl font-bold bg-gradient-to-r from-[#0CC0DF] to-[#14F195] bg-clip-text text-transparent">
-                            MetaLoot
+                        <span className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                            Pixel Perfect
                         </span>
                     </Link>
 
                     {/* Navigation Links */}
                     <div className="hidden md:flex items-center space-x-8">
-                        <Link href="about" className="text-gray-300 hover:text-white transition-colors">
-                            About
+                        <Link href="about" className="text-neutral font-medium hover:text-primary transition-colors">
+                            About Us
                         </Link>
-                        <Link href="pricing" className="text-gray-300 hover:text-white transition-colors">
-                            Pricing
+                        <Link href="pricing" className="text-neutral font-medium hover:text-primary transition-colors">
+                            Services
                         </Link>
-                        <Link
-                            href="https://documenter.getpostman.com/view/29604463/2sAYQXnsMR"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-gray-300 hover:text-white transition-colors"
-                        >
-                            Docs
+                        <Link href="#portfolio" className="text-neutral font-medium hover:text-primary transition-colors">
+                            Portfolio
                         </Link>
-                        <Link href="contact" className="text-gray-300 hover:text-white transition-colors">
-                            Support
+                        <Link href="contact" className="text-neutral font-medium hover:text-primary transition-colors">
+                            Contact
                         </Link>
                     </div>
 
                     {/* CTA Button */}
                     <div>
                         <Link
-                            href="/dashboard"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="bg-gradient-to-r from-[#0CC0DF] to-[#14F195] text-white px-6 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity"
+                            href="/contact"
+                            className="bg-gradient-to-r from-primary to-secondary text-white px-6 py-3 rounded-lg font-medium hover:shadow-lg transition-shadow"
                         >
-                            {/* Let&apos;s Build */}
-                            Beta Access
+                            Get a Quote
                         </Link>
                     </div>
                 </div>

@@ -8,11 +8,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: '#FF6B6B',
-        secondary: '#4ECDC4',
-        accent: '#45B7D1',
-        green: '#14F195',
-        grey: '#0C0E12',
+        primary: '#3D55FF',
+        secondary: '#FF3D6E',
+        accent: '#00CCBB',
+        green: '#00CC81',
+        grey: '#222222',
+        darkgradient: 'linear-gradient(135deg, #222222 0%, #444444 100%)',
       },
       keyframes: {
         'fade-in': {
@@ -31,14 +32,14 @@ module.exports = {
   daisyui: {
     themes: [
       {
-        metaloot: {
-          "primary": "#FF6B6B",
-          "secondary": "#4ECDC4",
-          "accent": "#45B7D1",
-          "neutral": "#1a1a1a",
-          "base-100": "#0F1115",
-          "base-200": "#16181D",
-          "base-300": "#202227",
+        marketing: {
+          "primary": "#3D55FF",
+          "secondary": "#FF3D6E",
+          "accent": "#00CCBB",
+          "neutral": "#222222",
+          "base-100": "#FFFFFF",
+          "base-200": "#F7F7F7",
+          "base-300": "#EEEEEE",
         },
       },
     ],
